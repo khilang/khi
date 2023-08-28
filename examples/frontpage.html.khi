@@ -1,0 +1,25 @@
+# Example of Khi HTML-preprocessor input.
+
+<@doctype> # @doctype is a preprocessor directive which inserts <!doctype html>.
+<+html> # <+tag> is an opening tag and <-tag> or <-> its closing tag.
+  <+head>
+    <+title>Hello world!<->
+    <+script src:script.js><->
+  <-head>
+  <+body>
+    <+h1 id:main-heading>Hello world!<->
+    <+p>Hello world!<-> # These two paragraph notations are equivalent.
+    <p>:{Hello world!}
+    <img src:frontpage.jpg>
+    <+div class:dark-background><+p>
+      This is a paragraph <br>
+      with a line break.
+      <+em class:italic-text>This text is italic.<->
+    <-><->
+    <colour>:{ # Dictionaries also compile to tags.
+      name: Teal;
+      hex: #008080;
+      description: Blue-green mix;
+    }
+  <-body>
+<-html>

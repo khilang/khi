@@ -1,0 +1,45 @@
+# Example of Khi LaTeX-preprocessor input.
+
+<documentclass>:article
+
+<usepackage>:amsmath
+
+<addtolength>:<jot>:1em # Controls the line spacing in align*
+
+<begin>:document
+
+<section>:Equations
+
+  # Define a sum-range command.
+  <@def>:<SumRn>:4:{ # @def is a preprocessor directive which handles the options in \newcommand.
+    <sum>_{#1}^{#2`:#3} #4
+  }
+
+  <begin>:align* [
+    | <SumRn>:k:0:100:k                                |
+    | = 0 + 1 + 2 + <dots> + 99 + 100                  |
+    | = (0 + 100) + (1 + 99) + <dots> (49 + 51) + 50   |
+    | = 5050                                           |
+  ] <end>:align*
+
+  <begin>:align* [
+    | <SumRn>:k:0:n:k                    |
+    | = 0 + 1 + 2 + <dots> + (n - 1) + n |
+    | = n <cfrac>:n:2 + <cfrac>:n:2      |
+    | = <cfrac>:n^2:2 + <cfrac>:n:2      |
+    | = n <cdot> <cfrac>:{n + 1}:2       |
+  ] <end>:align*
+
+<section>:Matrices
+
+  <begin>:math
+    <mathbf>:X = <begin>:bmatrix [
+      |1|0|0|
+      |0|1|0|
+      |0|0|1|
+    ] <end>:bmatrix
+    <n>
+    <mathbf>:X = <begin>:bmatrix [1|?|?; ?|1|?; ?|?|1] <end>:bmatrix
+  <end>:math
+
+<end>:document

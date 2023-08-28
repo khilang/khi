@@ -1,0 +1,32 @@
+# Example of a Khi-based configuration.
+
+oak-planks: {
+  name: Oak planks;
+  description: Planks made from oak wood.;
+  tags: [wood];
+  price: 200;
+};
+birch-planks: {
+  name: Birch planks;
+  description: Planks made from birch wood.;
+  tags: [wood];
+  price: 200;
+};
+stone: {
+  name: Stone;
+  description: A solid material, but does not insulate well.;
+  price: 100;
+  tags: [heavy; stone];
+};
+marble: {
+  name: Marble;
+  price: 800;
+  beauty: 2;
+  tags: [heavy; stone; rich];
+};
+# Glass: this material is not available yet.
+glass: {
+  disabled; # This is equal to `disabled: ?;` or `disabled: {};`.
+  name: Glass;
+  price: 250;
+};

@@ -1,0 +1,200 @@
+# Khi grammar
+
+# Nullable expression
+<null-expr> = <>
+            | <expr>
+
+# Expression
+<expr> = <>"?"<>                            # Empty expression.
+       | <><expr-sentence><>                # An expression consisting of a single sentence. This sentence cannot be a standalone `?`.
+       | <><sentence> <expr-tail-no-text><> # A sentence must be followed by another component, since the sentence can be "?".
+       | <><expr-tail-no-text><>
+
+# Non-textual component in an expression
+<expr-tail> = <sentence> <expr-tail-no-text>
+            | <expr-tail-no-text>
+
+# Component in an expression
+<expr-tail-no-text> = <quote>
+                    | <quote> <expr-tail>
+                    | <expr-cmp>
+                    | <expr-cmp> <expr-tail>
+                    | <dict-cmp>
+                    | <dict-cmp> <expr-tail>
+                    | <table-cmp>
+                    | <table-cmp> <expr-tail>
+                    | <tag-expr>
+                    | <tag-expr> <expr-tail>
+                    | <closed-cmd-expr>
+                    | <closed-cmd-expr> <expr-tail>
+                    | <open-cmd-expr>
+                    | <open-cmd-expr>_<expr-tail>
+                    | <open-cmd-expr><expr-tail-no-text>
+
+# Expression component
+<expr-cmp> = "{"<expr>"}"
+
+# Nullable dictionary
+<null-dict> = <>
+            | <dict>
+
+# Dictionary
+<dict> = <><key> ":"<expr>          # Last entry
+       | <><key> ":"<expr>";"<>     # Last entry with trailing semicolon
+       | <><key> ":"<expr>";"<dict> # Intermediary entry
+       | <><key> ";"<>              # Last key-only entry
+       | <><key> ";"<dict>          # Intermediary key-only entry
+
+# Dictionary key
+<key> = <word>
+      | <quote>
+
+# Dictionary component
+<dict-cmp> = "{"<dict>"}"
+           | "{"<null-dict>"#}"
+
+<null-table> = <>
+             | <table>
+
+# Table
+# Though not encoded in the grammar, all rows must have the same number of columns.
+<table> = <seq>
+        | <><tab><>
+
+# Table in sequential notation
+<seq> = <expr>         # Last element
+      | <expr>";"<>    # Last element with trailing semicolon
+      | <expr>";"<seq> # Last element of row
+      | <expr>"|"<seq> # Intermediary element
+
+# Table in tabular notation
+<tab> = "|"<expr><tab> # Intermediary element
+      | "|" <tab>      # End of row
+      | "|"            # End
+
+# Table component
+<table-cmp> = "["<table>"]"
+            | "["<null-table>"#]"
+
+# Command
+<cmd> = "<" <word> ">"
+      | "<" <word> <attr> ">"
+
+# Open command expression
+# A command that ends with plain text.
+<open-cmd-expr> = <cmd><open-cmd-arg>
+
+# Open command argument
+<open-cmd-arg> = ":"<arg-word>
+               | ":"<arg-word><open-cmd-arg>
+               | ":"<quote><open-cmd-arg>
+               | ":"<expr-cmp><open-cmd-arg>
+               | ":"<dict-cmp><open-cmd-arg>
+               | ":"<table-cmp><open-cmd-arg>
+               | ":"<cmd><open-cmd-arg>
+               | ":""<>"":"<open-cmd-expr>
+
+# Closed command expression
+# A command that does not end with plain text.
+<closed-cmd-expr> = <cmd><closed-cmd-arg>
+
+# Closed command argument
+<closed-cmd-arg> = ":"<arg-word>"?"
+                 | ":"<arg-word><closed-cmd-arg>
+                 | ":"<quote>
+                 | ":"<quote><closed-cmd-arg>
+                 | ":"<expr-cmp>
+                 | ":"<expr-cmp><closed-cmd-arg>
+                 | ":"<dict-cmp>
+                 | ":"<dict-cmp><closed-cmd-arg>
+                 | ":"<table-cmp>
+                 | ":"<table-cmp><closed-cmd-arg>
+                 | ":"<cmd>
+                 | ":"<cmd><closed-cmd-arg>
+                 | ":""<>"":"<closed-cmd-expr>
+
+# Opening tag
+<opening-tag> = "<+" <word> ">"
+              | "<+" <word>_<attr> ">"
+
+# Closing tag
+<closing-tag> = "<-" ">"
+              | "<-" <word> ">"
+
+# Tag expression
+<tag-expr> = <opening-tag> <closing-tag>
+           | <opening-tag> <expr> <closing-tag>
+           | <opening-tag><closed-tag-arg> <closing-tag>
+           | <opening-tag><closed-tag-arg> <expr> <closing-tag>
+           | <opening-tag><open-tag-arg> <closing-tag>
+           | <opening-tag><open-tag-arg>_<expr> <closing-tag>
+           | <opening-tag><open-tag-arg><expr-tail-no-text> <closing-tag>
+
+# Open tag argument
+# Tag arguments that does not end with plain text.
+<open-tag-arg> = ":"<arg-word>
+               | ":"<arg-word>:<open-tag-arg>
+               | ":"<quote><open-tag-arg>
+               | ":"<expr-cmp><open-tag-arg>
+               | ":"<dict-cmp><open-tag-arg>
+               | ":"<table-cmp><open-tag-arg>
+               | ":"<cmd><open-tag-arg>
+
+# Closed tag argument
+<closed-tag-arg> = ":"<arg-word><closed-tag-arg>
+                 | ":"<arg-word>"?"
+                 | ":"<quote><closed-tag-arg>
+                 | ":"<quote>
+                 | ":"<expr-cmp><closed-tag-arg>
+                 | ":"<expr-cmp>
+                 | ":"<dict-cmp><closed-tag-arg>
+                 | ":"<dict-cmp>
+                 | ":"<table-cmp><closed-tag-arg>
+                 | ":"<table-cmp>
+                 | ":"<cmd><closed-tag-arg>
+                 | ":"<cmd>
+
+# Attribute
+<attr> = <word>
+       | <word>_<attr>
+       | <word>":"<word>
+       | <word>":"<word>_<attr>
+       | <word>":"<quote>
+       | <word>":"<quote> <attr>
+       | <word>":"<expr-cmp>
+       | <word>":"<expr-cmp> <attr>
+       | <word>":"<dict-cmp>
+       | <word>":"<dict-cmp> <attr>
+       | <word>":"<table-cmp>
+       | <word>":"<table-cmp> <attr>
+
+# Quote
+# Matches a Quote token.
+<quote> = quote
+
+# Sentence
+# Matches any maximal combination of Word, Query, HashQuery and Whitespace tokens
+# where Whitespace is not at the beginning or end.
+<sentence>
+
+# Sentence expression
+# An expression consisting of a single sentence. Cannot be a single Query token.
+# Matches any maximal combination of Word, Query, HashQuery and Whitespace tokens
+# where Whitespace is not at the beginning or end and is not a single Query token.
+<expression-sentence>
+
+# Word
+# Matches any maximal combination of Word, Query and HashQuery tokens.
+<word>
+
+# Argument word
+# Matches a Word token.
+<arg-word>
+
+# Whitespace or nothing
+# Matches a Whitespace token or nothing.
+<>
+
+# Whitespace
+# Matches a Whitespace token.
+_
