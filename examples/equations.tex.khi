@@ -4,7 +4,7 @@
 
 <usepackage>:amsmath
 
-<addtolength>:<jot>:1em # Controls the line spacing in align*
+<setlength>:<jot>:1em # Controls math line spacing
 
 <begin>:document
 
@@ -15,19 +15,27 @@
     <sum>_{#1}^{#2`:#3} #4
   }
 
+  <begin>:equation* <begin>:split
+
+    <sqrt>:5 <times> <sqrt>:5 = 2 <n>
+
+    # A trailing apostrophe means that the first argument is optional.
+    <sqrt'>:3:4 <times> <sqrt'>:3:16 = 4
+
+  <end>:split <end>:equation*
+
   <begin>:align* [
-    | <SumRn>:k:0:100:k                                |
-    | = 0 + 1 + 2 + <dots> + 99 + 100                  |
-    | = (0 + 100) + (1 + 99) + <dots> (49 + 51) + 50   |
-    | = 5050                                           |
+    | <SumRn>:k:0:100:k | =                0 + 1 + 2 + <dots> + 99 + 100 |
+    |                 : | = (0 + 100) + (1 + 99) + <dots> (49 + 51) + 50 |
+    |                 : | =                                         5050 |
   ] <end>:align*
 
   <begin>:align* [
-    | <SumRn>:k:0:n:k                    |
+    |                    <SumRn>:k:0:n:k |
     | = 0 + 1 + 2 + <dots> + (n - 1) + n |
-    | = n <cfrac>:n:2 + <cfrac>:n:2      |
-    | = <cfrac>:n^2:2 + <cfrac>:n:2      |
-    | = n <cdot> <cfrac>:{n + 1}:2       |
+    | =      n <cfrac>:n:2 + <cfrac>:n:2 |
+    | =      <cfrac>:n^2:2 + <cfrac>:n:2 |
+    | =       n <cdot> <cfrac>:{n + 1}:2 |
   ] <end>:align*
 
 <section>:Matrices
@@ -38,8 +46,8 @@
       |0|1|0|
       |0|0|1|
     ] <end>:bmatrix
-    <n>
-    <mathbf>:X = <begin>:bmatrix [1|?|?; ?|1|?; ?|?|1] <end>:bmatrix
+
+    <n> <mathbf>:X = <begin>:bmatrix [1|:|:;:|1|:;:|:|1] <end>:bmatrix
   <end>:math
 
 <end>:document

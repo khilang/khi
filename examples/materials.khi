@@ -26,7 +26,7 @@ marble: {
 };
 # Glass: this material is not available yet.
 glass: {
-  disabled; # This is equal to `disabled: ?;` or `disabled: {};`.
+  disabled; # This is equal to `disabled: {};`.
   name: Glass;
   price: 250;
 };

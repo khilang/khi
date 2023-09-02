@@ -16,10 +16,5 @@
       with a line break.
       <+em class:italic-text>This text is italic.<->
     <-><->
-    <colour>:{ # Dictionaries also compile to tags.
-      name: Teal;
-      hex: #008080;
-      description: Blue-green mix;
-    }
   <-body>
 <-html>

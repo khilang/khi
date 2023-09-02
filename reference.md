@@ -1,4 +1,6 @@
-# Khi syntax and semantics
+# Khi reference
+
+A reference describing the syntax and semantics of the Khi data format.
 
 ### Expressions and components
 

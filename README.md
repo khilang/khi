@@ -8,10 +8,8 @@
 
 ## Links
 
-- [**Khi**](https://github.com/khilang/khilang/)
-- [**Khi syntax summary**](https://github.com/khilang/khilang/blob/master/guide.md)
-- [**Khi editor & preprocessors**](https://khilang.github.io/khi-editor/)
-- [**Khi Rust parser & library**](https://github.com/khilang/khi.rs/)
+- [**Khi**](https://github.com/khilang/khilang)**:** [reference](https://github.com/khilang/khilang/blob/master/reference.md), [editor & preprocessors](https://khilang.github.io/khi-editor)
+- **Libraries:** [Rust](https://github.com/khilang/khi.rs), [Javascript](https://github.com/khilang/khi.js)
 
 ## Examples & showcase
 

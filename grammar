@@ -5,9 +5,8 @@
             | <expr>
 
 # Expression
-<expr> = <>"?"<>                            # Empty expression.
-       | <><expr-sentence><>                # An expression consisting of a single sentence. This sentence cannot be a standalone `?`.
-       | <><sentence> <expr-tail-no-text><> # A sentence must be followed by another component, since the sentence can be "?".
+<expr> = <><sentence><>
+       | <><sentence> <expr-tail-no-text><>
        | <><expr-tail-no-text><>
 
 # Non-textual component in an expression
@@ -63,12 +62,17 @@
 
 # Table in sequential notation
 <seq> = <expr>         # Last element
+      | <>":"<>        # Empty element
       | <expr>";"<>    # Last element with trailing semicolon
+      | <>":" ";"<>    # Empty last element with trailing semicolon
       | <expr>";"<seq> # Last element of row
+      | <>":" ";"<seq> # Empty last element of row
       | <expr>"|"<seq> # Intermediary element
+      | <>":" "|"<seq> # Empty intermediary element
 
 # Table in tabular notation
 <tab> = "|"<expr><tab> # Intermediary element
+      | "|" ":" <tab>  # Empty element
       | "|" <tab>      # End of row
       | "|"            # End
 
@@ -176,12 +180,6 @@
 # Matches any maximal combination of Word, Query, HashQuery and Whitespace tokens
 # where Whitespace is not at the beginning or end.
 <sentence>
-
-# Sentence expression
-# An expression consisting of a single sentence. Cannot be a single Query token.
-# Matches any maximal combination of Word, Query, HashQuery and Whitespace tokens
-# where Whitespace is not at the beginning or end and is not a single Query token.
-<expression-sentence>
 
 # Word
 # Matches any maximal combination of Word, Query and HashQuery tokens.
