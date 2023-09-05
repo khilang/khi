@@ -2,16 +2,17 @@
 
 A reference describing the syntax and semantics of the Khi data format.
 
-### Expressions and components
+## Expressions and components
 
-An *expression* represents a data structure. It consists of a sequence of components.
+An *expression* represents an encoded data structure. It consists of a sequence of components.
 A *component* is a piece of information provided to an expression, which the expression
 uses to encode data.
 
 There are 5 kinds of components: expression, text, table, dictionary and directive.
 Indeed, an expression can be a component of another expression.
 
-**Example:** `{c1} {c2} {c3}` is an expression consisting of 3 components.
+**Example:** `{key: value} Text component [1;0;0]` is an expression consisting of
+a dictionary component, a text component and a table component.
 
 An expression with no components is known as an empty expression, an expression with a
 single component is known as a unary expression, and an expression with two or more components
@@ -20,19 +21,19 @@ is known as a compound expression.
 Each component variant encodes data in a unique way. Here is a summary of the interpretations
 of each variant.
 
-| Component  | Use                                                     |
-|------------|---------------------------------------------------------|
-| Expression | Encodes a data structure in a canonical or default way. |
-| Text       | Encodes a primitive value.                              |
-| Table      | Encodes multiple data structures.                       |
-| Dictionary | Encodes multiple data structures identified by a name.  |
-| Directive  | Encodes a data structure in a specific way.             |
+| Component  | Use                                                                      |
+|------------|--------------------------------------------------------------------------|
+| Expression | Encodes a data structure in a canonical or default way.                  |
+| Text       | Encodes a primitive value.                                               |
+| Dictionary | Encodes multiple data structures, where each is identified by a name.    |
+| Table      | Encodes multiple data structures, where each row represents a structure. |
+| Directive  | Encodes a data structure in a specific way.                              |
 
-### Brackets and grouping
+## Brackets: Grouping and delimitation
 
 Brackets `{` `}` are used to group and delimit components.
 
-#### Grouping
+### Grouping
 
 Grouping components is done to form expression.
 
@@ -55,7 +56,7 @@ text component.
 Whether a component shall be interpreted as a unary expression or not must be determined
 by the semantics of the document.
 
-#### Delimitation
+### Delimitation
 
 Delimitation is sometimes done to increase readability, but sometimes it is necessary
 to prevent components from merging into one.
@@ -63,7 +64,7 @@ to prevent components from merging into one.
 **Example:** `{Text 1} {Text 2}` is an expression with 2 text components. Brackets are
 used to separate the text components, preventing them from merging into one text component.
 
-### Text
+## Text
 
 A *text* component represents a primitive piece of information, such as text or a
 number. It is represented as either a sequence of words or as text enclosed in quotes.
@@ -91,7 +92,7 @@ Furthermore, any whitespace sequence in unquoted text is reduced to a single spa
 character. Khi is a whitespace-equivalent format, where all whitespace is equal
 to a space character, unless it is escaped or within a quote.
 
-### Dictionary
+## Dictionary
 
 A *dictionary* is a sequence of key-value entries delimited by semicolons `;`. The
 key and value in an entry is separated by a colon `:`. A key is given by a word or
@@ -113,7 +114,7 @@ A trailing semicolon is allowed.
 
 **Example:** `{k1: v1; k2: v2;}` and `{k1: v1; k2: v2}` are equal.
 
-### Table
+## Table
 
 A *table* component is an arrangement of values into rows and columns. It represents
 an organized collection of expressions.
@@ -128,7 +129,7 @@ An *empty table* is a table with no values. An empty table component is written 
 
 There are two notations for tables: tabular notation and sequential notation.
 
-#### Tabular notation
+### Tabular notation
 
 Tabular notation is intended for writing tables over several lines.
 
@@ -149,7 +150,7 @@ is a table argument with 2 rows and 3 columns.
 
 There must be at least 1 column.
 
-#### Sequential notation
+### Sequential notation
 
 In sequential notation, columns are separated bars `|` and rows are separated
 by semicolons `;`.
@@ -160,16 +161,15 @@ A *sequence* argument is a sequence of expressions delimited by semicolons `;` e
 
 **Example:** `[1|0|0; 0|1|0; 0|0|1]` is a table with 3 rows and 3 columns.
 
-Entries are expressions, thus empty entries can be represented with a question mark
-`?`.
+Empty entries can be represented by a colon.
 
-**Example:** `[1|?|?; ?|1|?; ?|?|1]` is a table with 6 empty entries.
+**Example:** `[1|:|:; :|1|:; :|:|1]` is a table with 6 empty entries.
 
 A trailing semicolon is allowed.
 
 **Example:** `[expr1; expr2;]` and `[expr1; expr2]` are equal.
 
-### Directive
+## Directive
 
 A *directive* consists of a header followed by an arbitrary number of attributes.
 The header is a word that identifies the directive, and attributes tune specific behaviours.
@@ -179,7 +179,7 @@ Directives are applied to arguments.
 There are two notations that produce directives: command notation and tag
 notation.
 
-#### Command notation
+### Command notation
 
 In command notation, a *directive expression* is encoded as a *directive* enclosed in angular brackets, followed by
 arguments applied to it which are appended with colons `:` where there is no surrounding whitespace.
@@ -223,12 +223,12 @@ command and the next component.
 **Example:** In `You have <b>:300?.`, a question mark ensures that there is
 no whitespace between `300` and `.`.
 
-#### Tag notation
+### Tag notation
 
 In tag notation, tags are used to produce directive expressions. An opening tag is
 opened with a `+` while a closing tag is opened with a `-`.
 
-**Example:** `<+tag>content<-tag>`.
+**Example:** `<+italic>Italic text<-italic>`.
 
 The content enclosed by the tags is an expression that is appended as the last argument onto the directive expression
 represented by the tags.
@@ -238,26 +238,28 @@ represented by the tags.
 Arguments may still be appended onto the opening tag, by using colons. A question
 mark can be used to end the arguments.
 
-**Example:** `<+Sum>:k:1:n?3k^2-2k</Sum>` is equivalent to `<Sum>:k:1:n:{3k^2 - 2k}`.
+**Example:** The tag expression `<+Sum>:k:1:n?3k^2 - 2k<-Sum>` is equivalent to the
+command expression `<Sum>:k:1:n:{3k^2 - 2k}`.
 
-It is optional whether to include the directive name in the closing tag or not. In some cases this is useful, but in
-others this is too verbose.
+`<-?>` is known as a *short closing tag*. It is an alternative that can close any
+tag.
 
-**Example:** `<+tag>arg<-tag>` is equivalent to `<+tag>arg<->`.
+**Example:** `<+bold><+italic>text<-?><-?>` is equivalent to `<+bold><+italic>text<-italic><-bold>`.
 
-Tag notation could in some cases increase the readability of a document.
+Tag notation gives you high visibility brackets. It increases readability in long
+or nested environments.
 
 **Example:** In long scopes spanning several lines, it could be difficult to see which brackets belong to which
-directive, and where each scope ends. Tag notation can display the name of the scope in the closing tag, solving this
+command expression and where each scope ends. Tag notation can display the name of the scope in the closing tag, solving this
 problem.
 `<+html> Many lines and lots of stuff... <-html>`.
 
-**Example:** Sometimes, brackets are placed too tersely, and it is difficult to distinguish them. Tag notation makes it
-easier to distinguish scopes by introducing verbosity.
-`<bold>:{Bold <italic>:{italic <underline>:{underlined <strikethrough>:{strikethrough text}}}}` is easier to read as
-`<+bold>Bold <+italic>italic <+underline>underlined <+strikethrough>strikethrough text<-><-><-><->`.
+**Example:** Sometimes, brackets get clustered together, and it is difficult to distinguish
+them. Tag notation makes it easier to distinguish scopes.
+`<bold>:{Bold <italic>:{italic <underline>:{underlined <strikethrough>:{strikethrough} text}}}` is easier to read as
+`<+bold>Bold <+italic>italic <+underline>underlined <+strikethrough>strikethrough<-?> text<-?><-?><-?>`.
 
-#### Directive semantics
+### Directive semantics
 
 There are two dimensions to a directive:
 
@@ -270,7 +272,7 @@ directive could be seen as a generalization of **XML**-tags, **LaTeX**-commands/
 
 **Example:** In **XML**-like markup, tags are used to mark up and add semantics to text. Tags do not encode any action.
 In **Khi**, tags can be encoded as directives, which when applied to text, encodes semantic text. For example, **HTML**
-`<span class="italic">text</span>` corresponds to **Khi** `<+span class:italic>text<->`.
+`<span class="italic">text</span>` corresponds to **Khi** `<+span class:italic>text<-?>`.
 
 **Example:** In `<sender> sent <amount> to <recipient>.`, directives are used to represent
 tokens or placeholders.
@@ -282,55 +284,59 @@ encoded as directives. For example, **LaTeX** `\frac{2a}{b}` corresponds to **Kh
 **Example:** `<set>:x:100` encodes an action which sets the variable `x` to `100`. It encodes an empty data structure,
 since this is purely a command.
 
-### Root node
+## Root node
 
-The root node of a Khi document is either an expression, table or dictionary.
+The root node of a Khi document is either an expression, table or dictionary. It is
+up to the designer of a format to choose which is the most practical for the application
+in question.
 
-### Reserved sequences
+## Reserved sequences
 
 Reserved sequences are character sequences that cannot be used in regular text, unless
 they are escaped or used within quotation marks. They represent tokens, which are
 used to structure a Khi document.
 
-| Sequence            | Label                | Usages                                    |
-|---------------------|----------------------|-------------------------------------------|
-| `:`                 | Colon                | Key-value separator, argument application |
-| `;`                 | Semicolon            | Row separator, entry delimiter            |
-| <code>&#x7c;</code> | Bar                  | Column separator                          |
-| `` ` ``             | Backtick             | Escape sequence                           |
-| `<>`                | Diamond              | Compose directives                        |
-| `{`                 | Left bracket         | Begin expression, begin dictionary        |
-| `}`                 | Right bracket        | End expression, end dictionary            |
-| `#}`                | Number right bracket | End dictionary                            |
-| `[`                 | Left square          | Begin table                               |
-| `]`                 | Right square         | End table                                 |
-| `#]`                | Number right square  | End table                                 |
-| `<+`                | Left angle plus      | Begin opening tag                         |
-| `<-`                | Left angle minus     | Begin closing tag                         |
-| `<`                 | Left angle           | Begin directive                           |
-| `>`                 | Right angle          | End directive                             |
-| `"`                 | Quote                | Begin quote, end quote                    |
+| Sequence            | Label              | Usages                                                       |
+|---------------------|--------------------|--------------------------------------------------------------|
+| `:`                 | Colon              | Key-value separator, argument application, empty table entry |
+| `;`                 | Semicolon          | Row separator, entry delimiter                               |
+| <code>&#x7c;</code> | Bar                | Column separator                                             |
+| `` ` ``             | Backtick           | Escape sequence                                              |
+| `<>`                | Diamond            | Compose directives                                           |
+| `{`                 | Left bracket       | Begin expression, begin dictionary                           |
+| `}`                 | Right bracket      | End expression, end dictionary                               |
+| `#}`                | Hash right bracket | End dictionary                                               |
+| `[`                 | Left square        | Begin table                                                  |
+| `]`                 | Right square       | End table                                                    |
+| `#]`                | Hash right square  | End table                                                    |
+| `<+`                | Left angle plus    | Begin opening tag                                            |
+| `<-`                | Left angle minus   | Begin closing tag                                            |
+| `<`                 | Left angle         | Begin command                                                |
+| `>`                 | Right angle        | End directive                                                |
+| `"`                 | Quote              | Begin quote, end quote                                       |
 
-### Special sequences
+## Special sequences
 
 Special sequences are character sequences that can usually be used in regular text,
 but which have special meanings in some contexts.
 
-#### Question mark: end directives & empty value
+### Question mark: end directives
 
-The question mark is usually interpreted as text, except in some circumstances.
+A question mark `?` is taken as text, except in one case. Within a directive plain
+text argument, a question mark can be used to close the argument and the directive
+expression.
 
-- is used to end directive arguments.
-- denotes an empty value in tables and dictionaries.
+**Example:** `<cmd>:arg:arg?` is equal to `<cmd>:arg:arg`.
 
-Within tables, a single standalone question mark denotes an empty entry.
+This is done when there must be no whitespace between a directive expression and the
+component following it.
 
-A question mark
+**Example:**
 
-Thus, question marks cannot be used within a directive word argument, and a standalone
-question mark cannot be
+Recommended style is to not use a question mark to end a directive expression unless
+it is necessary.
 
-#### Hash: Comments & end of dictionaries and tables
+### Hash: Comments & end of dictionaries and tables
 
 A hash is used to open comments, and they are used to end tables and dictionaries.
 
@@ -345,7 +351,7 @@ Within a directive, where a `?` ends the directive, the sequence `#?` cannot be 
 However, within an expression, where `?` is treated as text, `#?` can be used and
 is treated as text.
 
-### Escape character
+## Escape character
 
 Backtick `` ` `` is the *escape character*. The character following it specifies the
 character inserted into the document.
@@ -369,7 +375,7 @@ character inserted into the document.
 
 **Example:** `` `: `` represents the text `:`.
 
-### Escape sequences
+## Escape sequences
 
 Escape sequences are character sequences that take precedence over the reserved sequences,
 and which represents regular text rather than a token.
@@ -391,7 +397,7 @@ and which represents regular text rather than a token.
 
 **Example:** `Price:: 300€` represents the text `Price: 300€`.
 
-### Comments
+## Comments
 
 A number sign `#` at the beginning of a word may open a comment, depending on which character follows it. If it is
 followed by whitespace or another `#`, then a comment opens that ends at the next newline. Otherwise, if it is followed
@@ -408,11 +414,7 @@ by a text glyph.
 **Example:** A comment is not opened in `This is text# Is this a comment?` since `#`
 is not at the beginning of a word.
 
-### Question mark
-
-<price>:wood:<?>
-
-### Whitespace equivalence and significance
+## Whitespace equivalence and significance
 
 Every sequence of whitespace is equal to a single space character, unless the whitespace
 is escaped or within a quote. Whitespace between arguments in an expression is significant,
@@ -424,9 +426,9 @@ in significant whitespace.
 **Example:** `arg1{ arg2 }` is equal to `arg1{arg2}`, because there is no difference
 in significant whitespace.
 
-## Encoding
+# Encoding
 
-### Validity
+## Validity
 
 Khi dictates the syntax of expressions and components, but it does not dictate
 how data structures are encoded. The validity of directive expressions, dictionary
@@ -451,7 +453,7 @@ Given syntax and semantics, it is now considered how the universal data structur
 are encoded. When defining complex structures, one must split the data structure into multiple
 arguments, and encode each part using the variant that best fits.
 
-### Primitive value encoding
+## Primitive value encoding
 
 Primitive values are trivially encoded as text.
 
@@ -459,7 +461,7 @@ Primitive values are trivially encoded as text.
 - Numbers, including booleans, are encoded as text. Valid encodings are further determined
   by number type.
 
-### Markup encoding
+## Markup encoding
 
 Markup is encoded as an expression containing an arbitrary number of text and directive expression arguments.
 Directives that produce semantic text and which do not represent any action could be encoded as tags, but this is not
@@ -467,21 +469,21 @@ required. Other types of macros, which may represent actions, is encoded in comm
 
 **Example:** The preprocessor examples above demonstrate markup encoding.
 
-### Text encoding
+## Text encoding
 
 
 
-### Number encoding
+## Number encoding
 
 Numbers may be encoded with an arbitrary number of whitespace.
 
-### Bytes encoding
+## Bytes encoding
 
 By default, bytes are encoded in hexadecimal (base 16). Arbitrary whitespace is allowed.
 
 **Example:** `A1B2C3 D4E5F6` represents 6 bytes.
 
-### Struct encoding
+## Struct encoding
 
 Structs that have no fields are encoded as an empty expression. Structs that have fields are either encoded as a
 dictionary or a sequence, depending on if they are named or positional. Optionally, the struct type could be included.
@@ -492,7 +494,7 @@ dictionary or a sequence, depending on if they are named or positional. Optional
 | Positional fields | `[127; 127; 0]` or `Point [127; 127; 0]`                   |
 | No fields         | `{}` or `Empty`                                            |
 
-### Enum encoding
+## Enum encoding
 
 Enums are encoded as 1 or 2 arguments. The first argument is a text argument that specifies the enum variant. If the
 enum has no fields, it does not have a second argument. Otherwise, the second argument is either a sequence or a

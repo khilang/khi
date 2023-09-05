@@ -81,8 +81,8 @@
             | "["<null-table>"#]"
 
 # Command
-<cmd> = "<" <word> ">"
-      | "<" <word> <attr> ">"
+<cmd> = "<"<word> ">"
+      | "<"<word> <attr> ">"
 
 # Open command expression
 # A command that ends with plain text.
@@ -118,12 +118,11 @@
                  | ":""<>"":"<closed-cmd-expr>
 
 # Opening tag
-<opening-tag> = "<+" <word> ">"
-              | "<+" <word>_<attr> ">"
+<opening-tag> = "<+"<word> ">"
+              | "<+"<word>_<attr> ">"
 
 # Closing tag
-<closing-tag> = "<-" ">"
-              | "<-" <word> ">"
+<closing-tag> = "<-"<word> ">" # Includes "<-""?" ">" which closes any tag.
 
 # Tag expression
 <tag-expr> = <opening-tag> <closing-tag>

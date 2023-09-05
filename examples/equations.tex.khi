@@ -17,17 +17,17 @@
 
   <begin>:equation* <begin>:split
 
-    <sqrt>:5 <times> <sqrt>:5 = 2 <n>
+    <sqrt>:5 <times> <sqrt>:5 = 5 <n>
 
-    # A trailing apostrophe means that the first argument is optional.
+    # A trailing apostrophe is an instruction to treat the first argument as optional.
     <sqrt'>:3:4 <times> <sqrt'>:3:16 = 4
 
   <end>:split <end>:equation*
 
   <begin>:align* [
-    | <SumRn>:k:0:100:k | =                0 + 1 + 2 + <dots> + 99 + 100 |
-    |                 : | = (0 + 100) + (1 + 99) + <dots> (49 + 51) + 50 |
-    |                 : | =                                         5050 |
+    | <SumRn>:k:0:100:k | =                  0 + 1 + 2 + <dots> + 99 + 100 |
+    |                 : | = (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50 |
+    |                 : | =                                           5050 |
   ] <end>:align*
 
   <begin>:align* [

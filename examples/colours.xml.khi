@@ -2,9 +2,9 @@
 
 <+colours>
   <+colour>
-    <+name>Red<->
-    <+hex>#FF0000<->
-    <+description>Red<->
+    <+name>Red<-?>
+    <+hex>#FF0000<-?>
+    <+description>Red<-?>
   <-colour>
   <+colour>
     <name>:Green
