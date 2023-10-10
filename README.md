@@ -1,10 +1,11 @@
 # Khi
 
-- is a data format and notation for arbitrary data, also known as a [metaformat](https://www.w3.org/standards/webarch/metaformats).
+- is a simple and universal textual data format and notation ([metaformat](https://www.w3.org/standards/webarch/metaformats)).
 - can be used for configuration, markup, serialization, storage and interchange.
-- was first and foremost designed with handwritten data in mind.
-- has native support for the universal data structures found in other formats and
-  programming languages, including:
+- has native support for the universal data structures commonly found in programming
+  languages and other data formats like JSON, XML, CSV and LaTeX: text and markup,
+  dictionaries, tables, lists, tuples, commands(LaTeX commands) and named hierarchies(XML tags/elements).
+- is easy and intuitive to read, write and edit.
 
 ## Links
 
@@ -14,13 +15,15 @@
 ## Examples & showcase
 
 The following are some examples of **Khi**-based formats and documents written in
-them. It is shown how structured and unstructured data can coexist and form more
-complex structures, and how it can be used for markup and configuration.
+them. The universality of the format is demonstrated: it is shown that Khi natively
+can encode the same data structures as JSON, XML, CSV and (regular) LaTeX, and it
+is shown that Khi allows these data structures to coexist within the same document,
+unlike the other formats each of which only supports a subset of the universal data
+structures.
 
 ### Wiki article example
 
-This is an example of a wiki article written in a **Khi**-based wiki article
-format.
+This is an example of an article written in a **Khi**-based article format.
 
 Such an article consists of significantly different kinds of data structures. It consists
 of both structured data, such as values, dictionaries and lists, and unstructured
@@ -36,12 +39,10 @@ and simplicity of the format should be compared to other formats encoding the sa
 data.
 
 Notes:
-- Macro application looks like this: `<macro>:arg1:arg2:...:argN`. Arguments are appended
-  with a colon.
-- Macros can also be expressed with tags. This is a macro with 1 argument: `<+macro>arg<-macro>`.
-- The `@` macro inserts a link. It takes two arguments: the first argument is the article to link to, and the second is
-  the link label that will appear in the article.
-- The `title` macro takes no arguments and is substituted for the article title.
+- Command expressions look like this: `<cmd>:arg:arg:arg:arg`. Command arguments are
+  appended with a colon.
+- The `@` command inserts a link. It takes two arguments: the first argument is the
+  article to link to, and the second is the link label that will appear in the article.
 - The root element is a dictionary.
 
 ```
@@ -84,12 +85,12 @@ content: {
   <p> <@>:self:Aluminium is a <@>:element:{chemical element} with <@>:chemsym:{chemical symbol}
   <chemsym> and <@>:atomnum:{atomic number} <atomnum>.
 
-  <p> In <@>:purity:pure form, it is a highly <@>:react:reactive <@>:metal:metal?,
+  <p> In <@>:purity:pure form, it is a highly <@>:react:reactive {<@>:metal:metal},
   but normally a thin coat of <@>:aloxide:{aluminium oxide} forms on its
-  surface, keeping it highly <@>:stab:stable?.
+  surface, keeping it highly {<@>:stab:stable}.
 
-  <p> In nature, it occurs as the <@>:ion:ion <$>:{Al^{3+}}. It constitutes 8.2% of
-  the earth's crust, making it the most common <@>:metal:metal found there.
+  <p> In nature, it occurs as the <@>:ion:ion <$>:{Al^{3+}}. It constitutes <$>:8.2%
+  of the earth's crust, making it the most common <@>:metal:metal found there.
 
   ...
 
@@ -98,45 +99,52 @@ content: {
 
 ### HTML preprocessor example
 
-This is an example of a document written in a **Khi**-based **HTML** preprocessor input format. The preprocessor can
-compile this document to **HTML**.
+This is an example of a document written in a **Khi**-based **HTML** preprocessor
+input format. The preprocessor can compile this document to **HTML**.
 
-The purpose of this example is to showcase a **Khi**-based encoding of markup and **XML**-like structures.
+The purpose of this example is to showcase a **Khi**-based encoding of markup and
+**XML**-like structures.
 
-Compare this document to the corresponding **HTML** document. In terms of verbosity and syntax noise, **Khi** allows
-short and long closing tags. Both are useful in different cases. **Khi** does not require quotes around attribute
-values.
+Compare this document to the corresponding **HTML** document. In terms of verbosity
+and syntax noise, **Khi** allows short and long closing tags. Both are useful in different
+cases. **Khi** does not require quotes around attribute values.
 
 Notes:
-- In this format, regular markup tags and special macros are distinguished by the `!` symbol. Macros end with `!`
-  while regular tags only consist of letters.
-- The `doctype!` macro substitutes itself for `<!doctype html>`.
+- The `<@doctype>:html` macro expression compiles to `<!doctype html>`.
+- `<#>` opens and closes a multiline quote. Such a multiline quote discards any excess
+  indentation.
 
 ```
-<@doctype> # @doctype is a preprocessor directive which inserts <!doctype html>.
-<+html> # <+tag> is an opening tag and <-tag> or <-> its closing tag.
-  <+head>
-    <+title>Hello world!<->
-    <+script src:script.js><->
-  <-head>
-  <+body>
-    <+h1 id:main-heading>Hello world!<->
-    <+p>Hello world!<-> # These two paragraph notations are equivalent.
+<@doctype>:html # Preprocessor directive which inserts <!doctype html>.
+<html>:{
+  <head>:{
+    <title>:{Hello world!}
+    <script src:script.js>:{}
+  }
+  <body>:{
+    <h1 id:main-heading>:{Hello world!}
     <p>:{Hello world!}
     <img src:frontpage.jpg>
-    <+div class:dark-background><+p>
+    <div class:dark-background>:<>:<p>:{
       This is a paragraph <br>
       with a line break.
-      <+em class:italic-text>This text is italic.<->
-    <-><->
-    <colour>:{ # Dictionaries also compile to tags.
-      name: Teal;
-      hex: #008080;
-      description: Blue-green mix;
+      <em class:italic>:{This text is italic.}
     }
-  <-body>
-<-html>
+    <pre>:<>:<code>:<>:<@raw>:<#>
+      def fib(n):
+          if n == 0:
+              return 0
+          elif n == 1:
+              return 1
+          else:
+              return fib(n - 1) + fib(n - 2)
 
+      print(fib(10))
+      print(fib(20))
+      print(fib(30))
+    <#>
+  }
+}
 ```
 
 ### TeX preprocessor example
@@ -154,16 +162,18 @@ be determined from syntax alone.
 This format could be used to encode **LaTeX**-math, that is later displayed by **MathJax**.
 
 Notes:
-- Preprocessor macros start with `@` and regular commands consist only of letters.
-- The `@tabulate-sq` automatically tabulates a square grid, such as a matrix. It takes a number and a sequence of
-  tabulated values.
+- `<n>` inserts a newline.
+- Preprocessor macros start with `@`. They are processed by the preprocessor rather
+  than TeX.
+- Tables are compiled to tabulation syntax. For example, `[1|0; 0|1]` is compiled
+  to `1&0\\0&1\\`.
 
 ```
 <documentclass>:article
 
 <usepackage>:amsmath
 
-<addtolength>:<jot>:1em # Controls the line spacing in align*
+<setlength>:<jot>:1em # Controls math line spacing
 
 <begin>:document
 
@@ -174,11 +184,19 @@ Notes:
     <sum>_{#1}^{#2`:#3} #4
   }
 
+  <begin>:equation* <begin>:split
+
+    <sqrt>:5 <times> <sqrt>:5 = 5 <n>
+
+    # A trailing apostrophe is an instruction to treat the first argument as optional.
+    <sqrt'>:3:4 <times> <sqrt'>:3:16 = 4
+
+  <end>:split <end>:equation*
+
   <begin>:align* [
-    | <SumRn>:k:0:100:k                                |
-    | = 0 + 1 + 2 + <dots> + 99 + 100                  |
-    | = (0 + 100) + (1 + 99) + <dots> (49 + 51) + 50   |
-    | = 5050                                           |
+    | <SumRn>:k:0:100:k | = 0 + 1 + 2 + <dots> + 99 + 100                  |
+    |                 : | = (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50 |
+    |                 : | = 5050                                           |
   ] <end>:align*
 
   <begin>:align* [
@@ -197,8 +215,8 @@ Notes:
       |0|1|0|
       |0|0|1|
     ] <end>:bmatrix
-    <n>
-    <mathbf>:X = <begin>:bmatrix [1|?|?; ?|1|?; ?|?|1] <end>:bmatrix
+
+    <n> <mathbf>:X = <begin>:bmatrix [1|:|:; :|1|:; :|:|1] <end>:bmatrix
   <end>:math
 
 <end>:document
@@ -208,12 +226,8 @@ Notes:
 
 This is an example of a Khi-based configuration format.
 
-The purpose of this example is to show how Khi can be used for configuration
-and to compare it to the corresponding **JSON** or **YAML** document.
-
-- Khi allows comments, JSON does not.
-- In terms of syntax noise, **JSON** requires quotes around all keys and text values.
-- JSON requires the root element to be wrapped in brackets.
+The purpose of this example is to show that Khi can encode the same structures as
+JSON or YAML.
 
 ```
 oak-planks: {
@@ -242,7 +256,7 @@ marble: {
 };
 # Glass: this material is not available yet.
 glass: {
-  disabled; # This is equal to `disabled: ?;` or `disabled: {};`.
+  disabled; # This is equal to `disabled: {};`.
   name: Glass;
   price: 250;
 };

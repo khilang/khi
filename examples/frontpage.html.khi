@@ -1,22 +1,21 @@
 # Example of Khi HTML-preprocessor input.
 
-<@doctype> # @doctype is a preprocessor directive which inserts <!doctype html>.
-<+html> # <+tag> is an opening tag and <-tag> or <-?> its closing tag.
-  <+head>
-    <+title>Hello world!<-?>
-    <+script src:script.js><-?>
-  <-head>
-  <+body>
-    <+h1 id:main-heading>Hello world!<-?>
-    <+p>Hello world!<-p> # These two paragraph notations are equivalent.
+<@doctype>:html # Preprocessor directive which inserts <!doctype html>.
+<html>:{
+  <head>:{
+    <title>:{Hello world!}
+    <script src:script.js>:{}
+  }
+  <body>:{
+    <h1 id:main-heading>:{Hello world!}
     <p>:{Hello world!}
     <img src:frontpage.jpg>
-    <+div class:dark-background><+p>
+    <div class:dark-background>:<>:<p>:{
       This is a paragraph <br>
       with a line break.
-      <+em class:italic-text>This text is italic.<-?>
-    <-?><-?>
-    <+pre><+code> <@raw>:<#>
+      <em class:italic>:{This text is italic.}
+    }
+    <pre>:<>:<code>:<>:<@raw>:<#>
       def fib(n):
           if n == 0:
               return 0
@@ -28,6 +27,6 @@
       print(fib(10))
       print(fib(20))
       print(fib(30))
-    <#> <-code><-pre>
-  <-body>
-<-html>
+    <#>
+  }
+}

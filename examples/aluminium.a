@@ -39,12 +39,12 @@ content: {
   <p> <@>:self:Aluminium is a <@>:element:{chemical element} with <@>:chemsym:{chemical symbol}
   <chemsym> and <@>:atomnum:{atomic number} <atomnum>.
 
-  <p> In <@>:purity:pure form, it is a highly <@>:react:reactive <@>:metal:metal?,
+  <p> In <@>:purity:pure form, it is a highly <@>:react:reactive {<@>:metal:metal},
   but normally a thin coat of <@>:aloxide:{aluminium oxide} forms on its
-  surface, keeping it highly <@>:stab:stable?.
+  surface, keeping it highly {<@>:stab:stable}.
 
-  <p> In nature, it occurs as the <@>:ion:ion <+$>Al^{3+}<-$>. It constitutes 8.2% of
-  the earth's crust, making it the most common <@>:metal:metal found there.
+  <p> In nature, it occurs as the <@>:ion:ion <$>:{Al^{3+}}. It constitutes <$>:8.2%
+  of the earth's crust, making it the most common <@>:metal:metal found there.
 
   ...
 

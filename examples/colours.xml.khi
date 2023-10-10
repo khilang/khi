@@ -1,19 +1,19 @@
 # Example of Khi XML-preprocessor input.
 
-<+colours>
-  <+colour>
-    <+name>Red<-?>
-    <+hex>#FF0000<-?>
-    <+description>Red<-?>
-  <-colour>
-  <+colour>
+<colours>:{
+  <colour>:{
+    <name>:Red
+    <hex>:#FF0000
+    <description>:Red
+  }
+  <colour>:{
     <name>:Green
     <hex>:#00FF00
     <description>:Green
-  <-colour>
+  }
   <colour>:{ # Dictionaries compile to a sequence of tags.
     name: Teal;
     hex: #008080;
     description: Blue-green mix;
   }
-<-colours>
+}

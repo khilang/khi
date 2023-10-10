@@ -22,8 +22,6 @@
                     | <dict-cmp> <expr-tail>
                     | <table-cmp>
                     | <table-cmp> <expr-tail>
-                    | <tag-expr>
-                    | <tag-expr> <expr-tail>
                     | <closed-cmd-expr>
                     | <closed-cmd-expr> <expr-tail>
                     | <open-cmd-expr>
@@ -103,8 +101,7 @@
 <closed-cmd-expr> = <cmd><closed-cmd-arg>
 
 # Closed command argument
-<closed-cmd-arg> = ":"<arg-word>"?"
-                 | ":"<arg-word><closed-cmd-arg>
+<closed-cmd-arg> = ":"<arg-word><closed-cmd-arg>
                  | ":"<quote>
                  | ":"<quote><closed-cmd-arg>
                  | ":"<expr-cmp>
@@ -116,46 +113,6 @@
                  | ":"<cmd>
                  | ":"<cmd><closed-cmd-arg>
                  | ":""<>"":"<closed-cmd-expr>
-
-# Opening tag
-<opening-tag> = "<+"<word> ">"
-              | "<+"<word>_<attr> ">"
-
-# Closing tag
-<closing-tag> = "<-"<word> ">" # Includes "<-""?" ">" which closes any tag.
-
-# Tag expression
-<tag-expr> = <opening-tag> <closing-tag>
-           | <opening-tag> <expr> <closing-tag>
-           | <opening-tag><closed-tag-arg> <closing-tag>
-           | <opening-tag><closed-tag-arg> <expr> <closing-tag>
-           | <opening-tag><open-tag-arg> <closing-tag>
-           | <opening-tag><open-tag-arg>_<expr> <closing-tag>
-           | <opening-tag><open-tag-arg><expr-tail-no-text> <closing-tag>
-
-# Open tag argument
-# Tag arguments that does not end with plain text.
-<open-tag-arg> = ":"<arg-word>
-               | ":"<arg-word>:<open-tag-arg>
-               | ":"<quote><open-tag-arg>
-               | ":"<expr-cmp><open-tag-arg>
-               | ":"<dict-cmp><open-tag-arg>
-               | ":"<table-cmp><open-tag-arg>
-               | ":"<cmd><open-tag-arg>
-
-# Closed tag argument
-<closed-tag-arg> = ":"<arg-word><closed-tag-arg>
-                 | ":"<arg-word>"?"
-                 | ":"<quote><closed-tag-arg>
-                 | ":"<quote>
-                 | ":"<expr-cmp><closed-tag-arg>
-                 | ":"<expr-cmp>
-                 | ":"<dict-cmp><closed-tag-arg>
-                 | ":"<dict-cmp>
-                 | ":"<table-cmp><closed-tag-arg>
-                 | ":"<table-cmp>
-                 | ":"<cmd><closed-tag-arg>
-                 | ":"<cmd>
 
 # Attribute
 <attr> = <word>
