@@ -27,6 +27,7 @@
                     | <open-cmd-expr>
                     | <open-cmd-expr>_<expr-tail>
                     | <open-cmd-expr><expr-tail-no-text>
+                    | "~"<null-expr>
 
 # Expression component
 <expr-cmp> = "{"<expr>"}"
@@ -39,16 +40,13 @@
 <dict> = <><key> ":"<expr>          # Last entry
        | <><key> ":"<expr>";"<>     # Last entry with trailing semicolon
        | <><key> ":"<expr>";"<dict> # Intermediary entry
-       | <><key> ";"<>              # Last key-only entry
-       | <><key> ";"<dict>          # Intermediary key-only entry
 
 # Dictionary key
 <key> = <word>
       | <quote>
 
 # Dictionary component
-<dict-cmp> = "{"<dict>"}"
-           | "{"<null-dict>"#}"
+<dict-cmp> = "{"<null-dict>"}"
 
 <null-table> = <>
              | <table>
@@ -60,23 +58,17 @@
 
 # Table in sequential notation
 <seq> = <expr>         # Last element
-      | <>":"<>        # Empty element
       | <expr>";"<>    # Last element with trailing semicolon
-      | <>":" ";"<>    # Empty last element with trailing semicolon
       | <expr>";"<seq> # Last element of row
-      | <>":" ";"<seq> # Empty last element of row
       | <expr>"|"<seq> # Intermediary element
-      | <>":" "|"<seq> # Empty intermediary element
 
 # Table in tabular notation
 <tab> = "|"<expr><tab> # Intermediary element
-      | "|" ":" <tab>  # Empty element
       | "|" <tab>      # End of row
       | "|"            # End
 
 # Table component
-<table-cmp> = "["<table>"]"
-            | "["<null-table>"#]"
+<table-cmp> = "["<null-table>"]"
 
 # Command
 <cmd> = "<"<word> ">"

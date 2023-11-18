@@ -17,8 +17,8 @@
 
   <begin>:equation* <begin>:split
 
-    <sqrt>:5 <times> <sqrt>:5 = 5 <n>
-
+    <sqrt>:5 <times> <sqrt>:5 = 5
+    <n>
     # A trailing apostrophe is an instruction to treat the first argument as optional.
     <sqrt'>:3:4 <times> <sqrt'>:3:16 = 4
 
@@ -26,8 +26,8 @@
 
   <begin>:align* [
     | <SumRn>:k:0:100:k | = 0 + 1 + 2 + <dots> + 99 + 100                  |
-    |                 : | = (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50 |
-    |                 : | = 5050                                           |
+    |                 ~ | = (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50 |
+    |                 ~ | = 5050                                           |
   ] <end>:align*
 
   <begin>:align* [
@@ -46,8 +46,8 @@
       |0|1|0|
       |0|0|1|
     ] <end>:bmatrix
-
-    <n> <mathbf>:X = <begin>:bmatrix [1|:|:; :|1|:; :|:|1] <end>:bmatrix
+    <n>
+    <mathbf>:X = <begin>:bmatrix [1|~|~; ~|1|~; ~|~|1] <end>:bmatrix
   <end>:math
 
 <end>:document

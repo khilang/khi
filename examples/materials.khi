@@ -24,9 +24,8 @@ marble: {
   beauty: 2;
   tags: [heavy; stone; rich];
 };
-# Glass: this material is not available yet.
 glass: {
-  disabled; # This is equal to `disabled: {};`.
+  description; ~; # A single ~ indicates an empty description.
   name: Glass;
   price: 250;
 };

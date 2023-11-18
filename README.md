@@ -86,10 +86,10 @@ content: {
   <chemsym> and <@>:atomnum:{atomic number} <atomnum>.
 
   <p> In <@>:purity:pure form, it is a highly <@>:react:reactive {<@>:metal:metal},
-  but normally a thin coat of <@>:aloxide:{aluminium oxide} forms on its
-  surface, keeping it highly {<@>:stab:stable}.
+  but normally a thin coat of <@>:aloxide:{aluminium oxide} forms on its surface,
+  keeping it highly {<@>:stab:stable}.
 
-  <p> In nature, it occurs as the <@>:ion:ion <$>:{Al^{3+}}. It constitutes <$>:8.2%
+  <p> In nature, it occurs as the <@>:ion:ion <$>:{<Al>^{3+}}. It constitutes <$>:8.2%
   of the earth's crust, making it the most common <@>:metal:metal found there.
 
   ...
@@ -119,13 +119,13 @@ Notes:
 <html>:{
   <head>:{
     <title>:{Hello world!}
-    <script src:script.js>:{}
+    <script src:script.js>:{~} # {~} is an empty expression.
   }
   <body>:{
     <h1 id:main-heading>:{Hello world!}
     <p>:{Hello world!}
     <img src:frontpage.jpg>
-    <div class:dark-background>:<>:<p>:{
+    <div class:dark-background><><p>:{
       This is a paragraph <br>
       with a line break.
       <em class:italic>:{This text is italic.}
@@ -186,8 +186,8 @@ Notes:
 
   <begin>:equation* <begin>:split
 
-    <sqrt>:5 <times> <sqrt>:5 = 5 <n>
-
+    <sqrt>:5 <times> <sqrt>:5 = 5
+    <n>
     # A trailing apostrophe is an instruction to treat the first argument as optional.
     <sqrt'>:3:4 <times> <sqrt'>:3:16 = 4
 
@@ -195,8 +195,8 @@ Notes:
 
   <begin>:align* [
     | <SumRn>:k:0:100:k | = 0 + 1 + 2 + <dots> + 99 + 100                  |
-    |                 : | = (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50 |
-    |                 : | = 5050                                           |
+    |                 ~ | = (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50 |
+    |                 ~ | = 5050                                           |
   ] <end>:align*
 
   <begin>:align* [
@@ -215,8 +215,8 @@ Notes:
       |0|1|0|
       |0|0|1|
     ] <end>:bmatrix
-
-    <n> <mathbf>:X = <begin>:bmatrix [1|:|:; :|1|:; :|:|1] <end>:bmatrix
+    <n>
+    <mathbf>:X = <begin>:bmatrix [1|~|~; ~|1|~; ~|~|1] <end>:bmatrix
   <end>:math
 
 <end>:document
@@ -254,9 +254,8 @@ marble: {
   beauty: 2;
   tags: [heavy; stone; rich];
 };
-# Glass: this material is not available yet.
 glass: {
-  disabled; # This is equal to `disabled: {};`.
+  description; ~; # A single ~ indicates an empty description.
   name: Glass;
   price: 250;
 };
