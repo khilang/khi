@@ -1,0 +1,218 @@
+### Style recommendations
+
+## Dictionaries
+
+# Empty dictionary
+{}
+
+# Singleline dictionary, inline entries
+{k1: a a a a; k2: b; k3: c c c; k4: d d}
+
+# Multiline dictionary, singleline entries
+{
+  > k1: a a a a
+  > k2: b b b
+  > k3: c
+  > k4: d d
+}
+
+# Multiline dictionary, multiline entries
+{
+  > k1: a a a
+    a a a a
+  > k2: b b b
+  > k3: c c c {
+    c c
+    c c c c
+    c
+  }
+  > k4: d d d d d
+    d d d d d
+    d d d d
+  > k5: e e e e
+    e e e e
+  > k6: f f f [
+    f f
+  ]
+}
+
+## Tuples
+
+# Unit (empty/zero) tuple
+[]
+
+# Singleline tuple, short inline components
+[a|b|c|d|e]
+
+# Singleline tuple, longer inline components
+[a a a | b b b b | c | d d d d d d d | e]
+
+# Multiline tuple, singleline components
+[
+  > a a a
+  | b b b
+  | c c c
+]
+
+# Multiline tuple, multiline components
+[
+  > [
+    a a a
+  ]
+  | b b
+  | c
+  | {
+    d d d
+    d d d d
+  }
+  | [
+    e e
+    e e
+    e e e
+  ]
+]
+
+## Lists
+
+# Empty list
+[]
+
+# Singleline list, inline elements
+[a a a; b b b; c; d; e e]
+
+# Multiline list, inline elements
+[
+  a a a; b b b; c;
+  d; e e; f;
+  g g g; h;
+]
+
+# Multiline list, singleline elements
+[
+  > a a a a a a a
+  > b
+  > c c c c c
+  > d d d
+]
+
+# Multiline list, multiline elements
+[
+  > a a a
+    a a a a a
+  > b b b
+  > c c c c {
+    c c c c c
+  }
+  > d d d
+    d d
+  > [
+    e e e
+  ]
+]
+
+## Tables
+
+# Empty table
+[]
+
+# Singleline table, inline rows
+[a a|b; c c|d d; e|f f]
+
+# Multiline table, inline rows
+[
+  a|b|c; d|e|f;
+  g|h|i; j|k|l;
+]
+
+# Multiline table, singleline rows, short & mostly same width columns
+[
+  |a|b|c|
+  |d|e|f|
+  |g|h|i|
+]
+
+# Multiline table, singleline rows, longer & mostly same width columns
+[
+  | a |   b b b| c c |
+  | d | e e e e| f f |
+  | g | h h h h| i i |
+]
+
+# Multiline table, singleline rows, differing width columns
+[
+  > a a a a a | b | c
+  > a a a | b b b b b | c c c c c
+  > a | b b | c c
+  > a a a a | b b b b b | c c
+]
+
+# Multiline table, multiline rows
+[
+  > a
+    a a a
+  | b b b b b [
+    b b
+    b b
+  ]
+  | c c c c
+    c c c
+
+  > d d d d
+  | e e e {
+    e e
+    e e
+  }
+  | f
+]
+
+## Directive
+
+# Inline directive within expression
+<Dir>:a:{b b}:c
+
+# Multiline directive within expression
+<Dir>:a:{b b}:{
+  c c c
+}:[
+  d d d
+]
+
+## Expressions
+
+# Inline expression
+{a a a{} {c c c} d d d}
+
+# Multiline expression
+{
+  a a a a {b b b b} c
+  c c c [d d d] e e e e
+  f f f <g>:h:i:j k k
+  k k k k
+}
+
+## Constructors
+
+# Inline directive constructor
+<Dir> : a : b b : c
+
+# Multiline directive constructor
+<Dir> : a : b b : {
+  c c c
+} : [
+  d d d
+]
+
+# Singleline tuple constructor
+a a a : b b : c c c c c : d : e e e
+
+# Multiline tuple constructor
+a a a : {b b b} : c : d d : {
+  e e e
+  e e e e
+} : {
+  f f f f f
+} : [
+  g g
+  g g
+  g g g
+]

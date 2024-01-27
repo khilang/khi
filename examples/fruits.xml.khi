@@ -1,0 +1,20 @@
+# A list of fruits
+
+<fruits>:{
+  <fruit>:{
+    <name>:Apple
+    <amount>:30
+    <colour>:#ce4531
+  }
+  <fruit>:{
+    <name>:Watermelon
+    <amount>:10
+    <colour>:#aff10e
+  }
+  # Dictionaries compile to a sequence of tags.
+  <fruit>:{
+    > name: Mango
+    > amount: 20
+    > colour: #f0b902
+  }
+}

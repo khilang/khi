@@ -1,146 +1,136 @@
 # Khi grammar
 
-# Nullable expression
-<null-expr> = <>
-            | <expr>
+## Document
 
-# Expression
-<expr> = <><sentence><>
-       | <><sentence> <expr-tail-no-text><>
-       | <><expr-tail-no-text><>
+<expression-document> = *
+                      | *<expression>*
 
-# Non-textual component in an expression
-<expr-tail> = <sentence> <expr-tail-no-text>
-            | <expr-tail-no-text>
+<dictionary-document> = *
+                      | *<dictionary>*
 
-# Component in an expression
-<expr-tail-no-text> = <quote>
-                    | <quote> <expr-tail>
-                    | <expr-cmp>
-                    | <expr-cmp> <expr-tail>
-                    | <dict-cmp>
-                    | <dict-cmp> <expr-tail>
-                    | <table-cmp>
-                    | <table-cmp> <expr-tail>
-                    | <closed-cmd-expr>
-                    | <closed-cmd-expr> <expr-tail>
-                    | <open-cmd-expr>
-                    | <open-cmd-expr>_<expr-tail>
-                    | <open-cmd-expr><expr-tail-no-text>
-                    | "~"<null-expr>
+<table-document> = *
+                 | *<table>*
 
-# Expression component
-<expr-cmp> = "{"<expr>"}"
+## Expression
 
-# Nullable dictionary
-<null-dict> = <>
-            | <dict>
+<expression> = <expression'>
+             | <expression'>_":"_<expression'> # Constructor notation
+<expression'> = <word>
+              | <word> <expression'>
+              | <quotation>
+              | <quotation> <expression'>
+              | <text-block>
+              | <text-block> <expression'>
+              | <bracketed-expression>
+              | <bracketed-expression> <expression'>
+              | <bracketed-dictionary>
+              | <bracketed-dictionary> <expression'>
+              | <bracketed-table>
+              | <bracketed-table> <expression'>
+              | <pattern>
+              | <pattern> <expression'>
+              | "~"
+              | "~" <expression'>
 
-# Dictionary
-<dict> = <><key> ":"<expr>          # Last entry
-       | <><key> ":"<expr>";"<>     # Last entry with trailing semicolon
-       | <><key> ":"<expr>";"<dict> # Intermediary entry
+## Dictionary
 
-# Dictionary key
-<key> = <word>
-      | <quote>
+<dictionary> = <flow-dictionary>
+             | <bullet-dictionary>
 
-# Dictionary component
-<dict-cmp> = "{"<null-dict>"}"
+<flow-dictionary> = <dictionary-entry>
+                  | <dictionary-entry> ";"
+                  | <dictionary-entry> ";" <flow-dictionary>
 
-<null-table> = <>
-             | <table>
+<bullet-dictionary> = ">" <dictionary-entry>
+                    | ">" <dictionary-entry> <bullet-dictionary>
 
-# Table
-# Though not encoded in the grammar, all rows must have the same number of columns.
-<table> = <seq>
-        | <><tab><>
+<dictionary-entry> = <word>":" <expression>
+                   | <quotation>":" <expression>
+                   | <text-block>":" <expression>
 
-# Table in sequential notation
-<seq> = <expr>         # Last element
-      | <expr>";"<>    # Last element with trailing semicolon
-      | <expr>";"<seq> # Last element of row
-      | <expr>"|"<seq> # Intermediary element
+## Table
 
-# Table in tabular notation
-<tab> = "|"<expr><tab> # Intermediary element
-      | "|" <tab>      # End of row
-      | "|"            # End
+### All rows must have the same number of columns.
+<table> = <flow-table>
+        | <grid-table>
+        | <bullet-table>
 
-# Table component
-<table-cmp> = "["<null-table>"]"
+<flow-table> = <expression>
+             | <expression> ";"
+             | <expression> ";" <flow-table>
+             | <expression> "|" <flow-table>
 
-# Command
-<cmd> = "<"<word> ">"
-      | "<"<word> <attr> ">"
+### Cannot have zero columns.
+<grid-table> = "|" <expression> <grid-table>
+             | "|" <grid-table>
+             | "|"
 
-# Open command expression
-# A command that ends with plain text.
-<open-cmd-expr> = <cmd><open-cmd-arg>
+<bullet-table> = ">" <expression>
+               | ">" <expression> <bullet-table'>
+<bullet-table'> = <bullet-table>
+                | "|" <expression>
+                | "|" <expression> <bullet-table'>
 
-# Open command argument
-<open-cmd-arg> = ":"<arg-word>
-               | ":"<arg-word><open-cmd-arg>
-               | ":"<quote><open-cmd-arg>
-               | ":"<expr-cmp><open-cmd-arg>
-               | ":"<dict-cmp><open-cmd-arg>
-               | ":"<table-cmp><open-cmd-arg>
-               | ":"<cmd><open-cmd-arg>
-               | ":""<>"":"<open-cmd-expr>
+## Pattern
 
-# Closed command expression
-# A command that does not end with plain text.
-<closed-cmd-expr> = <cmd><closed-cmd-arg>
+### Name cannot start with a hash sign.
+<tag> = "<"<word>">"
+      | "<"<word> <attributes> ">"
 
-# Closed command argument
-<closed-cmd-arg> = ":"<arg-word><closed-cmd-arg>
-                 | ":"<quote>
-                 | ":"<quote><closed-cmd-arg>
-                 | ":"<expr-cmp>
-                 | ":"<expr-cmp><closed-cmd-arg>
-                 | ":"<dict-cmp>
-                 | ":"<dict-cmp><closed-cmd-arg>
-                 | ":"<table-cmp>
-                 | ":"<table-cmp><closed-cmd-arg>
-                 | ":"<cmd>
-                 | ":"<cmd><closed-cmd-arg>
-                 | ":""<>"":"<closed-cmd-expr>
+<attributes> = <word>
+             | <word> <attributes>
+             | <word>":" <word>
+             | <word>":" <word> <attributes>
+             | <word>":" <quotation>
+             | <word>":" <quotation> <attributes>
+             | <word>":" <text-block>
+             | <word>":" <text-block> <attributes>
 
-# Attribute
-<attr> = <word>
-       | <word>_<attr>
-       | <word>":"<word>
-       | <word>":"<word>_<attr>
-       | <word>":"<quote>
-       | <word>":"<quote> <attr>
-       | <word>":"<expr-cmp>
-       | <word>":"<expr-cmp> <attr>
-       | <word>":"<dict-cmp>
-       | <word>":"<dict-cmp> <attr>
-       | <word>":"<table-cmp>
-       | <word>":"<table-cmp> <attr>
+<pattern> = <tag>
+          | <tag><arguments>
 
-# Quote
-# Matches a Quote token.
-<quote> = quote
+<arguments> = ":"<word>
+            | ":"<word><arguments>
+            | ":"<quotation>
+            | ":"<quotation><arguments>
+            | ":"<text-block>
+            | ":"<text-block><arguments>
+            | ":"<bracketed-expression>
+            | ":"<bracketed-expression><arguments>
+            | ":"<bracketed-dictionary>
+            | ":"<bracketed-dictionary><arguments>
+            | ":"<bracketed-table>
+            | ":"<bracketed-table><arguments>
+            | ":"<tag>
+            | ":"<tag><arguments>
+            | ":""<>"":"<pattern>
 
-# Sentence
-# Matches any maximal combination of Word, Query, HashQuery and Whitespace tokens
-# where Whitespace is not at the beginning or end.
-<sentence>
+## Bracketed structures
 
-# Word
-# Matches any maximal combination of Word, Query and HashQuery tokens.
+<bracketed-expression> = "{" <expression> "}"
+
+<bracketed-dictionary> = "{" "}"
+                       | "{" <dictionary> "}"
+
+<bracketed-table> = "[" "]"
+                  | "[" <table> "]"
+
+## Text & whitespace
+
+### Matches a Word token.
 <word>
 
-# Argument word
-# Matches a Word token.
-<arg-word>
+### Matches an Quotation token.
+<quotation>
 
-# Whitespace or nothing
-# Matches a Whitespace token or nothing.
-<>
+### Matches a Block token.
+<text-block>
 
-# Whitespace
-# Matches a Whitespace token.
+### Any whitespace
+### Any number (including zero) of whitespace tokens.
+### Also represented by a space character.
+*
+
+### Whitespace
+### One or more whitespace tokens.
 _

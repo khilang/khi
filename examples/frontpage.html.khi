@@ -1,10 +1,10 @@
-# Example of Khi HTML-preprocessor input.
+# A frontpage
 
-<@doctype>:html # Preprocessor directive which inserts <!doctype html>.
+<doctype!>:html # Macro that inserts <!doctype html>.
 <html>:{
   <head>:{
     <title>:{Hello world!}
-    <script src:script.js>:{~} # {~} is an empty expression.
+    <script src:script.js>:{~} # {~} denotes an empty element.
   }
   <body>:{
     <h1 id:main-heading>:{Hello world!}
@@ -15,7 +15,7 @@
       with a line break.
       <em class:italic>:{This text is italic.}
     }
-    <pre>:<>:<code>:<>:<@raw>:<#>
+    <pre>:<>:<code>:<>:<raw!>:<#>
       def fib(n):
           if n == 0:
               return 0
@@ -23,10 +23,6 @@
               return 1
           else:
               return fib(n - 1) + fib(n - 2)
-
-      print(fib(10))
-      print(fib(20))
-      print(fib(30))
     <#>
   }
 }

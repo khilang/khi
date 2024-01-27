@@ -1,0 +1,53 @@
+# Examples of multiline quotes
+
+# In this example, some whitespace characters are emphasized:
+# spaces are denoted ·, tabs are denoted ⇥ and line feeds are denoted ⏎.
+# Be aware that editors commonly delete trailing whitespace from lines.
+
+# Code
+<#>⏎
+··def fib(n):⏎
+····if n == 0:⏎
+······return 0⏎
+····elif n == 1:⏎
+······return 1⏎
+····else:⏎
+······return fib(n - 2) + fib(n - 1)⏎
+<#>
+
+# Quote
+<#quote n>⏎
+⇥Everyone is a genius. But if⏎
+⇥·you judge a fish by its ability⏎
+⇥·to climb a tree, it will live⏎
+⇥·its whole life in belief that⏎
+⇥·it is stupid.⏎
+<#quote>
+
+# Korean paragraph with ideographic whitespace and punctuation.
+<# n>⏎
+··결정은　원자의　배열이　공간적으로　반복된　패턴을　가지는　물질이다。⏎
+··　액체를　냉각시키면　분자들의　운동이　느려지다가　마침내　어떤　온도⏎
+··　이하에서는　분자들이　일정한　배열을　이루게　되고　자유로이　돌아다닐⏎
+··　수　없게　된다。　이런　분자（또는　원자）들의　규칙적인　배열의　결과로⏎
+··　평면들로　둘러싸인　모양을　가지게　된　균일한　물질을　결정이라고　한다。⏎
+<#>
+
+# Chinese paragraph
+<#zh n>⏎
+··莎草纸是古埃及人广泛采用的书写材料，它用当时盛产于尼罗河三角洲的⏎
+··纸莎草的茎制成。大约在公元前3000年，古埃及人就开始使用莎草纸，并将⏎
+··这种特产出口到古希腊等古代地中海文明地区，甚至遥远的欧洲内陆和⏎
+··西亚。莎草紙消亡以後，製作莎草紙的傳統技術也因缺乏記載而失傳。⏎
+<#zh>
+
+# Whitespace
+<# rfh>⏎
+⇥··⏎
+⇥··⇥··⏎
+⇥··⇥··⏎
+⇥··⇥··⇥··⇥··⏎
+⇥··⇥··⇥··⇥··⏎
+⇥··⇥··⏎
+⇥··⏎
+<#>

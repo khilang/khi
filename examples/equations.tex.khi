@@ -1,4 +1,4 @@
-# Example of Khi LaTeX-preprocessor input.
+# Math equations
 
 <documentclass>:article
 
@@ -11,7 +11,7 @@
 <section>:Equations
 
   # Define a sum-range command.
-  <@def>:<SumRn>:4:{ # @def is a preprocessor directive which handles the options in \newcommand.
+  <def!>:<SumRn>:4:{ # def! is a macro that defines a LaTeX command.
     <sum>_{#1}^{#2`:#3} #4
   }
 
@@ -19,7 +19,7 @@
 
     <sqrt>:5 <times> <sqrt>:5 = 5
     <n>
-    # A trailing apostrophe is an instruction to treat the first argument as optional.
+    # A trailing apostrophe indicates that the first argument is optional.
     <sqrt'>:3:4 <times> <sqrt'>:3:16 = 4
 
   <end>:split <end>:equation*
