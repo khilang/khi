@@ -1,17 +1,18 @@
 # Sample from grammatical word list
 
-> <Verb> : clear : <Regular> : <Transitive> : [
-  <a>:to clear | cleared | cleared | clearing
-] : [
-  > To empty contents of.
-  > To remove obstructions from.
-  > To make transparent.
-]
-> <Verb> : burn <p>:down : <Irregular> : <Transitive> : [
-  <a>:to burn <p>:down | burnt <p>:down | burnt <p>:down | burning <p>:down
-] : [
-  > To burn completely.
-]
-> <Noun> : firewood : <Uncountable> : [firewood | firewood] : [
-  > Wood burned to fuel a fire.
-]
+> <Verb> : clear : <Regular> : <Transitive> : {
+  > conjugation: <a>:to clear : cleared : cleared : clearing
+  > definitions: [
+    > To empty the contents of.
+    > To remove obstructions from.
+    > To make transparent.
+  ]
+}
+> <Verb> : burn <p>:down : <Irregular> : <Transitive> : {
+  > conjugation: <a>:to burn <p>:down : burnt <p>:down : burnt <p>:down : burning <p>:down
+  > definition: To burn completely.
+}
+> <Noun> : firewood : <Uncountable> : {
+  > declension: firewood : firewood
+  > definition: Wood burned to fuel a fire.
+}

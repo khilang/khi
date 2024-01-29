@@ -109,7 +109,7 @@ Notes:
 - This is an expression document.
 
 ```
-# Example of Khi HTML-preprocessor input
+# A frontpage
 
 <doctype!>:html # Macro that inserts <!doctype html>.
 <html>:{
@@ -153,7 +153,7 @@ Notes:
 - This is an expression document.
 
 ```
-# Example of Khi LaTeX-preprocessor input
+# Math equations
 
 <documentclass>:article
 
@@ -163,12 +163,17 @@ Notes:
 
 <begin>:document
 
+A document containing some
+equations and matrices.
+
 <section>:Equations
 
   # Define a sum-range command.
   <def!>:<SumRn>:4:{ # def! is a macro that defines a LaTeX command.
-    <sum>_{#1}^{#2`:#3} #4
+    <sum>_{#1}^{`[#2`:#3`]} #4
   }
+
+  <def!>:<Log>:0:<>:<operatorname>:Log
 
   <begin>:equation* <begin>:split
 
@@ -178,6 +183,8 @@ Notes:
     <sqrt'>:3:4 <times> <sqrt'>:3:16 = 4
 
   <end>:split <end>:equation*
+
+  <begin>:equation* <Log>(1 + 2 + 3) = <Log>:1 + <Log>:2 + <Log>:3 <end>:equation*
 
   <begin>:align* [
     | <SumRn>:k:0:100:k | = 0 + 1 + 2 + <dots> + 99 + 100                  |
@@ -201,8 +208,8 @@ Notes:
       |0|1|0|
       |0|0|1|
     ] <end>:bmatrix
-    <n>
-    <mathbf>:X = <begin>:bmatrix [1|~|~; ~|1|~; ~|~|1] <end>:bmatrix
+    =
+    <begin>:bmatrix [1|~|~; ~|1|~; ~|~|1] <end>:bmatrix
   <end>:math
 
 <end>:document
@@ -259,6 +266,7 @@ Notes:
 
 ```
 # Chemical elements
+
 # 1) Atomic number
 # 2) Chemical symbol
 # 3) Element name

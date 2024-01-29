@@ -1,14 +1,14 @@
-### Style recommendations
+# Style recommendations
 
 ## Dictionaries
 
-# Empty dictionary
+### Empty dictionary
 {}
 
-# Singleline dictionary, inline entries
+### Singleline dictionary, inline entries
 {k1: a a a a; k2: b; k3: c c c; k4: d d}
 
-# Multiline dictionary, singleline entries
+### Multiline dictionary, singleline entries
 {
   > k1: a a a a
   > k2: b b b
@@ -16,7 +16,7 @@
   > k4: d d
 }
 
-# Multiline dictionary, multiline entries
+### Multiline dictionary, multiline entries
 {
   > k1: a a a
     a a a a
@@ -38,23 +38,23 @@
 
 ## Tuples
 
-# Unit (empty/zero) tuple
+### Unit tuple
 []
 
-# Singleline tuple, short inline components
+### Singleline tuple, short inline entries
 [a|b|c|d|e]
 
-# Singleline tuple, longer inline components
+### Singleline tuple, longer inline entries
 [a a a | b b b b | c | d d d d d d d | e]
 
-# Multiline tuple, singleline components
+### Multiline tuple, singleline entries
 [
   > a a a
   | b b b
   | c c c
 ]
 
-# Multiline tuple, multiline components
+### Multiline tuple, multiline entries
 [
   > [
     a a a
@@ -74,20 +74,20 @@
 
 ## Lists
 
-# Empty list
+### Empty list
 []
 
-# Singleline list, inline elements
+### Singleline list, inline entries
 [a a a; b b b; c; d; e e]
 
-# Multiline list, inline elements
+### Multiline list, inline entries
 [
   a a a; b b b; c;
   d; e e; f;
   g g g; h;
 ]
 
-# Multiline list, singleline elements
+### Multiline list, singleline entries
 [
   > a a a a a a a
   > b
@@ -95,7 +95,7 @@
   > d d d
 ]
 
-# Multiline list, multiline elements
+### Multiline list, multiline entries
 [
   > a a a
     a a a a a
@@ -112,33 +112,33 @@
 
 ## Tables
 
-# Empty table
+### Empty table
 []
 
-# Singleline table, inline rows
+### Singleline table, inline rows
 [a a|b; c c|d d; e|f f]
 
-# Multiline table, inline rows
+### Multiline table, inline rows
 [
   a|b|c; d|e|f;
   g|h|i; j|k|l;
 ]
 
-# Multiline table, singleline rows, short & mostly same width columns
+### Multiline table, singleline rows, short & mostly same width columns
 [
   |a|b|c|
   |d|e|f|
   |g|h|i|
 ]
 
-# Multiline table, singleline rows, longer & mostly same width columns
+### Multiline table, singleline rows, longer & mostly same width columns
 [
   | a |   b b b| c c |
   | d | e e e e| f f |
   | g | h h h h| i i |
 ]
 
-# Multiline table, singleline rows, differing width columns
+### Multiline table, singleline rows, differing width columns
 [
   > a a a a a | b | c
   > a a a | b b b b b | c c c c c
@@ -146,7 +146,7 @@
   > a a a a | b b b b b | c c
 ]
 
-# Multiline table, multiline rows
+### Multiline table, multiline rows
 [
   > a
     a a a
@@ -165,24 +165,22 @@
   | f
 ]
 
-## Directive
+## Pattern
 
-# Inline directive within expression
-<Dir>:a:{b b}:c
+### Inline pattern within expression
+<P>:a:{b b}:c
 
-# Multiline directive within expression
-<Dir>:a:{b b}:{
+### Multiline pattern within expression
+<P>:a:{b b}:{
   c c c
-}:[
-  d d d
-]
+}
 
 ## Expressions
 
-# Inline expression
+### Inline expression
 {a a a{} {c c c} d d d}
 
-# Multiline expression
+### Multiline expression
 {
   a a a a {b b b b} c
   c c c [d d d] e e e e
@@ -192,27 +190,20 @@
 
 ## Constructors
 
-# Inline directive constructor
-<Dir> : a : b b : c
+### Inline pattern constructor
+<P> : a : b b : c
 
-# Multiline directive constructor
-<Dir> : a : b b : {
-  c c c
-} : [
-  d d d
+### Multiline pattern constructor
+<P> : a : b b b b : [
+  c c c c c
 ]
 
-# Singleline tuple constructor
+### Singleline tuple constructor
 a a a : b b : c c c c c : d : e e e
 
-# Multiline tuple constructor
+### Multiline tuple constructor
 a a a : {b b b} : c : d d : {
-  e e e
-  e e e e
-} : {
-  f f f f f
-} : [
   g g
   g g
   g g g
-]
+}

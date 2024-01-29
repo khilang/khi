@@ -621,8 +621,8 @@ A *repeated escape sequence* is a sequence of characters that takes precedence o
 A *whitespace character* is one of the following:
 - space
 - tab
-- carriage return
 - line feed
+- carriage return + line feed
 
 *Whitespace* is a sequence of whitespace characters.
 
@@ -675,6 +675,9 @@ whitespace before and after a colon. If the first component is a pattern with ze
 arguments, the trailing components become the arguments of that pattern. Otherwise,
 the components form a tuple.
 
+It is recommended to only use constructor notation to separate shorter values on a
+single line. The last value may span multiple lines.
+
 **Example (List of stock changes & tuple constructor):**
 ```
 > 2023-Nov-10 : -200 Crates
@@ -689,25 +692,26 @@ the components form a tuple.
 
 **Example (List of words & tag constructor):**
 ```
-> <Verb> : clear : <Regular> : <Transitive> : [
-  <a>:to clear | cleared | cleared | clearing
-] : [
-  > To empty contents of.
-  > To remove obstructions from.
-  > To make transparent.
-]
-> <Verb> : burn <p>:down : <Irregular> : <Transitive> : [
-  <a>:to burn <p>:down | burnt <p>:down | burnt <p>:down | burning <p>:down
-] : [
-  > To burn completely.
-]
-> <Noun> : firewood : <Uncountable> : [firewood | firewood] : [
-  > Wood burned to fuel a fire.
-]
+> <Verb> : clear : <Regular> : <Transitive> : {
+  > conjugation: <a>:to clear : cleared : cleared : clearing
+  > definitions: [
+    > To empty the contents of.
+    > To remove obstructions from.
+    > To make transparent.
+  ]
+}
+> <Verb> : burn <p>:down : <Irregular> : <Transitive> : {
+  > conjugation: <a>:to burn <p>:down : burnt <p>:down : burnt <p>:down : burning <p>:down
+  > definition: To burn completely.
+}
+> <Noun> : firewood : <Uncountable> : {
+  > declension: firewood : firewood
+  > definition: Wood burned to fuel a fire.
+}
 ```
 
 **Example (Patterns within tag constructor):**\
-`<Dir> : arg arg arg : <Dir>:arg:arg : <Dir> : arg` represents a pattern with 4 arguments.
+`<Pattern> : arg arg arg : <P>:arg:arg : <P> : arg` represents a pattern with 4 arguments.
 
 ## Valid characters
 
