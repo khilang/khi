@@ -4,15 +4,23 @@ This document describes the syntax and semantics of the **Khi** data format.
 
 ## Overview
 
-- Document: A document is either an expression, a dictionary or a table. Evaluating
-  a document yields a structure.
-- Structure: The result of parsing a Khi document
-- Expressions - Sequence of components that parse to a structure
-- Structure variants: nil, text, dictionary, table, composition or pattern.
-- String encodings: words, 
-- Whitespace
-- Constructor
-- Comment
+1. [Document](#document): A string, file, stream, etc. corresponding to a data structure.
+2. [Structure](#structure) - A value corresponding to a data structure
+3. [Expression](#expression) - A textual representation of a data structure
+4. Structure variants:
+   1. [Nil](#nil)
+   2. [Text](#text)
+   3. [Dictionary](#dictionary)
+   4. [Table](#table)
+   5. [Composition](#composition)
+   6. [Pattern](#pattern)
+5. String representation - A textual representation of a string
+   1. [Word](#word)
+   2. [Quotation](#quotation)
+   3. [Text block](#text-block)
+6. Character
+7. [Constructor notation](#constructor-notation)
+8. [Comment](#comment)
 
 ## Document
 
@@ -42,16 +50,19 @@ data in a unique way.
 
 ## Expression
 
-An *expression* is a nonblank sequence of [terms](#term). There may be whitespace
+An *expression* is a nonblank sequence of terms. There may be whitespace
 between the terms. When evaluated, it yields a [structure](#structure) value. Any
 structure can be represented by an expression.
 
-An *empty expression* is an expression with no [terms](#term). It represents [nil](#nil).
+A *term* is a textual representation of a [structure](#structure) that can be used
+in an [expression](#expression).
 
-A *simple expression* is an expression with a single [term](#term). It represents
-the same [structure](#structure) as the [term](#term).
+An *empty expression* is an expression with no term. It represents [nil](#nil).
 
-A *compound expression* is an expression with multiple [terms](#term). It represents
+A *simple expression* is an expression with a single term. It represents
+the same [structure](#structure) as the term.
+
+A *compound expression* is an expression with multiple terms. It represents
 a [composition](#composition) of the structures represented by the terms. If there
 is whitespace between two terms, there is whitespace between the structures in the
 composition.
@@ -61,15 +72,15 @@ A *nil expression*, *text expression*, *dictionary expression*, *table expressio
 [nil](#nil), [text](#text), a [dictionary](#dictionary), a [table](#table), a [composition](#composition)
 or a [pattern](#pattern) respectively.
 
-In an expression, a tilde `~` represents the *compound operator*. It discards all
-whitespace between the previous and next component or word. If
-there is a tilde between two components, then there is no whitespace between the components
-in the resulting compound.
+In an expression, a tilde `~` is an operator which discards all
+whitespace between the previous and next term or word. If
+there is a tilde between two terms, then there is no whitespace between the elements
+in the resulting composition.
 
 Consecutive words and whitespace represent [text](#text).
 
-A tilde can also be placed before or after the components, but will have no effect.
-A tilde can be placed in an expression with no components. An expression cannot be
+A tilde can also be placed before or after the terms, but will have no effect.
+A tilde can be placed in an expression with no terms. An expression cannot be
 blank, thus, a tilde is necessary to represent an empty expression.
 
 **Example:** `Hello world!` is an expression with a text term. It parses to text.
@@ -77,11 +88,11 @@ blank, thus, a tilde is necessary to represent an empty expression.
 **Example:** `{k1: v1; k2: v2}` is an expression with a dictionary term. It parses
 to a dictionary.
 
-**Example:** `{k1: v1} Text [1; 2; 3]` is an expression containing a dictionary component,
-a text component and a table component. It parses to a [compound](#compound).
+**Example:** `{k1: v1} Text [1; 2; 3]` is an expression containing a dictionary term,
+text term and table term. It parses to a [composition](#composition).
 
-**Example:** `~` is an expression with no components. It is an empty expression. It
-evaluates to [null](#null).
+**Example:** `~` is an expression with no terms. It is an empty expression. It
+evaluates to [nil](#nil).
 
 **Example:** `{c1} ~ {c2}` is equivalent to `{c1}{c2}`.
 
@@ -103,49 +114,48 @@ the words in the result.
 
 **Example:** `R ~ e ~ d` is equivalent to `Red`.
 
-### Term
+### Term forms
 
-A *term* is a textual representation of a [structure](#structure) that can be used
-in an [expression](#expression). The 
+The possible forms of a [term](#expression) is:
 
-| Term                                          | Represents                |
-|-----------------------------------------------|---------------------------|
-| [Word sequence](#word-sequence)               | [Text](#text)             |
-| [Quotation](#quotation)                       | [Text](#text)             |
-| [Text block](#text-block)                     | [Text](#text)             |
-| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary) |
-| [Bracketed table](#bracketed-table)           | [Table](#table)           |
-| [Pattern](#pattern)                           | [Pattern](#pattern)       |
-| [Bracketed expression](#bracketed-expression) | Value of expression       |
+| Term                                          | Represents                                       |
+|-----------------------------------------------|--------------------------------------------------|
+| [Word sequence](#word-sequence)               | [Text](#text)                                    |
+| [Quotation](#quotation)                       | [Text](#text)                                    |
+| [Text block](#text-block)                     | [Text](#text)                                    |
+| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                        |
+| [Bracketed table](#bracketed-table)           | [Table](#table)                                  |
+| [Pattern](#pattern)                           | [Pattern](#pattern)                              |
+| [Bracketed expression](#bracketed-expression) | [Value](#structure) of [expression](#expression) |
 
 A *nil term*, *text term*, *dictionary term*, *table term*, *composition term* or
 *pattern term* is a term evaluating to [nil](#nil), [text](#text), a [dictionary](#dictionary),
 a [table](#table), a [composition](#composition) or a [pattern](#pattern) respectively.
 
-Some terms cannot be adjacent to each other. This is overcome by using a [grouping](#grouping)
-or sometimes a join mark.
+Some terms cannot be adjacent to each other. This is overcome by using a [bracketed expression](#bracketed-expression)
+or sometimes a tilde `~` operator.
 
 ### Bracketed expression
 
 A *bracketed expression* is an [expression](#expression) enclosed in a pair of brackets
 `{`, `}`.
 
-It can be used as both a [term](#term) and an [argument](#argument). It represents
+It can be used as both a [term](#expression) and an [argument](#pattern). It represents
 the same [structure](#structure) as the [expression](#expression) it encloses.
 
 #### Bracketing for delimitation
 
 Bracketing is sometimes necessary to delimit terms in an expression.
-Some components, like a [text sentence component](#sentence), a [compound component](#compound)
-or a [null component](#null) could incorrectly merge with other components when they
-are placed next to each other. To prevent this, it is necessary to group them.
+Some [terms](#expression), like an [open text term](#word-sequence) or a [pattern term](#pattern)
+could incorrectly merge with other terms when they are placed next to each other.
+To prevent this, it is necessary to group them.
 
-**Example:** An expression with the 2 components `Purple` and `Orange` is correctly
-written `{Purple} {Orange}`. On the other hand, `Purple Orange` is an expression with
-a single component.
+**Example:** An expression with the 2 terms `Purple` and `Orange` is correctly written
+`{Purple} {Orange}`. On the other hand, `Purple Orange` is an expression with a single
+term.
 
-**Example:** `{{a} [b; c]} d` is an expression with 2 components. Without bracketing,
-this expression would have 3 components.
+**Example:** `{{a} [b; c]} d` is an expression with 2 terms. Without bracketing, this
+expression would have 3 terms.
 
 #### Bracketing for readability
 
@@ -167,7 +177,8 @@ structure.
 ## Text
 
 *Text* is a [structure](#structure) corresponding to a simple, scalar or irreducible
-data structure. For example: a string, number, boolean or date.
+data structure. It contains a string, which is a textual representation of the data
+structure.  a string, number, boolean or date.
 
 ## Dictionary
 
@@ -188,8 +199,8 @@ and multiline entries.
 
 ### Bracketed dictionary
 
-A dictionary enclosed in curly brackets `{`, `}` can be used as a [term](#term) or
-an [argument](#argument).
+A dictionary enclosed in curly brackets `{`, `}` can be used as a [term](#expression) or
+an [argument](#pattern).
 
 ### Flow dictionary notation
 
@@ -235,17 +246,17 @@ is intended for singleline rows and bullet notation is intended for multiline ro
 ### Bracketed table
 
 A *bracketed table* is a table enclosed in square brackets `[`, `]`. It can be used
-as a [term](#term) or an [argument](#argument).
+as a [term](#expression) or an [argument](#pattern).
 
 ### Flow table notation
 
 In *flow notation*, rows are delimited by semicolons `;` and columns are delimited by
 bars `|`. A trailing semicolon is permitted.
 
-**Example (Flow list with 8 elements):**\
+**Example (Flow list with 8 entries):**\
 `0; 1; 1; 2; 3; 5; 8; 13`
 
-**Example (Flow tuple with 3 components):**\
+**Example (Flow tuple with 3 entries):**\
 `1|0|0`
 
 **Example (Flow table with 3 rows and 3 columns):**\
@@ -282,7 +293,7 @@ row.
 In *bullet notation*, each row starts with a right angle `>`. Columns are delimited
 by bars `|`.
 
-**Example (Bullet list with 4 elements):**
+**Example (Bullet list with 4 entries):**
 ```
 > Hydrogen
 > Helium
@@ -312,101 +323,88 @@ or whitespace. Markup is the prime example of a data structure represented by a 
 ## Pattern
 
 A *pattern* is a [structure](#structure) corresponding to a parameterized data structure
-or command. A pattern takes attributes which configures the pattern,
-and arguments, which is the data the pattern acts on.
-A pattern could change its envorimonet , impure..
+or command. A pattern has a name, attributes and arguments. A *name* is a string which
+identifies the pattern. An *attribute* is a key-value pair that configures the pattern.
+The key is a string while the value is either a string or not present. *Arguments* are
+the values that instantiate the structure or command. A pattern could be seen as a
+generalization of constructors, **XML**-tags, **LaTeX**-commands/macros and text placeholders/tokens.
 
-Name, attributes represetnt.
+A pattern is represented by a tag, which contains the name and attributes, followed
+by a sequence of applied arguments.
 
-There are two dimensions to a directive:
-
-1) A directive can represent a specific encoding of a data structure.
-2) A directive represents an action (a stateful change or query to the environment).
-
-Given this, a directive expression represents either an encoded data structure, an
-encoded action, or a mix of both. A directive could be seen as a generalization of
-**XML**-tags, **LaTeX**-commands/macros and text placeholders/tokens.
-
-**Example:** In **XML**-like markup, tags are used to mark up and add semantics to
-text. Tags do not encode any action. In **Khi**, tags can be encoded as directives,
-which when applied to text, encodes semantic text. For example, **HTML** `<span class="italic">text</span>`
-corresponds to **Khi** `<span class:italic>:text`.
-
-**Example:**\
-In `<sender> sent <amount> to <recipient>.`, directives are used to represent
-tokens or placeholders.
-
-**Example:**\
-In **LaTeX**-like markup, commands are used to perform substitutions,
-computations and stateful actions (for example incrementing a section count or including
-a package). In **Khi**, commands are encoded as directives. For example, **LaTeX**
-`\frac{2a}{b}` corresponds to **Khi** `<frac>:2a:b`.
-
-**Example:** `<set>:x:100` encodes an action which sets the variable `x` to `100`.
-It encodes no data structure, since this is purely a command.
-
-### Tag
-
-A *tag* is represented by a left angle bracket `<`, followed by a *name*, followed by a sequence of [attributes](#attribute),
-followed by a right angle bracket `>`. The name is represented by a [word](#word)
+A *tag* is a left angle bracket `<`, followed by a *name*, followed by a sequence
+of attributes, followed by a right angle bracket `>`. The name is represented by a [word](#word)
 that determines the specific data structure
-or action. The [attributes](#attribute) tune the specific properties or behaviours
-of the pattern. A pattern name cannot start with a hash sign `#`. This is reserved for [multiline quote](#multiline-quote)
-tags.
+or action. The [attributes](#pattern) tune the specific properties or behaviours
+of the pattern. A pattern name cannot start with a hash sign `#`. This is reserved
+for [text block tags](#text-block).
 
-**Example:** `<name attr1 attr2:val2 attr3:val3 attr4>`
-
-### Attribute
-
-An *attribute* configures the tag. An attribute is either a *flag* or take a string
+An *attribute* configures the pattern. An attribute is either a *flag* or take a string
 value. A flag is represented by a word. An option is represented by a word, followed
-by a colon `:`, followed by a value represented by a word, an inline quote or a multiline
-quote. Duplicate attributes are not allowed.
+by a colon `:`, followed by a value represented by a word, quotation or text block.
+Duplicate attributes are not allowed.
 
-### Application
+An attribute key is a string represented by a word, and an attribute value
+is a string represented by a word, quotation or text block. They are separated by
+a colon. An attribute can be a flag, which means it has an empty value. Such an attribute
+is represented by a single word.
+
+An *argument* is a representation of
+An *argument* is a representation of a [structure](#structure) that can be used in
+a [pattern](#pattern).
 
 A pattern is applied to an argument by appending a colon `:` followed by the argument.
 There cannot be whitespace between the colon `:` and argument. A pattern with zero
 arguments is simply represented by a tag.
 
-Note that arguments are always applied by the leftmost tag pattern.
+**Example (Pattern with 6 arguments):** `<sum>:1:2:3:4:5:6`
 
-Patterns can be arguments, but  into a directive expression. There, they are
-interpreted as directive expressions that have zero arguments.
+**Example (Pattern with no arguments):** `<br>`
 
-**Example (Application with 6 arguments):**\
-`<sum>:1:2:3:4:5:6`
+**Example:** `<weight>:600:{This is bold text}` is the pattern `weight` applied to
+2 text arguments.
 
-**Example (Application with no arguments):**\
-`<br>`
-
-**Example:** `<weight>:600:{This is bold text}` is the directive `weight` applied
-to 2 text arguments.
-
-**Example:** `<p id:opening class:fancy>` encodes the directive `p` with attributes
-`id:opening` and `class:fancy`.
+**Example:** `<p id:opening class:fancy>` is the pattern `p` with attributes `id:opening`
+and `class:fancy`.
 
 **Example:** `<input type:checkbox checked>` has two attributes:
-`type` with value `checkbox` and `checked` with value `~` (empty expression).
+`type` with value `checkbox` and `checked` with empty value.
 
-**Example:** In `<cmd0>:arg1:arg2:<cmd3>:arg4:arg5`, `<cmd0>` is a directive applied
-to 5 arguments. `<cmd3>` is the third argument to `<cmd0>`, and is a directive expression
+**Example:** In `<cmd0>:arg1:arg2:<cmd3>:arg4:arg5`, `<cmd0>` is a pattern applied
+to 5 arguments. `<cmd3>` is the third argument to `<cmd0>`, and is itself a pattern
 with zero arguments.
 
-### Argument
+**Example:** `<name attr1 attr2:val2 attr3:val3 attr4>`
 
-An *argument* is a representation of a [structure](#structure) that can be used in
-a [pattern](#pattern).
+**Example:** In **XML**-like markup, tags are used to mark up and add semantics to
+text. Tags do not encode any action. In **Khi**, tags can be encoded as patterns,
+which when applied to text, encodes semantic text. For example, **HTML** `<span class="italic">text</span>`
+corresponds to **Khi** `<span class:italic>:text`.
 
-| Argument                                      | Represents                |
-|-----------------------------------------------|---------------------------|
-| [Word](#word)                                 | [Text](#text)             | 
-| [Quotation](#quotation)                       | [Text](#text)             |
-| [Text block](#text-block)                     | [Text](#text)             |
-| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary) |
-| [Bracketed table](#bracketed-table)           | [Table](#table)           |
-| Tag (Pattern with no arguments)               | [Pattern](#pattern)       |
-| [Bracketed expression](#bracketed-expression) | Value of expression       |
+**Example:**\
+In `<sender> sent <amount> to <recipient>.`, patterns are used to represent placeholders.
+
+**Example:**\
+In **LaTeX**-like markup, commands are used to perform substitutions,
+computations and stateful actions (for example incrementing a section count or including
+a package). In **Khi**, commands are encoded as patterns. For example, **LaTeX**
+`\frac{2a}{b}` corresponds to **Khi** `<frac>:2a:b`.
+
+**Example:** `<set>:x:100` encodes an action which sets the variable `x` to `100`.
+
+### Argument forms
+
+The possible forms of an [argument](#pattern) is:
+
+| Argument                                                            | Represents                                       |
+|---------------------------------------------------------------------|--------------------------------------------------|
+| [Word](#word)                                                       | [Text](#text)                                    | 
+| [Quotation](#quotation)                                             | [Text](#text)                                    |
+| [Text block](#text-block)                                           | [Text](#text)                                    |
+| [Bracketed dictionary](#bracketed-dictionary)                       | [Dictionary](#dictionary)                        |
+| [Bracketed table](#bracketed-table)                                 | [Table](#table)                                  |
+| [Tag](#pattern) ([Pattern](#pattern) with no [arguments](#pattern)) | [Pattern](#pattern)                              |
+| [Bracketed expression](#bracketed-expression)                       | [Value](#structure) of [expression](#expression) |
 
 A *nil argument*, *text argument*, *dictionary argument*, *table argument*, *composition
 argument* or *pattern argument* is an argument evaluating to [nil](#nil), [text](#text),
@@ -415,51 +413,50 @@ a [dictionary](#dictionary), a [table](#table), a [composition](#composition) or
 
 ### Pattern composition
 
-The *composition operator* `<>` is a special operator that can be used in directive
-expressions. It applies the directive expression on the right-hand side as an argument
-to the directive expression on the left-hand side.
+Patterns can be composed by the *composition operator* `<>`. It applies the pattern
+on the right-hand side as an argument to the pattern on the left-hand side.
 
 **Example:** `<bold>:<>:<italic>:text` is equivalent to `<bold>:{ <italic>:text }`.
+
+**Example:** `<a>:<>:<b>:<>:<c>:d` is equivalent to `<a>:{<b>:{<c>:d}}`.
 
 ## Word
 
 A *word* is a sequence of glyphs, [character escape sequences](#character-escape-sequence)
-and [repeated escape sequences](#repeated-escape-sequence). A *glyph* is a character
-that is not [whitespace](#whitespace) nor a [reserved character](#reserved-character).
-A word encodes a string.
+and [repeated escape sequences](#repeated-escape-sequence). It represents a string.
+
+A *glyph* is a character that is not [whitespace](#whitespace) nor a [reserved character](#reserved-character).
 
 ## Quotation
 
-A *quotation* is a sequence of characters enclosed in a pair of quotation marks `"`.
-It cannot span multiple lines. [Character escape sequences](#character-escape-sequence)
+A *quotation* is a representation of a string. It is a sequence of characters enclosed
+in a pair of quotation marks `"`. It cannot span multiple lines. [Character escape sequences](#character-escape-sequence)
 can be used within the quotation, whose primary use case is the insertion of quotation
 marks `"` or linebreaks.
 
-A quotation can represent a [text term](#term), [text argument](#argument), [dictionary key](#dictionary)
-and [attribute value](#attribute).
-
 **Example:** `"This is a quotation"`
 
-**Example (quote with reserved characters & character escape sequences):**\
+**Example (quotation with reserved characters & character escape sequences):**\
 ```"Reserved: {, }, [, ], <, >, `", :, ;, |, ~, ``"``` returns the text string\
 `` Reserved: {, }, [, ], <, >, ", :, ;, |, ~, ` ``.
 
 ## Text block
 
-A *text block* is a sequence of characters enclosed in a pair of block tags which
-encodes a string. It can span multiple lines.
+A *text block* is a sequence of characters enclosed in a pair of text block tags.
+A text block represents a string. The *contents* of a text block is the enclosed characters,
+excluding the tags.
 
 A text block has a configuration which determines how its contents are processed before
 being returned. By default, a text block is optimal for files and code.
 
-A text block can have a [label](#labelled-text-block) which prevents enclosed characters from clashing with
-a closing block tag.
+A text block can have a [label](#labelled-text-block) which prevents enclosed characters
+from clashing with a closing block tag.
 
 ### Default text block
 
-A multiline quote is enclosed in a pair of multiline tags `<#>`.
+A text block is enclosed in a pair of text block tags `<#>`.
 
-By default, the contents of a multiline quote is formatted in 4 steps:
+By default, the contents of a text block is formatted in 4 steps:
 1. If a linebreak exists, delete the characters after the last linebreak if they are blank.
 2. If a linebreak exists, delete the header line if it is blank.
 3. Delete excess indentation from each line.
@@ -496,8 +493,8 @@ the remaining lines is deleted.
 
 ### Labelled text block
 
-Multiline quotes may be labelled. Labels are rarely needed, but may in some cases
-prevent quote content from clashing with a tag.
+Text blocks may be labelled. Labels are rarely needed, but may in some cases to
+prevent content from clashing with a tag.
 
 **Example:**
 ```
@@ -506,7 +503,7 @@ prevent quote content from clashing with a tag.
   clashing with the closing tag.
 <#text>
 ```
-is a multiline quote with the label `quote`.
+is a text block with the label `text`.
 
 **Example:**
 `<#khi><#a><#>...<#><#a><#khi>` yields the text `<#a><#>...<#><#a>`.
@@ -527,23 +524,23 @@ in the configuration are applied in order.
 | `n`  | Delete all linebreaks.                                                                   |
 | `r`  | Clear configuration, including the defaults.                                             |
 
-By default, a multiline quote has the flags `fhx`. The flag `r` resets and clears
+By default, a text block has the configuration `fhx`. The flag `r` resets and clears
 all flags, including the default flags.
 
-**Example:** `<#quote n>Hello world!<#quote>` is a multiline quote with label `quote`,
+**Example:** `<#q n>Hello world!<#q>` is a text block with label `q`,
 and configuration `fhxn`.
 
 **Example:**
 ```
 <# rtl>    public static final void main(String[] args) { ... }    <#>
 ```
-is a multiline quote with configuration `tl`.
+is a text block with configuration `tl`.
 
 ## Reserved character
 
 A *reserved character* is a character that does not represent [text](#text) in a word,
 unless it is escaped in some way. Reserved characters add structure to the document.
-Thus, they cannot be used freely within a plain text component.
+Thus, they cannot be used freely within a [word](#word).
 
 | Character | Name           | Use                                                    |
 |-----------|----------------|--------------------------------------------------------|
@@ -558,7 +555,7 @@ Thus, they cannot be used freely within a plain text component.
 | `]`       | Right square   | End nonempty table                                     |
 | `<`       | Left angle     | Begin tag, diamond                                     |
 | `>`       | Right angle    | End tag, bullet                                        |
-| `"`       | Quotation mark | Begin inline quote, end inline quote                   |
+| `"`       | Quotation mark | Begin quotation, end quotation                         |
 
 A hash `#` is not reserved, but either is text or opens a [comment](#comment) depending
 on the character following it.
@@ -618,24 +615,12 @@ A *repeated escape sequence* is a sequence of characters that takes precedence o
 
 ## Whitespace
 
-A *whitespace character* is one of the following:
-- space
-- tab
-- line feed
-- carriage return + line feed
-
-*Whitespace* is a sequence of whitespace characters.
-
-Additionally, a [comment](#comment) is considered to be whitespace.
+*Whitespace* is a sequence of whitespace characters or a [comment](#comment).
 
 ### Whitespace equivalence
 
-*Whitespace equivalence* is a principle applied to [expressions](#expression) and
-[sentences](#sentence). It states that any sequence of [whitespace](#whitespace) between
-[components](#component) and [words](#word) is equivalent.
-
-In an expression, each sequence of whitespace between words and components is equivalent
-to a single space character.
+*Whitespace equivalence* is the principle that any whitespace is equivalent. In other
+words, a sequence of whitespace is equivalent to a space character.
 
 **Example:**
 ```
@@ -652,31 +637,23 @@ Text    with    whitespace
 ```
 is equivalent to `Text with whitespace`.
 
-### Whitespace significance
-
-*Significant whitespace* is whitespace that, when parsed, is preserved in the result.
-*Insignificant whitespace* is whitespace that is ignored by the parser.
-
-[Whitespace](#whitespace) between components in an expression or between words in
-a sentence is significant. Whitespace before or after an expression, a table or a
-dictionary is insignificant.
-
 ## Constructor notation
 
 Some data structures consist of multiple substructures. Tuples and patterns are
 used to specify such structures. *Constructor notation* is intended to make structures
-encoded as tuples and patterns easier to read and write.
+encoded as tuples and patterns easier to read and write. Constructor notation can
+be used anywhere an expression is expected.
 
 - Tuples can be expressed without square brackets.
-- Text components can easily be delimited.
+- Text expressions can easily be delimited.
 
-In constructor notation, components are delimited by colons `:`, and there must be
-whitespace before and after a colon. If the first component is a pattern with zero
-arguments, the trailing components become the arguments of that pattern. Otherwise,
-the components form a tuple.
+In constructor notation, expressions are delimited by colons `:`, and there must be
+whitespace before and after a colon. If the first expression is a pattern with zero
+arguments, the trailing expressions become the arguments of that pattern. Otherwise,
+the expressions form a tuple.
 
-It is recommended to only use constructor notation to separate shorter values on a
-single line. The last value may span multiple lines.
+It is recommended, for sakes of readability, to only use constructor notation to separate
+shorter values on a single line. The last value may span multiple lines.
 
 **Example (List of stock changes & tuple constructor):**
 ```
@@ -690,7 +667,7 @@ single line. The last value may span multiple lines.
 > 2023-Nov-17 : -350 Crates
 ```
 
-**Example (List of words & tag constructor):**
+**Example (List of words & pattern constructor):**
 ```
 > <Verb> : clear : <Regular> : <Transitive> : {
   > conjugation: <a>:to clear : cleared : cleared : clearing
@@ -710,12 +687,18 @@ single line. The last value may span multiple lines.
 }
 ```
 
-**Example (Patterns within tag constructor):**\
+**Example (Patterns within pattern constructor):**\
 `<Pattern> : arg arg arg : <P>:arg:arg : <P> : arg` represents a pattern with 4 arguments.
 
-## Valid characters
+## Character
 
-## Linebreaks
+A *whitespace character* is one of the following:
+- `U+0020 (Space)`
+- `U+0009 (Tabulation)`
+- `U+000A (Line feed)`
+
+An *ignored character* refers to `U+000D (Carriage return)`. It is always skipped,
+even in quotations and text blocks.
 
 ## Comment
 
