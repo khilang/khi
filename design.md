@@ -70,7 +70,7 @@ The goal is to design a data format that fulfills the criteria:
 
 ## Candidates
 
-Here, candidate formats are compared and evaluated according the criteria.
+Here, candidate formats are compared and evaluated according to the criteria.
 
 <table>
  <tr><th></th><th>JSON</th><th>XML</th><th>YAML</th><th>TOML</th><th>DSV/CSV</th><th>LaTeX</th></tr>
