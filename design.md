@@ -56,7 +56,7 @@ The goal is to design a data format that fulfills the criteria:
       tagged trees.
    2. can be used for configuration, markup and storage.
 2. *Source format*: As a handwritten document, the format
-   1. is easy and intuitive to read, write and edit.
+   1. is easy and intuitive to read, write and edit and understandable at a glance.
    2. is aesthetic.
    3. is resistant to errors.
    4. has style recommendations.
@@ -182,6 +182,15 @@ are preferred to control scoping.
 The selected structure variants, nil, text, dictionaries, tables, compositions and
 patterns, cover the corresponding considered data structures. Furthermore, each have
 a satisfactory textual representation.
+
+#### Patterns
+
+A pattern represents a specific parameterized structure. It is left a little vague,
+but this allows it to cover many important data structures. By *specific*: they can
+represent any of an unbounded number of commands, enum variants, placeholders and
+other name-identified data structures. By *parameterized*: these commands and enums
+can take arguments and values. Attributes allow them to represent XML-tags or to be
+configured, which is sometimes useful.
 
 #### Argument application
 
