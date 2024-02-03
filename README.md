@@ -142,6 +142,7 @@ These features have not been explained here:
 - Text blocks: another way to represent text. Can be used to insert code or other
   files.
 - Constructor notation
+- Comments
 
 ## Examples & showcase
 
@@ -156,10 +157,10 @@ data, such as markup.
 
 Notes:
 - Comments are opened by a hash `#`.
-- A macro has syntax: `<pattern>:arg:arg:arg`. Arguments are applied with a colon
-  `:`.
+- This encyclopedia has macros. They are represented by Khi patterns: `<macro>:arg:arg:arg`.
 - The `<@>` macro inserts a link. It takes two arguments: the first argument is the
   article to link to, and the second is the link label that will appear in the article.
+- Compare: The `title` entry has a text value, while the `decsription` entry has a composition value.
 - This is a dictionary document.
 
 ```
@@ -223,9 +224,11 @@ supports named hierarchies, including text and tags with attributes. A preproces
 could compile this document to **HTML**.
 
 Notes:
-- A macro ends with `!`. They are implemented in the preprocessor and compile to **XML**/**HTML**.
+- Here, we distinguish between HTML tags and HTML preprocessor macros. Both are
+  represented by Khi patterns, but a macro ends with `!`, while a regular HTML tag is
+  alphabetic.
 - `<doctype!>:html` compiles to `<!doctype html>`.
-- `<#>` opens and closes a text block.
+- `<#>` opens and closes a text block. We use it to embed code.
 - This is an expression document.
 
 ```
@@ -266,6 +269,8 @@ compositions of text and commands with arguments. A preprocessor could compile t
 document to **LaTeX**.
 
 Notes:
+- Here, we distinguish between regular LaTeX commands and preprocessor macros. Both
+  are represented by Khi patterns, but a macro ends with `!`.
 - **Khi** does not natively support optional arguments. This is instead handled by
   ending a command name with an apostrophe.
 - Tables are compiled to tabulation syntax. For example, `[1|0; 0|1]` is compiled
@@ -341,8 +346,9 @@ This is a configuration example. It demonstrates that **Khi**, like **JSON** and
 natively supports objects, arrays and scalar values.
 
 Notes:
-- **Khi** is not *syntax typed*, unlike **JSON** and **YAML**. In **Khi**, all scalar
-  values are represented by text.
+- **Khi** is not *syntax typed*, unlike **JSON** and **YAML**. JSON and YAML determine
+  the types of data during parsing. For example, quotes indicate that a value is a
+  string. Using Khi, programs determine the types of values themselves.
 - This is a dictionary document.
 
 ```
