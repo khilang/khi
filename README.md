@@ -23,6 +23,126 @@
   - [khi.rs](https://github.com/khilang/khi.rs) (Rust)
   - [khi.js](https://github.com/khilang/khi.js) (JavaScript)
 
+## A brief overview
+
+### Document
+
+A Khi document contains either an expression(a value), a dictionary or a table. It
+is up to the programmer to decide which root element is most suitable. Possible values,
+dictionaries and tables will be explained further below.
+
+### Nil
+
+Nil represents an empty or default value. It corresponds to other formats' null value.
+A nil value is written `~`.
+
+### Text
+
+Text represents scalar or irreducible value like strings, numbers, booleans, dates etc. Simply
+write `This is a string`, `300`, `1024.0`, `true`.
+If the text contains reserved characters, you can optionally use quotes:
+`"https://khilang.github.io/khi-editor/"`.
+
+### Dictionary
+
+A dictionary organizes values by string keys.
+
+There are two notations for dictionaries:
+- **Flow notation:**
+  ```
+  {name: Oak planks; price: 200}
+  ```
+- **Bullet notation:**
+  ```
+  {
+    > name: Oak planks
+    > price: 200
+  }
+  ```
+
+It is recommended to use flow notation for inline entries and bullet notation for
+multiline entries.
+
+<details>
+<summary>Non-recommended styles</summary>
+The following syntax is allowed, but it is recommended to use bullet notation:
+
+```
+{
+  name: Oak planks;
+  price: 200;
+}
+```
+
+The following is allowed, but looks bad:
+
+```
+{>name: Oak planks >price: 200}
+```
+
+</details>
+
+### Table
+
+A table organizes values by rows and columns. A table with one column is also known
+as a list, and a table with one row is also known as a tuple.
+
+There are three notations for tables:
+- **Flow notation:**
+  ```
+  [1|0|0; 0|1|0; 0|0|1]
+  ```
+- **Grid notation:**
+  ```
+  [
+    |1|~|~|
+    |~|1|~|
+    |~|~|1|
+  ]
+  ```
+- **Bullet notation:**
+  ```
+  [
+    > Northwest
+    | Northeast
+    > Southwest
+    | Southeast
+  ]
+  ```
+
+It is recommended to use flow notation for inline rows, grid notation for singleline
+rows and bullet notation for multiline rows.
+
+### Pattern
+
+A pattern represents something that is identifiable by a name. For example:
+
+- **Enums:**
+  `<Red>`, `<Blue>`, `<Green>`, `<Rgb>:255:127:0`
+- **Actions:**
+  `<set>:x:10`, `<load>:std.lib`
+- **LaTeX-like commands:**
+  `<frac>:1:2`, `<begin>:bmatrix`
+- **XML-like tagged trees**
+  `<div class:m1>:{Content}` - patterns can have attributes which configure them.
+
+### Composition
+
+Whenever a value is expected, you can use one of the constructs above: nil, text,
+dictionary, table and pattern. But you are also allowed to compose them. This is how
+Khi supports markup; Markup consists of such textual compositions.
+
+`This is a <br> composition` is a composition consisting of a text term, followed
+by a pattern term, followed by a text term.
+
+### Other features
+
+These features have not been explained here:
+
+- Text blocks: another way to represent text. Can be used to insert code or other
+  files.
+- Constructor notation
+
 ## Examples & showcase
 
 The following are some examples of **Khi** documents. It is shown how **Khi** supports

@@ -73,8 +73,8 @@ or positional. Optionally, the struct type could be included.
 ## Enum
 
 Enums are encoded as patterns with zero or one argument. The pattern name
-specifies the enum variant. If the enum has no fields, it does not have a second argument.
-Otherwise, the second argument is either a tuple or a dictionary, depending on if
+specifies the enum variant. If the enum has no fields, it does not have an argument.
+Otherwise, the argument is either a tuple or a dictionary, depending on if
 the enum has named or positional fields.
 
 | Variant           | Example                      |
