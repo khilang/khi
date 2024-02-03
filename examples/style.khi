@@ -188,21 +188,21 @@
   k k k k
 }
 
-## Constructors
+## Constructor notation
 
 ### Inline pattern constructor
-<P> : a : b b : c
+<P> <> a <> b b <> c
 
 ### Multiline pattern constructor
-<P> : a : b b b b : [
+<P> <> a <> b b b b <> [
   c c c c c
 ]
 
 ### Singleline tuple constructor
-a a a : b b : c c c c c : d : e e e
+a a a <> b b <> c c c c c <> d <> e e e
 
 ### Multiline tuple constructor
-a a a : {b b b} : c : d d : {
+a a a <> {b b b} <> c <> d d <> {
   g g
   g g
   g g g

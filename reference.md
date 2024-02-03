@@ -617,10 +617,9 @@ be used anywhere an expression is expected.
 - Tuples can be expressed without square brackets.
 - Text expressions can easily be delimited.
 
-In constructor notation, expressions are delimited by colons `:`, and there must be
-whitespace before and after a colon. If the first expression is a pattern with zero
-arguments, the trailing expressions become the arguments of that pattern. Otherwise,
-the expressions form a tuple.
+In constructor notation, expressions are delimited by diamonds `<>`. If the first
+expression is a pattern with zero arguments, the trailing expressions become the arguments
+of that pattern. Otherwise, the expressions form a tuple.
 
 It is recommended, for sakes of readability, to only use constructor notation to separate
 shorter values on a single line. The last value may span multiple lines.
@@ -629,36 +628,36 @@ shorter values on a single line. The last value may span multiple lines.
 
 - **List of stock changes & tuple constructor:**
   ```
-  > 2023-Nov-10 : -200 Crates
-  > 2023-Nov-11 : +500 Crates
-  > 2023-Nov-12 : +500 Crates
-  > 2023-Nov-13 : [+500 Crates; -250 Crates]
-  > 2023-Nov-14 : -650 Crates
+  > 2023-Nov-10 <> -200 Crates
+  > 2023-Nov-11 <> +500 Crates
+  > 2023-Nov-12 <> +500 Crates
+  > 2023-Nov-13 <> [+500 Crates; -250 Crates]
+  > 2023-Nov-14 <> -650 Crates
   > 2023-Nov-15
-  > 2023-Nov-16 : -250 Crates
-  > 2023-Nov-17 : -350 Crates
+  > 2023-Nov-16 <> -250 Crates
+  > 2023-Nov-17 <> -350 Crates
   ```
 - **List of words & pattern constructor:**
   ```
-  > <Verb> : clear : <Regular> : <Transitive> : {
-    > conjugation: <a>:to clear : cleared : cleared : clearing
+  > <Verb> <> clear <> <Regular> <> <Transitive> <> {
+    > conjugation: <a>:to clear <> cleared <> cleared <> clearing
     > definitions: [
       > To empty the contents of.
       > To remove obstructions from.
       > To make transparent.
     ]
   }
-  > <Verb> : burn <p>:down : <Irregular> : <Transitive> : {
-    > conjugation: <a>:to burn <p>:down : burnt <p>:down : burnt <p>:down : burning <p>:down
+  > <Verb> <> burn <p>:down <> <Irregular> <> <Transitive> <> {
+    > conjugation: <a>:to burn <p>:down <> burnt <p>:down <> burnt <p>:down <> burning <p>:down
     > definition: To burn completely.
   }
-  > <Noun> : firewood : <Uncountable> : {
-    > declension: firewood : firewood
+  > <Noun> <> firewood <> <Uncountable> <> {
+    > declension: firewood <> firewood
     > definition: Wood burned to fuel a fire.
   }
   ```
 - **Patterns within pattern constructor:**\
-  `<Pattern> : arg arg arg : <P>:arg:arg : <P> : arg` represents a pattern with 4 arguments.
+  `<Pattern> <> arg arg arg <> <P>:arg:arg <> <P> <> arg` represents a pattern with 4 parameters.
 
 ## Comment
 

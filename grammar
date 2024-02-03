@@ -14,7 +14,7 @@
 ## Expression
 
 <expression> = <expression'>
-             | <expression'>_":"_<expression'> # Constructor notation
+             | <expression'> "<>" <expression'> # Constructor notation
 <expression'> = <word>
               | <word> <expression'>
               | <quotation>
@@ -130,7 +130,3 @@
 ### Any number (including zero) of whitespace tokens.
 ### Also represented by a space character.
 *
-
-### Whitespace
-### One or more whitespace tokens.
-_
