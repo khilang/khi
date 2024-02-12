@@ -1,18 +1,28 @@
 # Sample from grammatical word list
 
-> <Verb> <> clear <> <Regular> <> <Transitive> <> {
-  > conjugation: <a>:to clear <> cleared <> cleared <> clearing
+> <Verb> :: clear :: {
+  > regularity: <Regular>
+  > transitivity: <Transitive>
+  > conjugation: [ <to> clear | cleared | cleared | clearing ]
   > definitions: [
     > To empty the contents of.
     > To remove obstructions from.
     > To make transparent.
   ]
 }
-> <Verb> <> burn <p>:down <> <Irregular> <> <Transitive> <> {
-  > conjugation: <a>:to burn <p>:down <> burnt <p>:down <> burnt <p>:down <> burning <p>:down
+> <Verb> :: burn <down> :: {
+  > regularity: <Irregular>
+  > transitivity: <Transitive>
+  > conjugation: [
+    > <to> burn <down>
+    | burnt <down>
+    | burnt <down>
+    | burning <down>
+  ]
   > definition: To burn completely.
 }
-> <Noun> <> firewood <> <Uncountable> <> {
-  > declension: firewood <> firewood
+> <Noun> :: firewood :: {
+  > countability: <Uncountable>
+  > declension: [ firewood | firewood ]
   > definition: Wood burned to fuel a fire.
 }

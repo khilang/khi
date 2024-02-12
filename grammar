@@ -14,23 +14,27 @@
 ## Expression
 
 <expression> = <expression'>
-             | <expression'> "<>" <expression'> # Constructor notation
-<expression'> = <word>
-              | <word> <expression'>
-              | <quotation>
-              | <quotation> <expression'>
-              | <text-block>
-              | <text-block> <expression'>
-              | <bracketed-expression>
-              | <bracketed-expression> <expression'>
-              | <bracketed-dictionary>
-              | <bracketed-dictionary> <expression'>
-              | <bracketed-table>
-              | <bracketed-table> <expression'>
-              | <pattern>
-              | <pattern> <expression'>
-              | "~"
-              | "~" <expression'>
+             | "::" <expression'>
+<expression'> = <expression''>
+              | <expression''> "::" <expression'>
+<expression''> = <word>
+               | <word> <expression''>
+               | <transcription>
+               | <transcription> <expression''>
+               | <text-block>
+               | <text-block> <expression''>
+               | <bracketed-expression>
+               | <bracketed-expression> <expression''>
+               | <bracketed-dictionary>
+               | <bracketed-dictionary> <expression''>
+               | <bracketed-table>
+               | <bracketed-table> <expression''>
+               | <tuple>
+               | <tuple> <expression''>
+               | <tagged-value>
+               | <tagged-value> <expression''>
+               | "~"
+               | "~" <expression''>
 
 ## Dictionary
 
@@ -45,7 +49,7 @@
                     | ">" <dictionary-entry> <bullet-dictionary>
 
 <dictionary-entry> = <word>":" <expression>
-                   | <quotation>":" <expression>
+                   | <transcription>":" <expression>
                    | <text-block>":" <expression>
 
 ## Table
@@ -71,7 +75,12 @@
                 | "|" <expression>
                 | "|" <expression> <bullet-table'>
 
-## Pattern
+## Tuple
+
+<tuple> = "<>"
+        | "<>"<arguments>
+
+## Tag & tagged value
 
 ### Name cannot start with a hash sign.
 <tag> = "<"<word>">"
@@ -81,18 +90,20 @@
              | <word> <attributes>
              | <word>":" <word>
              | <word>":" <word> <attributes>
-             | <word>":" <quotation>
-             | <word>":" <quotation> <attributes>
+             | <word>":" <transcription>
+             | <word>":" <transcription> <attributes>
              | <word>":" <text-block>
              | <word>":" <text-block> <attributes>
 
-<pattern> = <tag>
-          | <tag><arguments>
+<tagged-value> = <tag>
+               | <tag><arguments>
+
+## Arguments
 
 <arguments> = ":"<word>
             | ":"<word><arguments>
-            | ":"<quotation>
-            | ":"<quotation><arguments>
+            | ":"<transcription>
+            | ":"<transcription><arguments>
             | ":"<text-block>
             | ":"<text-block><arguments>
             | ":"<bracketed-expression>
@@ -101,9 +112,12 @@
             | ":"<bracketed-dictionary><arguments>
             | ":"<bracketed-table>
             | ":"<bracketed-table><arguments>
+            | ":""<>"
+            | ":""<>"<arguments>
             | ":"<tag>
             | ":"<tag><arguments>
-            | ":""<>"":"<pattern>
+            | ":"_<tuple>
+            | ":"_<tagged-value>
 
 ## Bracketed structures
 
@@ -120,8 +134,8 @@
 ### Matches a Word token.
 <word>
 
-### Matches an Quotation token.
-<quotation>
+### Matches a Transcription token.
+<transcription>
 
 ### Matches a Text block token.
 <text-block>
@@ -130,3 +144,7 @@
 ### Any number (including zero) of whitespace tokens.
 ### Also represented by a space character.
 *
+
+### Some whitespace
+### At least one whitespace token.
+_

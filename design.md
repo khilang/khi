@@ -12,7 +12,7 @@ Each of these formats natively support particular data structures: most support 
 and numbers; JSON, YAML and TOML support objects, dictionaries and arrays; XML supports
 tagged trees; CSV supports values in a table; and LaTeX supports markup.
 
-There are applications where one needs to encode a set of data structures not directly
+There are applications where one needs to encode a combination of data structures not directly
 supported by any of these formats. This is not really a problem if all one needs is
 to serialize data, since many of the formats are versatile enough to systematically
 encode any data in some way.
@@ -150,7 +150,7 @@ Here, candidate formats are compared and evaluated according to the criteria.
  <tr>
   <td><b>4</b></td>
   <td>✔️Concise. ❌Severe syntax noise around keys.</td>
-  <td>❌Verbose. ➖️️Some noise around attributes.</td>
+  <td>❌Excessively verbose. ➖️️Some noise around attributes.</td>
   <td>✔️Concise. ✔️Low syntax noise.</td>
   <td>✔️Concise. ✔️Low syntax noise.</td>
   <td>✔️Concise. ✔️Low syntax noise.</td>
@@ -197,6 +197,10 @@ configured, which is sometimes useful.
 Appending arguments by colon allows short word arguments, which are common, to be
 given without using brackets. This reduces the number of required brackets, and increases
 readability.
+
+#### Escape sequences
+
+#### Reserved characters
 
 #### Metaformat
 

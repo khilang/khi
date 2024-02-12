@@ -9,7 +9,7 @@
 
 > chemical-symbol: Al
 > atomic-number: 13
-> stp-phase: solid
+> stp-phase: <Solid>
 > melting-point: 933.47
 > boiling-point: 2743
 > density: 2.7
@@ -17,8 +17,8 @@
 
 # External references
 > ext-refs: {
-  > wikipedia: "https://en.wikipedia.org/wiki/Aluminium"
-  > snl: "https://snl.no/aluminium"
+  > wikipedia: \https://en.wikipedia.org/wiki/Aluminium\
+  > snl: \https://snl.no/aluminium\
 }
 
 # Internal references
@@ -36,16 +36,19 @@
 
 > content: {
 
-  <p> <@>:self:Aluminium is a <@>:element:{chemical element} with <@>:chemsym:{chemical symbol}
-  <chemsym> and <@>:atomnum:{atomic number} <atomnum>.
+  <p> <@>:self:Aluminium is a <@>:element:{chemical element}
+  with <@>:chemsym:{chemical symbol} <chemsym> and
+  <@>:atomnum:{atomic number} <atomnum>.
 
-  <p> In <@>:purity:pure form, it is a highly <@>:react:reactive <@>:metal:metal~,
-  but normally a thin coat of <@>:aloxide:{aluminium oxide} forms on its surface,
-  keeping it highly <@>:stab:stable~.
+  <p> In <@>:purity:pure form, it is a highly <@>:react:reactive
+  <@>:metal:metal~, but normally a thin coat of
+  <@>:aloxide:{aluminium oxide} forms on its surface, keeping it
+  highly <@>:stab:stable~.
 
-  <p> In nature, it occurs as the <@>:ion:ion <$>:{<Al>^{3+}}. It constitutes <$>:8.2%
-  of the earth's crust, making it the most common <@>:metal:metal found there.
+  <p> In nature, it occurs as the <@>:ion:ion <$>:{<Al>^{3+}}.
+  It constitutes <$>:8.2% of the earth's crust, making it the
+  most common <@>:metal:metal found there.
 
-  ...
+  For example:` ...
 
 }

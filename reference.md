@@ -11,21 +11,20 @@ This document describes the syntax and semantics of the **Khi** data format.
    3. [Dictionary](#dictionary)
    4. [Table](#table)
    5. [Composition](#composition)
-   6. [Pattern](#pattern)
+   6. [Tuple](#tuple)
+   7. [Pattern](#pattern)
 3. [Expression](#expression) - A textual representation of a data structure
 4. [String](#string) - A textual representation of a string
    1. [Word](#word)
-   2. [Quotation](#quotation)
+   2. [Transcription](#quotation)
    3. [Text block](#text-block)
 5. [Whitespace](#whitespace)
 6. [Character](#character)
    1. [Whitespace character](#whitespace-character)
    2. [Ignored character](#ignored-character)
    3. [Reserved character](#reserved-character)
-   4. [Character escape sequence](#character-escape-sequence)
-   5. [Repeated escape sequence](#repeated-escape-sequence)
-7. [Constructor notation](#constructor-notation)
-8. [Comment](#comment)
+   4. [Escape sequence](#character-escape-sequence)
+7. [Comment](#comment)
 
 ## Document
 
@@ -37,20 +36,27 @@ a [dictionary](#dictionary) or a [table](#table). It represents a [structure](#s
 ## Structure
 
 A *structure*, also referred to as a *value*, corresponds to a real data structure,
-such as strings, numbers, dates, dictionaries, tables, tuples, lists and markup. A
-structure is the result of parsing a [document](#document), [expression](#expression),
-[term](#expression) or [argument](#pattern). There are six *structure variants*: [nil](#nil),
-[text](#text), [dictionary](#dictionary), [table](#table), [composition](#composition)
+such as a string, number, date, dictionary, table, tuple, list and markup. A structure
+is the result of parsing a [document](#document), [expression](#expression),
+[term](#expression) or [argument](#pattern). There are seven *structure variants*: [nil](#nil),
+[text](#text), [dictionary](#dictionary), [table](#table), [composition](#composition), tuple
 and [pattern](#pattern).
 
-| Structure                   | Corresponds to                                                            | Examples                                                  |
-|-----------------------------|---------------------------------------------------------------------------|-----------------------------------------------------------|
-| [Nil](#nil)                 | An empty, null or default data structure.                                 | Empty value, default value, null, empty markup            |
-| [Text](#text)               | A scalar or irreducible data structure.                                   | String, number, boolean, date, markup text                |
-| [Dictionary](#dictionary)   | A collection of data structures organized by keys.                        | Dictionary, object, struct, configuration                 |
-| [Table](#table)             | A collection of data structures organized by rows and columns or indices. | Table, list, tuple, set, array, matrix, markup tabulation |
-| [Composition](#composition) | A textual composition of data structures.                                 | Markup                                                    |
-| [Pattern](#pattern)         | A specific parameterized data structure or command.                       | Enum, placeholder, markup tag, markup command             |
+| Structure                   | Corresponds to                                        | Examples                                                                    |
+|-----------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
+| [Nil](#nil)                 | An empty or null data structure.                      | Empty value, null, empty markup                                             |
+| [Text](#text)               | A scalar or irreducible data structure.               | String, number, boolean, date, markup text                                  |
+| [Dictionary](#dictionary)   | A collection of data structures organized by keys.    | Dictionary, object, struct, configuration                                   |
+| [Table](#table)             | A collection of data structures organized by indices. | Table, list, set, array, matrix, markup tabulation                          |
+| [Composition](#composition) | A textual composition of data structures.             | Markup                                                                      |
+| [Tuple](#tuple)             | A parameterization of a data structure.               | Tuple, arguments, parameters, components, substructures                     |
+| [Pattern](#pattern)         | An identifier of a specific variant.                  | Enum variant, placeholder, function name, parameterization name, markup tag |
+
+**Categorization:**
+- Nil and text represent scalar values
+- Dictionary, table, composition are scalable collections
+- Tuple represents structures composed of multiple values
+- Tag is an identifier attached to a structure
 
 ### Nil
 
@@ -71,7 +77,7 @@ entries. An *entry* assigns a [structure](#structure) *value* to a string *key*.
 with identical keys are allowed, and the order of the entries are preserved.
 
 An entry is represented by a key, followed by a colon `:`, followed by a value. A
-*key* is a string represented by a [word](#word), [quotation](#quotation) or [text block](#text-block).
+*key* is a string represented by a [word](#word), [transcription](#transcription) or [text block](#text-block).
 There cannot be any [whitespace](#whitespace) between a key and colon. A *value* is
 a [structure](#structure) represented by an [expression](#expression). A nonempty
 dictionary is represented by either of two notations: [flow notation](#flow-dictionary-notation)
@@ -209,6 +215,107 @@ of data structures. It consists of a sequence of elements. An *element* is eithe
 a [structure](#structure) or a space indicator. Markup is the prime example of a data
 structure represented by a composition.
 
+### Tuple
+
+Some data structures consist of multiple substructures. Tuples and patterns are
+used to specify such structures. *Constructor notation* is intended to make structures
+encoded as tuples and patterns easier to read and write. Constructor notation can
+be used anywhere an expression is expected.
+
+- Tuples can be expressed without square brackets.
+- Text expressions can easily be delimited.
+
+In constructor notation, expressions are delimited by diamonds `<>`. If the first
+expression is a pattern with zero arguments, the trailing expressions become the arguments
+of that pattern. Otherwise, the expressions form a tuple.
+
+It is recommended, for sakes of readability, to only use constructor notation to separate
+shorter values on a single line. The last value may span multiple lines.
+
+TODO: Write
+
+A tuple is a parameterization of a data structure.
+
+Tuples can be used to specify a data structure consisting of an arbitrary number of
+components. It is recommended to only use tuples for obvious/well documented cases.
+Complex structures should use a dictionary.
+
+Tuples with 1 component are automatically unwrapped. Thus, `<>:a` will always be
+unwrapped to `a`. (Unless `a` is a tuple, in which case the tuples become nested).
+
+`<>:a:b:c:d` is a tuple with 4 parameters.
+
+A tuple expression: `a :: b :: c` is an expression representing a tuple with 3 parameters.
+
+#### Component
+
+An *argument* is a textual representation of a [structure](#structure) that can be
+used in a [pattern](#pattern).
+
+A *nil argument*, *text argument*, *dictionary argument*, *table argument*, *composition
+argument* or *pattern argument* is an argument evaluating to [nil](#nil), [text](#text),
+a [dictionary](#dictionary), a [table](#table), a [composition](#composition), a tuple or a
+[pattern](#pattern) respectively.
+
+The following textual representations can be used as components:
+
+| Component                                     | Represents                                           |
+|-----------------------------------------------|------------------------------------------------------|
+| [Word](#word)                                 | [Text](#text)                                        | 
+| [Transcription](#transcription)               | [Text](#text)                                        |
+| [Text block](#text-block)                     | [Text](#text)                                        |
+| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                            |
+| [Bracketed table](#bracketed-table)           | [Table](#table)                                      |
+| Empty tuple `<>`                              | Empty tuple                                          |
+| Tag `<Tag>`                                   | Tag                                                  |
+| [Bracketed expression](#bracketed-expression) | [Value](#structure) of the [expression](#expression) |
+
+###### Examples
+
+- **List of stock changes & tuple constructor:**
+  ```
+  > 2023-Nov-10 :: -200 Crates
+  > 2023-Nov-11 :: +500 Crates
+  > 2023-Nov-12 :: +500 Crates
+  > 2023-Nov-13 :: [+500 Crates; -250 Crates]
+  > 2023-Nov-14 :: -650 Crates
+  > 2023-Nov-15
+  > 2023-Nov-16 :: -250 Crates
+  > 2023-Nov-17 :: -350 Crates
+  ```
+- **List of words & pattern constructor:**
+  ```
+    > <Verb> :: clear :: {
+      > regularity: <Regular>
+      > transitivity: <Transitive>
+      > conjugation: [ <to> clear | cleared | cleared | clearing ]
+      > definitions: [
+          > To empty the contents of.
+          > To remove obstructions from.
+          > To make transparent.
+      ]
+    }
+    > <Verb> :: burn <down> :: {
+      > regularity: <Irregular>
+      > transitivity: <Transitive>
+      > conjugation: [
+          > <to> burn <down>
+          | burnt <down>
+          | burnt <down>
+          | burning <down>
+      ]
+      > definition: To burn completely.
+    }
+    > <Noun> :: firewood :: {
+      > countability: <Uncountable>
+      > declension: [ firewood | firewood ]
+      > definition: Wood burned to fuel a fire.
+    }
+  ```
+- **Patterns within pattern constructor:**\
+  `<Pattern> :: arg arg arg :: <P>:arg:arg :: <P> :: arg` represents a pattern with 4 parameters.
+
+
 ### Pattern
 
 A *pattern* is a [structure](#structure) corresponding to a specific parameterized
@@ -224,31 +331,14 @@ by a sequence of arguments which represent the parameters. A *tag* is a left ang
 bracket `<`, followed by a word which represents the name, followed by a sequence
 of attributes, followed by a right angle bracket `>`. An empty attribute is represented
 by a word, and a valued attribute is represented by a word, followed by a colon `:`,
-followed by a [word](#word), [quotation](#quotation) or [text block](#text-block)
+followed by a [word](#word), [transcription](#transcription) or [text block](#text-block)
 which represents the string attribute value. A parameter is represented by an appended
 colon `:`, followed by the corresponding argument. There cannot be whitespace before
 or between the colon `:` and argument. A pattern with zero parameters is represented
 by a plain tag.
 
-An *argument* is a textual representation of a [structure](#structure) that can be
-used in a [pattern](#pattern).
-
-A *nil argument*, *text argument*, *dictionary argument*, *table argument*, *composition
-argument* or *pattern argument* is an argument evaluating to [nil](#nil), [text](#text),
-a [dictionary](#dictionary), a [table](#table), a [composition](#composition) or a
-[pattern](#pattern) respectively.
-
-The following textual representations can be used as arguments:
-
-| Argument                                      | Represents                                           |
-|-----------------------------------------------|------------------------------------------------------|
-| [Word](#word)                                 | [Text](#text)                                        | 
-| [Quotation](#quotation)                       | [Text](#text)                                        |
-| [Text block](#text-block)                     | [Text](#text)                                        |
-| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                            |
-| [Bracketed table](#bracketed-table)           | [Table](#table)                                      |
-| Pattern with no arguments                     | Pattern                                              |
-| [Bracketed expression](#bracketed-expression) | [Value](#structure) of the [expression](#expression) |
+The arguments form a tuple. The possible arguments are those that can be applied to
+a tuple.
 
 ###### Examples
 
@@ -271,13 +361,13 @@ The following textual representations can be used as arguments:
 
 #### Pattern composition
 
-A *diamond operator* `<>` is used to compose patterns. It applies the pattern on the
-right-hand side as an argument to the pattern on the left-hand side.
+Whitespace between two arguments is used to compose patterns. It applies the pattern
+on the right-hand side as an argument to the pattern on the left-hand side.
 
 ###### Examples
 
-- `<bold>:<>:<italic>:text` is equivalent to `<bold>:{ <italic>:text }`.
-- `<a>:<>:<b>:<>:<c>:d` is equivalent to `<a>:{ <b>:{ <c>:d } }`.
+- `<bold>: <italic>:text` is equivalent to `<bold>:{ <italic>:text }`.
+- `<a>: <b>: <c>:d` is equivalent to `<a>:{ <b>:{ <c>:d } }`.
 
 ## Expression
 
@@ -308,9 +398,9 @@ or a [pattern](#pattern) respectively.
 A *term* is a textual representation of a [structure](#structure) that can be used
 in an [expression](#expression).
 
-A *text term* represents [text](#text). It is a sequence of [words](#word), [quotations](#quotation),
+A *text term* represents [text](#text). It is a sequence of [words](#word), [transcriptions](#transcription),
 [text blocks](#text-block) and tilde `~` operators which may have [whitespace](#whitespace)
-in between them. When parsed, the strings represented by the [words](#word), [quotations](#quotation)
+in between them. When parsed, the strings represented by the [words](#word), [transcriptions](#transcription)
 and [text blocks](#text-block) are concatenated. If there is non-discarded whitespace
 in between two strings, then there is a space character between them in the result.
 The concatenated string is the content of the represented text.
@@ -392,19 +482,19 @@ contexts.
 A *word* is a sequence of [glyphs](#glyph), including [character escape sequences](#character-escape-sequence)
 and [repeated escape sequences](#repeated-escape-sequence). It represents a string.
 
-### Quotation
+### Transcription
 
-A *quotation* is a representation of a string. It is a sequence of characters enclosed
-in a pair of quotation marks `"`. It cannot span multiple lines. [Character escape sequences](#character-escape-sequence)
-can be used within the quotation, whose primary use case is the insertion of quotation
-marks `"` or linebreaks.
+A *transcription* is a representation of a string. It is a sequence of characters enclosed
+in a pair of backslashes `\ `. It cannot span multiple lines. [Character escape sequences](#character-escape-sequence)
+can be used within the transcription, whose primary use case is the insertion of backslashes
+marks `\ ` or linebreaks.
 
 ###### Examples
 
-- **Example:** `"This is a quotation"`
+- **Example:** `\This is a quotation\ `
 - **Example (quotation with reserved characters & character escape sequences):**\
-  ```"Reserved: {, }, [, ], <, >, `", :, ;, |, ~, ``"``` yields the text string\
-  `` Reserved: {, }, [, ], <, >, ", :, ;, |, ~, ` ``.
+  ```\Reserved: {, }, [, ], <, >, \`, :, ;, |, ~, ``\ ``` yields the text string\
+  `` Reserved: {, }, [, ], <, >, \, :, ;, |, ~, ` ``.
 
 ### Text block
 
@@ -519,53 +609,40 @@ nor a [reserved character](#reserved-character).
 A *character escape sequence* is a *backtick* `` ` ``, known as the *escape character*,
 followed by one of a preset of characters. It represents a [glyph](#glyph).
 
-| Sequence   | Glyph     |
-|------------|-----------|
-| `` `{ ``   | `{`       |
-| `` `} ``   | `}`       |
-| `` `[ ``   | `[`       |
-| `` `] ``   | `]`       |
-| `` `< ``   | `<`       |
-| `` `> ``   | `>`       |
-| `` `" ``   | `"`       |
-| `` `: ``   | `:`       |
-| `` `; ``   | `;`       |
-| `` `\| ``  | `` \| ``  |
-| `` `~ ``   | `~`       |
-| ``` `` ``` | `` ` ``   |
-| `` `# ``   | `#`       |
-| `` `n ``   | Linebreak |
+| Sequence   | Glyph    |
+|------------|----------|
+| `` {` ``   | `{`      |
+| `` }` ``   | `}`      |
+| `` [` ``   | `[`      |
+| `` ]` ``   | `]`      |
+| `` <` ``   | `<`      |
+| `` >` ``   | `>`      |
+| `` :` ``   | `:`      |
+| `` ;` ``   | `;`      |
+| `` \|` ``  | `` \| `` |
+| `` ~` ``   | `~`      |
+| ``` `` ``` | `` ` ``  |
+| `` \` ``   | `\ `     |
+| `` #` ``   | `#`      |
+| `` n` ``   | Newline  |
 
 ###### Examples
 
--  `` Example`: `` encodes the string `Example:`.
+-  `` Example:` This is an example `` encodes the string `Example: This is an example`.
+- ``Example:` This is an example.``.
 
 #### Repeated escape sequence
 
 A *repeated escape sequence* is a sequence of characters that takes precedence over
 the [reserved characters](#reserved-character) and represents a sequence of [glyphs](#glyph).
 
-| Sequence | Glyphs   |
-|----------|----------|
-| `::`     | `::`     |
-| `:::`    | `:::`    |
-| `::::`   | `::::`   |
-| ...      | ...      |
-| `;;`     | `;;`     |
-| `;;;`    | `;;;`    |
-| ...      | ...      |
-| `\|\|`   | `\|\|`   |
-| `\|\|\|` | `\|\|\|` |
-| ...      | ...      |
-| `~~`     | `~~`     |
-| `~~~`    | `~~~`    |
-| ...      | ...      |
-| `<<`     | `<<`     |
-| `<<<`    | `<<<`    |
-| ...      | ...      |
-| `>>`     | `>>`     |
-| `>>>`    | `>>>`    |
-| ...      | ...      |
+| Sequence | Glyphs |
+|----------|--------|
+| `\|\|`   | `\|\|` |
+| `<<`     | `<<`   |
+| `<<<`    | `<<<`  |
+| `>>`     | `>>`   |
+| `>>>`    | `>>>`  |
 
 ###### Examples
 
@@ -581,7 +658,7 @@ A *whitespace character* is one of the following:
 ### Ignored character
 
 An *ignored character* refers to `U+000D (Carriage return)`. It is always skipped,
-even in quotations and text blocks.
+even in [transcriptions](#transcription) and text blocks.
 
 ### Reserved character
 
@@ -589,75 +666,23 @@ A *reserved character* is a character that does not represent [text](#text) in a
 unless it is escaped in some way. Reserved characters add structure to the document.
 Thus, they cannot be used freely as [glyphs](#glyph).
 
-| Character | Name           | Use                                                    |
-|-----------|----------------|--------------------------------------------------------|
-| `:`       | Colon          | Key-value separator, argument application, constructor |
-| `;`       | Semicolon      | Row separator, entry delimiter                         |
-| `\|`      | Bar            | Column separator                                       |
-| `~`       | Tilde          | Whitespace contraction                                 |
-| `` ` ``   | Backtick       | Escape sequence                                        |
-| `{`       | Left bracket   | Begin expression, begin dictionary                     |
-| `}`       | Right bracket  | End expression, end nonempty dictionary                |
-| `[`       | Left square    | Begin table                                            |
-| `]`       | Right square   | End nonempty table                                     |
-| `<`       | Left angle     | Begin tag, diamond                                     |
-| `>`       | Right angle    | End tag, bullet                                        |
-| `"`       | Quotation mark | Begin quotation, end quotation                         |
+| Character | Name          | Use                                       |
+|-----------|---------------|-------------------------------------------|
+| `:`       | Colon         | Key-value separator, argument application |
+| `;`       | Semicolon     | Row separator, entry delimiter            |
+| `\|`      | Bar           | Column separator                          |
+| `~`       | Tilde         | Whitespace contraction                    |
+| `` ` ``   | Backtick      | Escape sequence                           |
+| `\ `      | Backslash     | Begin transcription, end transcription    |
+| `{`       | Left bracket  | Begin expression, begin dictionary        |
+| `}`       | Right bracket | End expression, end nonempty dictionary   |
+| `[`       | Left square   | Begin table                               |
+| `]`       | Right square  | End nonempty table                        |
+| `<`       | Left angle    | Begin tag, diamond                        |
+| `>`       | Right angle   | End tag, bullet                           |
 
 A hash `#` is not reserved, but either is text or opens a [comment](#comment) depending
 on the character following it.
-
-## Constructor notation
-
-Some data structures consist of multiple substructures. Tuples and patterns are
-used to specify such structures. *Constructor notation* is intended to make structures
-encoded as tuples and patterns easier to read and write. Constructor notation can
-be used anywhere an expression is expected.
-
-- Tuples can be expressed without square brackets.
-- Text expressions can easily be delimited.
-
-In constructor notation, expressions are delimited by diamonds `<>`. If the first
-expression is a pattern with zero arguments, the trailing expressions become the arguments
-of that pattern. Otherwise, the expressions form a tuple.
-
-It is recommended, for sakes of readability, to only use constructor notation to separate
-shorter values on a single line. The last value may span multiple lines.
-
-###### Examples
-
-- **List of stock changes & tuple constructor:**
-  ```
-  > 2023-Nov-10 <> -200 Crates
-  > 2023-Nov-11 <> +500 Crates
-  > 2023-Nov-12 <> +500 Crates
-  > 2023-Nov-13 <> [+500 Crates; -250 Crates]
-  > 2023-Nov-14 <> -650 Crates
-  > 2023-Nov-15
-  > 2023-Nov-16 <> -250 Crates
-  > 2023-Nov-17 <> -350 Crates
-  ```
-- **List of words & pattern constructor:**
-  ```
-  > <Verb> <> clear <> <Regular> <> <Transitive> <> {
-    > conjugation: <a>:to clear <> cleared <> cleared <> clearing
-    > definitions: [
-      > To empty the contents of.
-      > To remove obstructions from.
-      > To make transparent.
-    ]
-  }
-  > <Verb> <> burn <p>:down <> <Irregular> <> <Transitive> <> {
-    > conjugation: <a>:to burn <p>:down <> burnt <p>:down <> burnt <p>:down <> burning <p>:down
-    > definition: To burn completely.
-  }
-  > <Noun> <> firewood <> <Uncountable> <> {
-    > declension: firewood <> firewood
-    > definition: Wood burned to fuel a fire.
-  }
-  ```
-- **Patterns within pattern constructor:**\
-  `<Pattern> <> arg arg arg <> <P>:arg:arg <> <P> <> arg` represents a pattern with 4 parameters.
 
 ## Comment
 
@@ -669,8 +694,8 @@ A comment is opened with a hash `#` which is followed by whitespace or another h
 of characters.
 
 If the hash `#` is followed by another character, then it is considered to be regular
-text. A hash `#` cannot be followed by `{`, `}`, `[`, `]`, `<`, `>`, `"`, `:`, `;`, `|`
-or `~`.
+text. A hash `#` cannot be followed a reserved character `{`, `}`, `[`, `]`, `<`,
+`>`, `:`, `;`, `|`, `~` or `\ `.
 
 ###### Examples
 

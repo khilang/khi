@@ -1,6 +1,6 @@
 # Style recommendations
 
-## Dictionaries
+## Dictionary
 
 ### Empty dictionary
 {}
@@ -36,25 +36,25 @@
   ]
 }
 
-## Tuples
+## Row
 
-### Unit tuple
+### Empty row
 []
 
-### Singleline tuple, short inline entries
+### Singleline row, short inline entries
 [a|b|c|d|e]
 
-### Singleline tuple, longer inline entries
-[a a a | b b b b | c | d d d d d d d | e]
+### Singleline row, longer inline entries
+[ a a a | b b b b | c | d d d d d d d | e ]
 
-### Multiline tuple, singleline entries
+### Multiline row, singleline entries
 [
   > a a a
   | b b b
   | c c c
 ]
 
-### Multiline tuple, multiline entries
+### Multiline row, multiline entries
 [
   > [
     a a a
@@ -72,7 +72,7 @@
   ]
 ]
 
-## Lists
+## List / Column
 
 ### Empty list
 []
@@ -110,7 +110,7 @@
   ]
 ]
 
-## Tables
+## Table
 
 ### Empty table
 []
@@ -133,9 +133,9 @@
 
 ### Multiline table, singleline rows, longer & mostly same width columns
 [
-  | a |   b b b| c c |
-  | d | e e e e| f f |
-  | g | h h h h| i i |
+  | a |   b b b | c c |
+  | d | e e e e | f f |
+  | g | h h h h | i i |
 ]
 
 ### Multiline table, singleline rows, differing width columns
@@ -165,20 +165,76 @@
   | f
 ]
 
-## Pattern
+## Tuple
 
-### Inline pattern within expression
-<P>:a:{b b}:c
+### Inline tuple
+<>:a:{b b b}:[c]
 
-### Multiline pattern within expression
-<P>:a:{b b}:{
+### Multiline tuple, singleline header
+<>:a:{b b b}:[
+  c c c c c
+  c c c c c c
+]
+
+### Multiline tuple expression
+:: a a a
+:: {b b b}
+:: c
+:: {
+  d d d d d
+  d d d
+}
+:: e e e e
+
+### Singleline tuple expression
+a a a :: {b b b} :: c c
+
+### Multiline tuple, singleline header expression
+a a a :: {b b b} :: c :: {
+  d d d d d
+  d d d
+}
+
+### Inner empty tuple
+<>: <>: <>: <>: <>
+
+### Inner tuple
+<>: <>: <>: <>:{
+  a :: b :: c
+}
+
+## Tagged value
+
+### Inline tag
+<A>:a:{b b}:c
+
+### Multiline tag, singleline header
+<A>:a:{b b}:{
+  c c c
   c c c
 }
 
-## Expressions
+### Tag composition
+<A>:b:c: <D>:e: <F>:g:h: <I>:{
+  j j j j j
+}
 
-### Inline expression
-{a a a{} {c c c} d d d}
+### Singleline tag expression
+<A> :: a :: b b :: c
+
+### Multiline tag, singleline header expression
+### :: are only on the first line.
+<A> :: a :: b b b b :: [
+  c c c c c
+]
+
+## Expression
+
+### Short inline expression
+{a a a}
+
+### Long inline expression
+{ a a a[] {c c c} d d d }
 
 ### Multiline expression
 {
@@ -186,24 +242,4 @@
   c c c [d d d] e e e e
   f f f <g>:h:i:j k k
   k k k k
-}
-
-## Constructor notation
-
-### Inline pattern constructor
-<P> <> a <> b b <> c
-
-### Multiline pattern constructor
-<P> <> a <> b b b b <> [
-  c c c c c
-]
-
-### Singleline tuple constructor
-a a a <> b b <> c c c c c <> d <> e e e
-
-### Multiline tuple constructor
-a a a <> {b b b} <> c <> d d <> {
-  g g
-  g g
-  g g g
 }

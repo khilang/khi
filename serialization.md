@@ -10,24 +10,30 @@ is that such an encoding may be far more verbose than necessary.
 
 ## Summary
 
-| Construct       | Encoding                                       |
-|-----------------|------------------------------------------------|
-| String          | Text                                           |
-| Number          | Text                                           |
-| Boolean         | Text                                           |
-| Date            | Text                                           |
-| Dictionary, map | Dictionary                                     |
-| Table, matrix   | Table                                          |
-| List, set       | List                                           |
-| Tuple           | Tuple                                          |
-| Field struct    | Dictionary or pattern with dictionary argument |
-| Tuple struct    | Tuple or pattern with tuple argument           |
-| Unit struct     | Null or pattern with no arguments              |
-| Field enum      | Pattern with dictionary argument               |
-| Tuple enum      | Pattern with tuple argument                    |
-| Unit enum       | Pattern with no arguments                      |
-| Option          | ``<?>`` if empty or `<?>:x` if present         |
-| Null, default   | `~`                                            |
+| Construct                | Encoding                               |
+|--------------------------|----------------------------------------|
+| String                   | Text                                   |
+| Number                   | Text                                   |
+| Boolean                  | Text                                   |
+| Date                     | Text                                   |
+| Dictionary, map          | Dictionary                             |
+| Object                   | Dictionary                             |
+| Table, matrix            | Table                                  |
+| List, array              | List                                   |
+| Set                      | List                                   |
+| Tuple                    | Row                                    |
+| Arguments, parameters    | Tuple                                  |
+| Function, macro, command | Tagged tuple, tagged dictionary        |
+| Constructor              | Tagged tuple, tagged dictionary        |
+| Field struct             | Dictionary, tagged dictionary          |
+| Tuple struct             | Tuple, tagged tuple                    |
+| Unit struct              | Nil, empty tag                         |
+| Field enum variant       | Tagged dictionary                      |
+| Tuple enum variant       | Tagged tuple                           |
+| Unit enum variant        | Empty tag                              |
+| Option                   | ``<?>`` if empty or `<?>:x` if present |
+| Null, empty              | Nil `~`                                |
+| Default value            | Empty tuple `<>`                       |
 
 ## Scalar
 

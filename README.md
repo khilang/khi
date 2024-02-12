@@ -38,7 +38,7 @@ A nil value is written `~`.
 
 ### Text
 
-Text represents scalar or irreducible value like strings, numbers, booleans, dates etc. Simply
+Text represents scalar or irreducible values like strings, numbers, booleans, dates etc. Simply
 write `This is a string`, `300`, `1024.0`, `true`.
 If the text contains reserved characters, you can optionally use quotes:
 `"https://khilang.github.io/khi-editor/"`.
@@ -113,12 +113,31 @@ There are three notations for tables:
 It is recommended to use flow notation for inline rows, grid notation for singleline
 rows and bullet notation for multiline rows.
 
-### Pattern
+### Tuple
 
-A pattern represents something that is identifiable by a name. For example:
+TODO: Write
+
+A tuple is a parameterization of a data structure.
+
+Tuples can be used to specify a data structure consisting of an arbitrary number of
+components. It is recommended to only use tuples for obvious/well documented cases.
+Complex structures should use a dictionary.
+
+Tuples with 1 component are automatically unwrapped. Thus, `<>:a` will always be
+unwrapped to `a`. (Unless `a` is a tuple, in which case the tuples become nested).
+
+`<>:a:b:c:d` is a tuple with 4 parameters.
+
+A tuple expression: `a :: b :: c` is an expression representing a tuple with 3 parameters.
+
+### Tag / Tagged value
+
+A tag is an identifier which can be attached to another value, or not. For example:
 
 - **Enums:**
-  `<Red>`, `<Blue>`, `<Green>`, `<Rgb>:255:127:0`
+  `<Red>`, `<Blue>`, `<Green>`, `<Rgb>:255:127:0`. The first three are attached to
+  an empty tuple, because they only have 1 value. The last is attached to a tuple with
+  3 values.
 - **Actions:**
   `<set>:x:10`, `<load>:std.lib`
 - **LaTeX-like commands:**
@@ -129,7 +148,7 @@ A pattern represents something that is identifiable by a name. For example:
 ### Composition
 
 Whenever a value is expected, you can use one of the constructs above: nil, text,
-dictionary, table and pattern. But you are also allowed to compose them. This is how
+dictionary, table, tuple and pattern. But you are also allowed to compose them. This is how
 Khi supports markup; Markup consists of such textual compositions.
 
 `This is a <br> composition` is a composition consisting of a text term, followed
