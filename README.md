@@ -136,8 +136,8 @@ A tag is an identifier which can be attached to another value, or not. For examp
 
 - **Enums:**
   `<Red>`, `<Blue>`, `<Green>`, `<Rgb>:255:127:0`. The first three are attached to
-  an empty tuple, because they only have 1 value. The last is attached to a tuple with
-  3 values.
+  an empty tuple, because they only have 1 possible value. The last is attached to a tuple with
+  3 components.
 - **Actions:**
   `<set>:x:10`, `<load>:std.lib`
 - **LaTeX-like commands:**
