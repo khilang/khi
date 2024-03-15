@@ -14,9 +14,9 @@
 ## Expression
 
 <expression> = <expression'>
-             | "::" <expression'>
+             | ":"_<expression'>
 <expression'> = <expression''>
-              | <expression''> "::" <expression'>
+              | <expression''>_":"_<expression'>
 <expression''> = <word>
                | <word> <expression''>
                | <transcription>

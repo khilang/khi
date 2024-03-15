@@ -15,10 +15,10 @@ equations and matrices.
 
   # Define a sum-range command.
   <def!>:<SumRn>:4:{ # def! is a macro that defines a LaTeX command.
-    <sum>_{#1}^{[`#2:`#3]`} #4
+    <sum>_{#1}^{`[#2::#3`]} #4
   }
 
-  <def!>:<Log>:0: <operatorname>:Log
+  <def!>:<Log>:0:{ <operatorname>:Log }
 
   <begin>:equation* <begin>:split
 

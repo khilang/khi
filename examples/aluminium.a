@@ -17,8 +17,8 @@
 
 # External references
 > ext-refs: {
-  > wikipedia: \https://en.wikipedia.org/wiki/Aluminium\
-  > snl: \https://snl.no/aluminium\
+  > wikipedia: \https://en.wikipedia.org/wiki/Aluminium
+  > snl: \https://snl.no/aluminium
 }
 
 # Internal references
@@ -49,6 +49,6 @@
   It constitutes <$>:8.2% of the earth's crust, making it the
   most common <@>:metal:metal found there.
 
-  For example:` ...
+  ...
 
 }

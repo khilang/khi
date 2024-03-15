@@ -27,7 +27,7 @@ The goal is to find or design a textual format that is versatile enough to nativ
 express all universal data structures found in programming languages and other formats
 while being easy to read and edit, so that it is a good source format.
 
-The universal data structures that must be supported include scalars (strings, numbers
+The universal data structures that must be supported include scalars (strings, numbers,
 booleans, dates), lists, tuples, sets, tables, matrices, dictionaries, maps, objects,
 arrays, structs, enums and markup (such as text with commands or tags). These structures
 are sufficient for markup, configuration and storage.
@@ -42,7 +42,7 @@ In other words, these formats are not suitable as source documents for such arti
 must be encoded in a way that is excessively verbose. For example, in XML, a list
 is encoded like `<list><li>1</li><li>2</li><li>3</li></list>`, while in JSON, this
 list is encoded as `[1, 2, 3]`. Clearly, XML is usable as a serialization format,
-but as a source format for expressing lists, it is unpleasant.
+but as a source format for expressing lists, it is unbearable.
 
 ## Goals
 

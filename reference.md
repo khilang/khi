@@ -16,7 +16,7 @@ This document describes the syntax and semantics of the **Khi** data format.
 3. [Expression](#expression) - A textual representation of a data structure
 4. [String](#string) - A textual representation of a string
    1. [Word](#word)
-   2. [Transcription](#quotation)
+   2. [Transcription](#transcription)
    3. [Text block](#text-block)
 5. [Whitespace](#whitespace)
 6. [Character](#character)
@@ -37,9 +37,9 @@ a [dictionary](#dictionary) or a [table](#table). It represents a [structure](#s
 
 A *structure*, also referred to as a *value*, corresponds to a real data structure,
 such as a string, number, date, dictionary, table, tuple, list and markup. A structure
-is the result of parsing a [document](#document), [expression](#expression),
-[term](#expression) or [argument](#pattern). There are seven *structure variants*: [nil](#nil),
-[text](#text), [dictionary](#dictionary), [table](#table), [composition](#composition), tuple
+is the result of parsing a [document](#document), [expression](#expression), [term](#expression)
+or [argument](#pattern). There are seven *structure variants*: [nil](#nil), [text](#text),
+[dictionary](#dictionary), [table](#table), [composition](#composition), [tuple](#tuple)
 and [pattern](#pattern).
 
 | Structure                   | Corresponds to                                        | Examples                                                                    |
@@ -96,7 +96,9 @@ an empty dictionary.
 In *flow notation*, entries are delimited by semicolons `;`. A *trailing semicolon*,
 a semicolon following the last entry, is allowed.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - **Flow dictionary with 3 entries:** `k1: 1; "key 2": Hello world!; k3: [1; 2; 3]`
 - **Flow dictionary & trailing semicolon:**
@@ -105,11 +107,16 @@ a semicolon following the last entry, is allowed.
   k4: v4; k5: v5; k6: v6;
   ```
 
+</details>
+
 #### Bullet dictionary notation
 
 In *bullet notation*, each entry starts with a right angle `>`.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
+
 - **Bullet dictionary:**
   ```
   > k1: v1
@@ -120,6 +127,8 @@ In *bullet notation*, each entry starts with a right angle `>`.
   ]
   > k4: v4
   ```
+
+</details>
 
 ### Table
 
@@ -146,7 +155,9 @@ empty dictionary.
 In *flow notation*, rows are delimited by semicolons `;` and columns are delimited by
 bars `|`. A trailing semicolon is permitted.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - **Flow list with 8 entries:**\
   `0; 1; 1; 2; 3; 5; 8; 13`
@@ -160,13 +171,17 @@ bars `|`. A trailing semicolon is permitted.
   -1|-4; 1|4; 2|6; 0|3;
   ```
 
+</details>
+
 #### Grid table notation
 
 In *grid notation*, bars `|` delimit rows and columns. A bar which is not preceded by
 an entry opens a row. An entry followed by a bar appends the entry to the current
 row.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - **Grid table with 2 rows and 3 columns:**
   ```
@@ -181,12 +196,16 @@ row.
   |1|0|0|1|
   ```
 
+</details>
+
 #### Bullet table notation
 
 In *bullet notation*, each row starts with a right angle `>`. Columns are delimited
 by bars `|`.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - **Bullet list with 4 entries:**
   ```
@@ -207,6 +226,8 @@ by bars `|`.
   | South
   | Southeast
   ```
+
+</details>
 
 ### Composition
 
@@ -243,9 +264,15 @@ Complex structures should use a dictionary.
 Tuples with 1 component are automatically unwrapped. Thus, `<>:a` will always be
 unwrapped to `a`. (Unless `a` is a tuple, in which case the tuples become nested).
 
+<details>
+
+<summary>Examples</summary>
+
 `<>:a:b:c:d` is a tuple with 4 parameters.
 
-A tuple expression: `a :: b :: c` is an expression representing a tuple with 3 parameters.
+A tuple expression: `a : b : c` is an expression representing a tuple with 3 parameters.
+
+</details>
 
 #### Component
 
@@ -270,51 +297,53 @@ The following textual representations can be used as components:
 | Tag `<Tag>`                                   | Tag                                                  |
 | [Bracketed expression](#bracketed-expression) | [Value](#structure) of the [expression](#expression) |
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - **List of stock changes & tuple constructor:**
   ```
-  > 2023-Nov-10 :: -200 Crates
-  > 2023-Nov-11 :: +500 Crates
-  > 2023-Nov-12 :: +500 Crates
-  > 2023-Nov-13 :: [+500 Crates; -250 Crates]
-  > 2023-Nov-14 :: -650 Crates
+  > 2023-Nov-10 : -200
+  > 2023-Nov-11 : +500
+  > 2023-Nov-12 : +500
+  > 2023-Nov-13 : [+500; -250]
+  > 2023-Nov-14 : -650
   > 2023-Nov-15
-  > 2023-Nov-16 :: -250 Crates
-  > 2023-Nov-17 :: -350 Crates
+  > 2023-Nov-16 : -250
+  > 2023-Nov-17 : -350
   ```
 - **List of words & pattern constructor:**
   ```
-    > <Verb> :: clear :: {
-      > regularity: <Regular>
-      > transitivity: <Transitive>
-      > conjugation: [ <to> clear | cleared | cleared | clearing ]
-      > definitions: [
-          > To empty the contents of.
-          > To remove obstructions from.
-          > To make transparent.
-      ]
-    }
-    > <Verb> :: burn <down> :: {
-      > regularity: <Irregular>
-      > transitivity: <Transitive>
-      > conjugation: [
-          > <to> burn <down>
-          | burnt <down>
-          | burnt <down>
-          | burning <down>
-      ]
-      > definition: To burn completely.
-    }
-    > <Noun> :: firewood :: {
-      > countability: <Uncountable>
-      > declension: [ firewood | firewood ]
-      > definition: Wood burned to fuel a fire.
-    }
+  > <Verb> : clear : {
+    > regularity: <Regular>
+    > transitivity: <Transitive>
+    > conjugation: <to> clear : cleared : cleared : clearing
+    > definitions: [
+      > To empty the contents of.
+      > To remove obstructions from.
+      > To make transparent.
+    ]
+  }
+  > <Verb> : burn <down> : {
+    > regularity: <Irregular>
+    > transitivity: <Transitive>
+    > conjugation:
+      : <to> burn <down>
+      : burnt <down>
+      : burnt <down>
+      : burning <down>
+    > definition: To burn completely.
+  }
+  > <Noun> : firewood : {
+    > countability: <Uncountable>
+    > declension: firewood : firewood
+    > definition: Wood burned to fuel a fire.
+  }
   ```
 - **Patterns within pattern constructor:**\
   `<Pattern> :: arg arg arg :: <P>:arg:arg :: <P> :: arg` represents a pattern with 4 parameters.
 
+</details>
 
 ### Pattern
 
@@ -340,7 +369,9 @@ by a plain tag.
 The arguments form a tuple. The possible arguments are those that can be applied to
 a tuple.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - `<b w:600>` is a pattern with name `b`, attribute `w` with value `600` and no parameters.
 - **Pattern with 6 parameters:** `<sum>:1:2:3:4:5:6`
@@ -359,15 +390,21 @@ a tuple.
 - `<set>:x:100` is a pattern representing the specific command `set` which sets the
   variable `x` to `100`.
 
+</details>
+
 #### Pattern composition
 
 Whitespace between two arguments is used to compose patterns. It applies the pattern
 on the right-hand side as an argument to the pattern on the left-hand side.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - `<bold>: <italic>:text` is equivalent to `<bold>:{ <italic>:text }`.
 - `<a>: <b>: <c>:d` is equivalent to `<a>:{ <b>:{ <c>:d } }`.
+
+</details>
 
 ## Expression
 
@@ -422,7 +459,9 @@ The following textual representations can be used as terms:
 | [Pattern](#pattern)                           | [Pattern](#pattern)                   |
 | [Bracketed expression](#bracketed-expression) | [Value](#structure) of the expression |
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - `~` is an empty expression. It contains no terms and represents [nil](#nil).
 - `Hello world!` is a text expression containing a text term.
@@ -446,6 +485,8 @@ The following textual representations can be used as terms:
   ```
   is equivalent to `Text with whitespace`.
 
+</details>
+
 ### Bracketed expression
 
 A *bracketed expression* is an [expression](#expression) enclosed in a pair of curly
@@ -460,7 +501,9 @@ could incorrectly merge with other terms when they are placed next to each other
 Bracketing could also be applied to increase readability, most commonly in multiline
 contexts.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - An expression with the 2 terms `Purple` and `Orange` is correctly written `{Purple} {Orange}`.
   On the other hand, `Purple Orange` is an expression with a single text term.
@@ -475,6 +518,8 @@ contexts.
   ...
   ```
 
+</details>
+
 ## String
 
 ### Word
@@ -484,17 +529,26 @@ and [repeated escape sequences](#repeated-escape-sequence). It represents a stri
 
 ### Transcription
 
-A *transcription* is a representation of a string. It is a sequence of characters enclosed
-in a pair of backslashes `\ `. It cannot span multiple lines. [Character escape sequences](#character-escape-sequence)
+A *transcription* is a representation of a string. It is a sequence of characters
+enclosed in a pair of backslashes `\ `. Reserved characters are allowed within the
+transcription. It cannot span multiple lines. [Character escape sequences](#character-escape-sequence)
 can be used within the transcription, whose primary use case is the insertion of backslashes
 marks `\ ` or linebreaks.
 
-###### Examples
+The closing `\ ` can be omitted, in which case the transcription spans the rest of
+the line.
 
-- **Example:** `\This is a quotation\ `
-- **Example (quotation with reserved characters & character escape sequences):**\
-  ```\Reserved: {, }, [, ], <, >, \`, :, ;, |, ~, ``\ ``` yields the text string\
-  `` Reserved: {, }, [, ], <, >, \, :, ;, |, ~, ` ``.
+<details>
+
+<summary>Examples</summary>
+
+- `\This is a transcription\ `
+- `\This transcription spans a line...`
+- **Quotation with reserved characters & character escape sequences:**\
+  ```\Reserved: {, }, [, ], <, >, :, ;, |, ~, ``, `\\ ``` yields the text string\
+  `` Reserved: {, }, [, ], <, >, :, ;, |, ~, `, \ ``.
+
+</details>
 
 ### Text block
 
@@ -517,7 +571,9 @@ By default, the contents of a text block is formatted in 4 steps:
 2. If a linebreak exists, delete the header line if it is blank.
 3. Delete excess indentation from each line.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - **Code:**
   ```
@@ -548,12 +604,16 @@ By default, the contents of a text block is formatted in 4 steps:
   first line `⏎` is blank, and is deleted. The excess indentation `····` in each of
   the remaining lines is deleted.
 
+</details>
+
 #### Labelled text block
 
 Text blocks may be labelled. Labels are rarely needed, but may in some cases to
 prevent content from clashing with a tag.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - ```
   <#text>
@@ -563,6 +623,8 @@ prevent content from clashing with a tag.
   ```
   is a text block with the label `text`.
 - `<#khi><#a><#>...<#><#a><#khi>` yields the text `<#a><#>...<#><#a>`.
+
+</details>
 
 #### Configured text block
 
@@ -583,7 +645,9 @@ the configuration are applied in order.
 By default, a text block has the configuration `fhx`. The flag `r` resets and clears
 all flags, including the default flags.
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - `<#q n>Hello world!<#q>` is a text block with label `q`,
   and configuration `fhxn`.
@@ -592,6 +656,8 @@ all flags, including the default flags.
   ```
   is a text block with configuration `tl`, and yields
   `public static final void main(String[] arguments) { ... }`.
+
+</details>
 
 ## Whitespace
 
@@ -609,44 +675,54 @@ nor a [reserved character](#reserved-character).
 A *character escape sequence* is a *backtick* `` ` ``, known as the *escape character*,
 followed by one of a preset of characters. It represents a [glyph](#glyph).
 
-| Sequence   | Glyph    |
-|------------|----------|
-| `` {` ``   | `{`      |
-| `` }` ``   | `}`      |
-| `` [` ``   | `[`      |
-| `` ]` ``   | `]`      |
-| `` <` ``   | `<`      |
-| `` >` ``   | `>`      |
-| `` :` ``   | `:`      |
-| `` ;` ``   | `;`      |
-| `` \|` ``  | `` \| `` |
-| `` ~` ``   | `~`      |
-| ``` `` ``` | `` ` ``  |
-| `` \` ``   | `\ `     |
-| `` #` ``   | `#`      |
-| `` n` ``   | Newline  |
+| Sequence   | Glyph   |
+|------------|---------|
+| `` `: ``   | `:`     |
+| `` `; ``   | `;`     |
+| `` `\| ``  | `\|`    |
+| `` `~ ``   | `~`     |
+| ``` `` ``` | `` ` `` |
+| `` `\ ``   | `\ `    |
+| `` `{ ``   | `{`     |
+| `` `} ``   | `}`     |
+| `` `[ ``   | `[`     |
+| `` `] ``   | `]`     |
+| `` `< ``   | `<`     |
+| `` `> ``   | `>`     |
+| `` `# ``   | `#`     |
+| `` `n ``   | Newline |
+| `` `t ``   | Tab     |
 
-###### Examples
+<details>
 
--  `` Example:` This is an example `` encodes the string `Example: This is an example`.
-- ``Example:` This is an example.``.
+<summary>Examples</summary>
+
+- `` Example`: This is an example `` encodes the string `Example: This is an example`.
+
+</details>
 
 #### Repeated escape sequence
 
 A *repeated escape sequence* is a sequence of characters that takes precedence over
-the [reserved characters](#reserved-character) and represents a sequence of [glyphs](#glyph).
+the [reserved characters](#reserved-character) and represents a [glyph](#glyph).
 
-| Sequence | Glyphs |
-|----------|--------|
-| `\|\|`   | `\|\|` |
-| `<<`     | `<<`   |
-| `<<<`    | `<<<`  |
-| `>>`     | `>>`   |
-| `>>>`    | `>>>`  |
+| Sequence | Glyph |
+|----------|-------|
+| `::`     | `:`   |
+| `;;`     | `;`   |
+| `\|\|`   | `\|`  |
+| `~~`     | `~`   |
+| `<<`     | `<`   |
+| `>>`     | `>`   |
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - `a >> b` is [text](#text), but `a > b` is invalid since a single `>` is [reserved](#reserved-character).
+- `Example:: This is an example` encodes the string `Example: This is an example`.
+
+</details>
 
 ### Whitespace character
 
@@ -666,20 +742,20 @@ A *reserved character* is a character that does not represent [text](#text) in a
 unless it is escaped in some way. Reserved characters add structure to the document.
 Thus, they cannot be used freely as [glyphs](#glyph).
 
-| Character | Name          | Use                                       |
-|-----------|---------------|-------------------------------------------|
-| `:`       | Colon         | Key-value separator, argument application |
-| `;`       | Semicolon     | Row separator, entry delimiter            |
-| `\|`      | Bar           | Column separator                          |
-| `~`       | Tilde         | Whitespace contraction                    |
-| `` ` ``   | Backtick      | Escape sequence                           |
-| `\ `      | Backslash     | Begin transcription, end transcription    |
-| `{`       | Left bracket  | Begin expression, begin dictionary        |
-| `}`       | Right bracket | End expression, end nonempty dictionary   |
-| `[`       | Left square   | Begin table                               |
-| `]`       | Right square  | End nonempty table                        |
-| `<`       | Left angle    | Begin tag, diamond                        |
-| `>`       | Right angle   | End tag, bullet                           |
+| Character | Name          | Use                                                        |
+|-----------|---------------|------------------------------------------------------------|
+| `:`       | Colon         | Key-value separator, argument application, tuple delimiter |
+| `;`       | Semicolon     | Row separator, entry delimiter                             |
+| `\|`      | Bar           | Column separator                                           |
+| `~`       | Tilde         | Whitespace contraction                                     |
+| `` ` ``   | Backtick      | Escape sequence                                            |
+| `\ `      | Backslash     | Begin transcription, end transcription                     |
+| `{`       | Left bracket  | Begin expression, begin dictionary                         |
+| `}`       | Right bracket | End expression, end dictionary                             |
+| `[`       | Left square   | Begin table                                                |
+| `]`       | Right square  | End table                                                  |
+| `<`       | Left angle    | Begin tag, text block tag, diamond                         |
+| `>`       | Right angle   | End tag, bullet                                            |
 
 A hash `#` is not reserved, but either is text or opens a [comment](#comment) depending
 on the character following it.
@@ -693,14 +769,19 @@ A comment is opened with a hash `#` which is followed by whitespace or another h
 `#`. The comment ends at the next linebreak or EOF. The comment may contain any sequence
 of characters.
 
-If the hash `#` is followed by another character, then it is considered to be regular
-text. A hash `#` cannot be followed a reserved character `{`, `}`, `[`, `]`, `<`,
-`>`, `:`, `;`, `|`, `~` or `\ `.
+If the hash `#` is followed by another glyph, then the hash is considered to be a
+regular text glyph. A hash `#` cannot be followed by
+`:`, `;`, `|`, `~`, `\ `, `{`, `}`, `[`, `]`, `<` or `>`, unless the character is
+part of a [repeated escape sequence](#repeated-escape-sequence).
 
-###### Examples
+<details>
+
+<summary>Examples</summary>
 
 - `# This is a comment` is a comment, because `#` is followed by whitespace.
 - `#### Configuration ####` is a comment since the first `#` is followed
   by `#`.
 - `#2`, `#0FA60F`, `A#B` and `#elements` are not comments since each `#`
   is followed by a text glyph.
+
+</details>
