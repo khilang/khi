@@ -5,15 +5,15 @@ This document describes the syntax and semantics of the **Khi** data format.
 ## Overview
 
 1. [Document](#document) - A string, file, stream, etc. corresponding to a data structure.
-2. [Structure](#structure) - A value corresponding to a data structure
+2. [Value](#value) - A data structure or piece of information
    1. [Nil](#nil)
    2. [Text](#text)
    3. [Dictionary](#dictionary)
    4. [Table](#table)
-   5. [Composition](#composition)
+   5. [Compound](#compound)
    6. [Tuple](#tuple)
-   7. [Pattern](#pattern)
-3. [Expression](#expression) - A textual representation of a data structure
+   7. [Tagged value](#tagged-value)
+3. [Expression](#expression) - A textual representation of a value
 4. [String](#string) - A textual representation of a string
    1. [Word](#word)
    2. [Transcription](#transcription)
@@ -29,57 +29,61 @@ This document describes the syntax and semantics of the **Khi** data format.
 ## Document
 
 A *document* is a text file, string, stream, etc. conforming to either an [expression](#expression),
-a [dictionary](#dictionary) or a [table](#table). It represents a [structure](#structure),
+a [dictionary](#dictionary) or a [table](#table). It represents a [value](#value),
 [dictionary](#dictionary) or a [table](#table) respectively. A blank document represents
 [nil](#nil), an empty [dictionary](#dictionary) or an empty [table](#table).
 
-## Structure
+## Data structure
 
-A *structure*, also referred to as a *value*, corresponds to a real data structure,
-such as a string, number, date, dictionary, table, tuple, list and markup. A structure
-is the result of parsing a [document](#document), [expression](#expression), [term](#expression)
-or [argument](#pattern). There are seven *structure variants*: [nil](#nil), [text](#text),
-[dictionary](#dictionary), [table](#table), [composition](#composition), [tuple](#tuple)
-and [pattern](#pattern).
+A real data structure, such as a string, number, date, dictionary, table, tuple, list or markup.
 
-| Structure                   | Corresponds to                                        | Examples                                                                    |
-|-----------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
-| [Nil](#nil)                 | An empty or null data structure.                      | Empty value, null, empty markup                                             |
-| [Text](#text)               | A scalar or irreducible data structure.               | String, number, boolean, date, markup text                                  |
-| [Dictionary](#dictionary)   | A collection of data structures organized by keys.    | Dictionary, object, struct, configuration                                   |
-| [Table](#table)             | A collection of data structures organized by indices. | Table, list, set, array, matrix, markup tabulation                          |
-| [Composition](#composition) | A textual composition of data structures.             | Markup                                                                      |
-| [Tuple](#tuple)             | A parameterization of a data structure.               | Tuple, arguments, parameters, components, substructures                     |
-| [Pattern](#pattern)         | An identifier of a specific variant.                  | Enum variant, placeholder, function name, parameterization name, markup tag |
+## Value
+
+A *value* represents something that can be an element of a tuple. Often data structures
+are represented by values.
+
+A value is the result of parsing a [document](#document), [expression](#expression), [term](#expression)
+or [argument](#tagged-value). There are seven value *variants*: [nil](#nil), [text](#text),
+[dictionary](#dictionary), [table](#table), [compound](#compound), [tuple](#tuple)
+and [tagged value](#tagged-value).
+
+| Structure                     | Corresponds to                                        | Examples                                                                    |
+|-------------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|
+| [Nil](#nil)                   | An empty or null data structure.                      | Empty value, null, empty markup                                             |
+| [Text](#text)                 | A scalar or irreducible data structure.               | String, number, boolean, date, markup text                                  |
+| [Dictionary](#dictionary)     | A collection of data structures organized by keys.    | Dictionary, object, struct, configuration                                   |
+| [Table](#table)               | A collection of data structures organized by indices. | Table, list, set, array, matrix, markup tabulation                          |
+| [Compound](#compound)         | A textual composition of data structures.             | Markup                                                                      |
+| [Tuple](#tuple)               | A parameterization of a data structure.               | Tuple, arguments, parameters, components, substructures                     |
+| [Tagged value](#tagged-value) | An identifier of a specific variant.                  | Enum variant, placeholder, function name, parameterization name, markup tag |
 
 **Categorization:**
 - Nil and text represent scalar values
-- Dictionary, table, composition are scalable collections
+- Dictionary, table, compounds are scalable collections
 - Tuple represents structures composed of multiple values
 - Tag is an identifier attached to a structure
 
 ### Nil
 
-*Nil* is a [structure](#structure) corresponding to an empty, null or default data
-structure.
+*Nil* is a [value](#value) corresponding to an empty (or null) structure.
 
 ### Text
 
-*Text* is a [structure](#structure) corresponding to a scalar or irreducible
+*Text* is a [value](#value) corresponding to a scalar or irreducible
 data structure. It consists of a string, which is a textual representation of the
 corresponding data structure.
 
 ### Dictionary
 
-A *dictionary* is a [structure](#structure) corresponding to a collection of data
+A *dictionary* is a [value](#value) corresponding to a collection of data
 structures organized by keys. It consists of a sequence of key-value pairs known as
-entries. An *entry* assigns a [structure](#structure) *value* to a string *key*. Entries
+entries. An *entry* assigns a [*value*](#value) to a string *key*. Entries
 with identical keys are allowed, and the order of the entries are preserved.
 
 An entry is represented by a key, followed by a colon `:`, followed by a value. A
 *key* is a string represented by a [word](#word), [transcription](#transcription) or [text block](#text-block).
 There cannot be any [whitespace](#whitespace) between a key and colon. A *value* is
-a [structure](#structure) represented by an [expression](#expression). A nonempty
+a [value](#value) represented by an [expression](#expression). A nonempty
 dictionary is represented by either of two notations: [flow notation](#flow-dictionary-notation)
 or [bullet notation](#bullet-dictionary-notation). Flow notation is intended for inline
 entries and compact representations, while bullet notation is intended for singleline
@@ -88,7 +92,7 @@ and multiline entries.
 #### Bracketed dictionary
 
 A *bracketed dictionary* is a dictionary enclosed in a pair of curly brackets `{`,
-`}`. It can be used as a [term](#expression) or an [argument](#pattern). `{}` represents
+`}`. It can be used as a [term](#expression) or an [argument](#tagged-value). `{}` represents
 an empty dictionary.
 
 #### Flow dictionary notation
@@ -132,7 +136,7 @@ In *bullet notation*, each entry starts with a right angle `>`.
 
 ### Table
 
-A *table* is a [structure](#structure) corresponding to a collection of data structures
+A *table* is a [value](#value) corresponding to a collection of data structures
 organized by rows and columns, or equivalently, indices. It consists of rows, which
 consist of entries. All rows in a table must have the same number of entries. A table
 that has only one column is also known as a *list*, and a table that has only one
@@ -147,7 +151,7 @@ bullet notation is intended for multiline rows.
 #### Bracketed table
 
 A *bracketed table* is a table enclosed in a pair of square brackets `[`, `]`. It
-can be used as a [term](#expression) or an [argument](#pattern). `[]` represents an
+can be used as a [term](#expression) or an [argument](#tagged-value). `[]` represents an
 empty dictionary.
 
 #### Flow table notation
@@ -229,26 +233,26 @@ by bars `|`.
 
 </details>
 
-### Composition
+### Compound
 
-A *composition* is a [structure](#structure) corresponding to a textual composition
+A *compound* is a [value](#value) corresponding to a "textual" composition
 of data structures. It consists of a sequence of elements. An *element* is either
-a [structure](#structure) or a space indicator. Markup is the prime example of a data
-structure represented by a composition.
+a [value](#value) or a space separator. Markup is the prime example of a data
+structure represented by a compound.
 
 ### Tuple
 
-Some data structures consist of multiple substructures. Tuples and patterns are
+Some data structures consist of multiple substructures. Tuples and tagged values are
 used to specify such structures. *Constructor notation* is intended to make structures
-encoded as tuples and patterns easier to read and write. Constructor notation can
+encoded as tuples and tagged tuples easier to read and write. Constructor notation can
 be used anywhere an expression is expected.
 
 - Tuples can be expressed without square brackets.
 - Text expressions can easily be delimited.
 
-In constructor notation, expressions are delimited by diamonds `<>`. If the first
-expression is a pattern with zero arguments, the trailing expressions become the arguments
-of that pattern. Otherwise, the expressions form a tuple.
+In tuple notation, expressions are delimited by diamonds `:` with surrounding whitespace.
+If the first expression is an empty tagged tuple, the following expressions become
+the arguments of that tag. Otherwise, the expressions form a tuple.
 
 It is recommended, for sakes of readability, to only use constructor notation to separate
 shorter values on a single line. The last value may span multiple lines.
@@ -258,10 +262,10 @@ TODO: Write
 A tuple is a parameterization of a data structure.
 
 Tuples can be used to specify a data structure consisting of an arbitrary number of
-components. It is recommended to only use tuples for obvious/well documented cases.
+elements. It is recommended to only use tuples for obvious/well documented cases.
 Complex structures should use a dictionary.
 
-Tuples with 1 component are automatically unwrapped. Thus, `<>:a` will always be
+Tuples with 1 element are automatically unwrapped. Thus, `<>:a` will always be
 unwrapped to `a`. (Unless `a` is a tuple, in which case the tuples become nested).
 
 <details>
@@ -276,26 +280,26 @@ A tuple expression: `a : b : c` is an expression representing a tuple with 3 par
 
 #### Component
 
-An *argument* is a textual representation of a [structure](#structure) that can be
-used in a [pattern](#pattern).
+An *argument* is a textual representation of a [value](#value) that can be
+used in a [tagged value](#tagged-value).
 
-A *nil argument*, *text argument*, *dictionary argument*, *table argument*, *composition
-argument* or *pattern argument* is an argument evaluating to [nil](#nil), [text](#text),
-a [dictionary](#dictionary), a [table](#table), a [composition](#composition), a tuple or a
-[pattern](#pattern) respectively.
+A *nil argument*, *text argument*, *dictionary argument*, *table argument*, *compound
+argument* or *tag argument* is an argument evaluating to [nil](#nil), [text](#text),
+a [dictionary](#dictionary), a [table](#table), a [compound](#compound), a tuple or a
+[tag](#tagged-value) respectively.
 
 The following textual representations can be used as components:
 
-| Component                                     | Represents                                           |
-|-----------------------------------------------|------------------------------------------------------|
-| [Word](#word)                                 | [Text](#text)                                        | 
-| [Transcription](#transcription)               | [Text](#text)                                        |
-| [Text block](#text-block)                     | [Text](#text)                                        |
-| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                            |
-| [Bracketed table](#bracketed-table)           | [Table](#table)                                      |
-| Empty tuple `<>`                              | Empty tuple                                          |
-| Tag `<Tag>`                                   | Tag                                                  |
-| [Bracketed expression](#bracketed-expression) | [Value](#structure) of the [expression](#expression) |
+| Component                                     | Represents                                       |
+|-----------------------------------------------|--------------------------------------------------|
+| [Word](#word)                                 | [Text](#text)                                    | 
+| [Transcription](#transcription)               | [Text](#text)                                    |
+| [Text block](#text-block)                     | [Text](#text)                                    |
+| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                        |
+| [Bracketed table](#bracketed-table)           | [Table](#table)                                  |
+| Empty tuple `<>`                              | Empty tuple                                      |
+| Tag `<Tag>`                                   | Tag                                              |
+| [Bracketed expression](#bracketed-expression) | [Value](#value) of the [expression](#expression) |
 
 <details>
 
@@ -312,7 +316,7 @@ The following textual representations can be used as components:
   > 2023-Nov-16 : -250
   > 2023-Nov-17 : -350
   ```
-- **List of words & pattern constructor:**
+- **List of words & tuple constructor:**
   ```
   > <Verb> : clear : {
     > regularity: <Regular>
@@ -340,22 +344,22 @@ The following textual representations can be used as components:
     > definition: Wood burned to fuel a fire.
   }
   ```
-- **Patterns within pattern constructor:**\
-  `<Pattern> :: arg arg arg :: <P>:arg:arg :: <P> :: arg` represents a pattern with 4 parameters.
+- **Tagged values within tuple constructor:**\
+  `<Tag> : arg arg arg : <T>:arg:arg : <T> : arg` represents a tag with 4 arguments.
 
 </details>
 
-### Pattern
+### Tagged value
 
-A *pattern* is a [structure](#structure) corresponding to a specific parameterized
-data structure or command. A pattern consists of a name, attributes and parameters.
-A *name* is a string which identifies the pattern. An *attribute* configures the pattern
+A *tagged value* is a [value](#value) corresponding to a specific parameterized
+data structure or command. A tagged value consists of a name, attributes and parameters.
+A *name* is a string which identifies the tag. An *attribute* configures the tag
 and is either *valued* or *empty*. An attribute is identified by a string, and a valued
 attribute has a string value. Duplicate attributes are not allowed. A *parameter* is
-a [structure](#structure) that is used to instantiate the data structure or command.
-A pattern name cannot start with a hash sign `#`, as this is reserved for [text block tags](#text-block).
+a [value](#value) that is used to instantiate the data structure or command.
+A tag name cannot start with a hash sign `#`, as this is reserved for [text block tags](#text-block).
 
-A pattern is represented by a tag, which contains the name and attributes, followed
+A tagged value is represented by a tag, which contains the name and attributes, followed
 by a sequence of arguments which represent the parameters. A *tag* is a left angle
 bracket `<`, followed by a word which represents the name, followed by a sequence
 of attributes, followed by a right angle bracket `>`. An empty attribute is represented
@@ -363,8 +367,7 @@ by a word, and a valued attribute is represented by a word, followed by a colon 
 followed by a [word](#word), [transcription](#transcription) or [text block](#text-block)
 which represents the string attribute value. A parameter is represented by an appended
 colon `:`, followed by the corresponding argument. There cannot be whitespace before
-or between the colon `:` and argument. A pattern with zero parameters is represented
-by a plain tag.
+or between the colon `:` and argument.
 
 The arguments form a tuple. The possible arguments are those that can be applied to
 a tuple.
@@ -373,29 +376,29 @@ a tuple.
 
 <summary>Examples</summary>
 
-- `<b w:600>` is a pattern with name `b`, attribute `w` with value `600` and no parameters.
-- **Pattern with 6 parameters:** `<sum>:1:2:3:4:5:6`
-- **Pattern with no parameters:** `<br>`
-- `<weight>:600:{This is bold text}` is the pattern `weight` applied to
+- `<b w:600>` is a tag with name `b`, attribute `w` with value `600` and no arguments.
+- **Tag with 6 parameters:** `<sum>:1:2:3:4:5:6`
+- **Tag with no parameters:** `<br>`
+- `<weight>:600:{This is bold text}` is the tag `weight` applied to
   2 text arguments.
-- `<p id:opening class:fancy>` is the pattern `p` with attributes `id:opening`
+- `<p id:opening class:fancy>` is the tag `p` with attributes `id:opening`
   and `class:fancy`.
 - `<input type:checkbox checked>` has two attributes:
   `type` with value `checkbox` and `checked` with no value.
-- In `<cmd0>:arg1:arg2:<cmd3>:arg4:arg5`, `<cmd0>` is a pattern applied
-  to 5 arguments. `<cmd3>` is the third argument to `<cmd0>`, and is itself a pattern
+- In `<cmd0>:arg1:arg2:<cmd3>:arg4:arg5`, `<cmd0>` is a tag applied
+  to 5 arguments. `<cmd3>` is the third argument to `<cmd0>`, and is itself a tag
   with zero arguments.
 - `<name attr1 attr2:val2 attr3:val3 attr4>`
-- In `<sender> sent <amount> to <recipient>.`, patterns are used to represent placeholders.
-- `<set>:x:100` is a pattern representing the specific command `set` which sets the
+- In `<sender> sent <amount> to <recipient>.`, tags are used to represent placeholders.
+- `<set>:x:100` is a tag representing the specific command `set` which sets the
   variable `x` to `100`.
 
 </details>
 
-#### Pattern composition
+#### Composition
 
-Whitespace between two arguments is used to compose patterns. It applies the pattern
-on the right-hand side as an argument to the pattern on the left-hand side.
+Whitespace after the colon between denoted composition. It applies the tag on the
+right-hand side as an argument to the tag on the left-hand side.
 
 <details>
 
@@ -408,9 +411,9 @@ on the right-hand side as an argument to the pattern on the left-hand side.
 
 ## Expression
 
-An *expression* is a textual representation of a [structure](#structure). It is a
+An *expression* is a textual representation of a [value](#value). It is a
 nonblank sequence of terms and tilde operators `~` which may have whitespace in between
-them. Every [structure](#structure) can be represented by an expression.
+them. Every [value](#value) can be represented by an expression.
 
 Tilde `~` is an operator which discards adjacent whitespace. *Discarded whitespace*
 is ignored in compound expressions and text terms. A tilde can be placed before or
@@ -419,20 +422,20 @@ since an expression cannot be blank.
 
 An *empty expression* is an expression with no terms. It represents [nil](#nil).
 
-A *simple expression* is an expression with a single term. It represents the [value](#structure)
+A *simple expression* is an expression with a single term. It represents the [value](#value)
 the term represents.
 
-A *compound expression* is an expression with multiple terms. It represents a [composition](#composition).
-The composition contains the structures represented by the terms, ordered accordingly.
+A *compound expression* is an expression with multiple terms. It represents a [compound](#compound).
+The compound contains the structures represented by the terms, ordered accordingly.
 If there is non-discarded whitespace between two terms, then there is a space between
 the corresponding structures in the result.
 
 A *nil expression*, *text expression*, *dictionary expression*, *table expression*
-*composition expression* or *pattern expression* is an expression that represents
-[nil](#nil), [text](#text), a [dictionary](#dictionary), a [table](#table), a [composition](#composition)
-or a [pattern](#pattern) respectively.
+*compound expression* or *tag expression* is an expression that represents
+[nil](#nil), [text](#text), a [dictionary](#dictionary), a [table](#table), a [compound](#compound)
+or a [tagged value](#tagged-value) respectively.
 
-A *term* is a textual representation of a [structure](#structure) that can be used
+A *term* is a textual representation of a [value](#value) that can be used
 in an [expression](#expression).
 
 A *text term* represents [text](#text). It is a sequence of [words](#word), [transcriptions](#transcription),
@@ -442,22 +445,22 @@ and [text blocks](#text-block) are concatenated. If there is non-discarded white
 in between two strings, then there is a space character between them in the result.
 The concatenated string is the content of the represented text.
 
-A *nil term*, *text term*, *dictionary term*, *table term*, *composition term* or
-*pattern term* is a term representing [nil](#nil), [text](#text), a [dictionary](#dictionary),
-a [table](#table), a [composition](#composition) or a [pattern](#pattern) respectively.
+A *nil term*, *text term*, *dictionary term*, *table term*, *compound term* or
+*tag term* is a term representing [nil](#nil), [text](#text), a [dictionary](#dictionary),
+a [table](#table), a [compound](#compound) or a [tagged value](#tagged-value) respectively.
 
 Some terms cannot be adjacent to each other, because they will merge. This is overcome
 by using a [bracketed expression](#bracketed-expression) or sometimes a tilde `~` operator.
 
 The following textual representations can be used as terms:
 
-| Term                                          | Represents                            |
-|-----------------------------------------------|---------------------------------------|
-| Text term                                     | [Text](#text)                         |
-| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)             |
-| [Bracketed table](#bracketed-table)           | [Table](#table)                       |
-| [Pattern](#pattern)                           | [Pattern](#pattern)                   |
-| [Bracketed expression](#bracketed-expression) | [Value](#structure) of the expression |
+| Term                                          | Represents                        |
+|-----------------------------------------------|-----------------------------------|
+| Text term                                     | [Text](#text)                     |
+| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)         |
+| [Bracketed table](#bracketed-table)           | [Table](#table)                   |
+| [Tagged value](#tagged-value)                 | [Tagged tuple](#tagged-value)     |
+| [Bracketed expression](#bracketed-expression) | [Value](#value) of the expression |
 
 <details>
 
@@ -469,7 +472,7 @@ The following textual representations can be used as terms:
 - `R ~ e ~ d` is equivalent to `Red`.
 - `{k1: v1; k2: v2}` is a dictionary expression containing a dictionary term.
 - `{k1: v1} Text [1; 2; 3]` is a compound expression containing a dictionary term,
-  text term and table term. It represents a [composition](#composition).
+  text term and table term. It represents a [compound](#compound).
 - `{c1} ~ {c2}` is equivalent to `{c1}{c2}`, but not `{c1} {c2}`.
 - `{c1}`, `~ {c1}`, `{c1} ~`, `~ {c1} ~` are equivalent.
 - **Whitespace equivalence:**
@@ -490,12 +493,12 @@ The following textual representations can be used as terms:
 ### Bracketed expression
 
 A *bracketed expression* is an [expression](#expression) enclosed in a pair of curly
-brackets `{`, `}`. It can be used as a [term](#expression) or an [argument](#pattern).
-It represents the same [structure](#structure) as the [expression](#expression) it
+brackets `{`, `}`. It can be used as a [term](#expression) or an [argument](#tagged-value).
+It represents the same [value](#value) as the [expression](#expression) it
 encloses.
 
 Bracketing is sometimes necessary to delimit terms in an expression.
-Some [terms](#expression), like a [text term](#expression) or a [pattern term](#pattern)
+Some [terms](#expression), like a [text term](#expression) or a [tag term](#tagged-value)
 could incorrectly merge with other terms when they are placed next to each other.
 
 Bracketing could also be applied to increase readability, most commonly in multiline
