@@ -200,10 +200,10 @@
 }
 
 ### Inner empty tuple
-<>: <>: <>: <>: <>
+<> <:> <> <:> <>
 
 ### Inner tuple
-<>: <>: <>: <>:{
+<> <:> <> <:> {
   a : b : c
 }
 
@@ -219,7 +219,7 @@
 }
 
 ### Tag composition
-<A>:b:c: <D>:e: <F>:g:h: <I>:{
+<A>:b:c <:> <D>:e <:> <F>:g:h <:> <I>:{
   j j j j j
 }
 

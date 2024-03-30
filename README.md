@@ -46,9 +46,10 @@ to the implementor to decide which is most suitable.
 
 ### Value
 
-A *value* represents a piece of information. A real data structure, such as a string,
-number, array, dictionary, tuple or struct, is represented by a *value*. There are
-7 kinds of values: Nil, text, dictionary, table, compound, tuple and tagged value.
+A *value* is a piece of information which corresponds to a real data structure or
+piece of a data structure. Examples of data structures are strings, numbers, arrays,
+dictionaries, tuples and structs. There are 7 kinds of values: Nil, text, dictionary,
+table, compound, tuple and tagged value.
 
 ### Expression
 

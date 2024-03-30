@@ -5,7 +5,7 @@ This document describes the syntax and semantics of the **Khi** data format.
 ## Overview
 
 1. [Document](#document) - A string, file, stream, etc. corresponding to a data structure.
-2. [Value](#value) - A data structure or piece of information
+2. [Value](#value) - A piece of information, such as a data structure
    1. [Nil](#nil)
    2. [Text](#text)
    3. [Dictionary](#dictionary)
@@ -39,8 +39,8 @@ A real data structure, such as a string, number, date, dictionary, table, tuple,
 
 ## Value
 
-A *value* represents something that can be an element of a tuple. Often data structures
-are represented by values.
+A *value* is a piece of information that corresponds to a real data structure or a
+component of a data structure.
 
 A value is the result of parsing a [document](#document), [expression](#expression), [term](#expression)
 or [argument](#tagged-value). There are seven value *variants*: [nil](#nil), [text](#text),
@@ -235,50 +235,64 @@ by bars `|`.
 
 ### Compound
 
-A *compound* is a [value](#value) corresponding to a "textual" composition
-of data structures. It consists of a sequence of elements. An *element* is either
-a [value](#value) or a space separator. Markup is the prime example of a data
-structure represented by a compound.
-
-### Tuple
-
-Some data structures consist of multiple substructures. Tuples and tagged values are
-used to specify such structures. *Constructor notation* is intended to make structures
-encoded as tuples and tagged tuples easier to read and write. Constructor notation can
-be used anywhere an expression is expected.
-
-- Tuples can be expressed without square brackets.
-- Text expressions can easily be delimited.
-
-In tuple notation, expressions are delimited by diamonds `:` with surrounding whitespace.
-If the first expression is an empty tagged tuple, the following expressions become
-the arguments of that tag. Otherwise, the expressions form a tuple.
-
-It is recommended, for sakes of readability, to only use constructor notation to separate
-shorter values on a single line. The last value may span multiple lines.
-
-TODO: Write
-
-A tuple is a parameterization of a data structure.
-
-Tuples can be used to specify a data structure consisting of an arbitrary number of
-elements. It is recommended to only use tuples for obvious/well documented cases.
-Complex structures should use a dictionary.
-
-Tuples with 1 element are automatically unwrapped. Thus, `<>:a` will always be
-unwrapped to `a`. (Unless `a` is a tuple, in which case the tuples become nested).
+A *compound* is a [value](#value) corresponding to a "textual" composition of data
+structures. It consists of a sequence of elements. An *element* is either a [value](#value)
+or a space separator. Markup is the prime example of a data structure represented
+by a compound.
 
 <details>
 
 <summary>Examples</summary>
 
-`<>:a:b:c:d` is a tuple with 4 parameters.
-
-A tuple expression: `a : b : c` is an expression representing a tuple with 3 parameters.
+- `A compound <br> with 5 <br> components.` is a compound expression consisting of
+  a text term, tag term, text term, tag term, and a final text term.
 
 </details>
 
-#### Component
+### Tuple
+
+A *tuple* is a [value](#value) corresponding to a heterogeneous collection which contains
+zero, one or multiple values, called *elements*.
+
+The *unit tuple*, the tuple with zero elements, represents a trivial or default instance.
+Do not confuse this with [nil](#nil), which represents an empty instance.
+
+A tuple with 1 element is always automatically unwrapped, unless the element is a
+tuple itself. Thus, in general there is no way to distinguish between a value and
+a tuple containing that value.
+
+#### Tuple term
+
+A tuple term is initiated by `<>`, and elements are specified by appending a colon `:`
+followed by the value. For example: `<>:a:b:c` is a tuple with 3 values.
+
+#### Tuple expressions
+
+For expressions [expression](#expression) evaluating to tuples or tagged values, one
+can use a *tuple expression*: `a : b : c` is an expression representing a tuple with
+3 elements.
+
+Tuple expressions allow expressing tuples at the top level.
+
+- Tuples can be expressed without square brackets.
+- Text expressions can easily be delimited.
+
+In tuple expressions, [expressions](#expression) are delimited by colons `:` surrounded
+by whitespace. If the first expression yields a tag with no elements, the following
+expressions represent the arguments of that tag. Otherwise, the expressions form a
+tuple.
+
+<details>
+
+<summary>Examples</summary>
+
+- `<>:a:b:c:d` is a tuple with 4 parameters.
+- `<>:{<>:{a}}`, `<>:{a}` and `a` are equivalent by automatic unwrapping.
+- `a : b : c` is a tuple expression evaluating to a tuple with 3 elements.
+
+</details>
+
+#### Argument
 
 An *argument* is a textual representation of a [value](#value) that can be
 used in a [tagged value](#tagged-value).
@@ -290,15 +304,15 @@ a [dictionary](#dictionary), a [table](#table), a [compound](#compound), a tuple
 
 The following textual representations can be used as components:
 
-| Component                                     | Represents                                       |
+| Argument                                      | Represents                                       |
 |-----------------------------------------------|--------------------------------------------------|
-| [Word](#word)                                 | [Text](#text)                                    | 
+| [Word](#word)                                 | [Text](#text)                                    |
 | [Transcription](#transcription)               | [Text](#text)                                    |
 | [Text block](#text-block)                     | [Text](#text)                                    |
 | [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                        |
 | [Bracketed table](#bracketed-table)           | [Table](#table)                                  |
-| Empty tuple `<>`                              | Empty tuple                                      |
-| Tag `<Tag>`                                   | Tag                                              |
+| Empty tuple                                   | Empty tuple                                      |
+| Tag                                           | Tag                                              |
 | [Bracketed expression](#bracketed-expression) | [Value](#value) of the [expression](#expression) |
 
 <details>
@@ -397,15 +411,29 @@ a tuple.
 
 #### Composition
 
-Whitespace after the colon between denoted composition. It applies the tag on the
-right-hand side as an argument to the tag on the left-hand side.
+*Composition* is indicated by the *composition operator* `<:>`. In a composition,
+the right-hand side is applied as the last argument of the tuple or tagged value on
+the left-hand side.
+
+The right-hand side can be any of the following:
+
+| Composition argument                          | Represents                                       |
+|-----------------------------------------------|--------------------------------------------------|
+| [Word](#word)                                 | [Text](#text)                                    |
+| [Transcription](#transcription)               | [Text](#text)                                    |
+| [Text block](#text-block)                     | [Text](#text)                                    |
+| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                        |
+| [Bracketed table](#bracketed-table)           | [Table](#table)                                  |
+| [Tuple](#tuple)                               | [Tuple](#tuple)                                  |
+| [Tagged value](#tagged-value)                 | [Tagged value](#tagged-value)                    |
+| [Bracketed expression](#bracketed-expression) | [Value](#value) of the [expression](#expression) |
 
 <details>
 
 <summary>Examples</summary>
 
-- `<bold>: <italic>:text` is equivalent to `<bold>:{ <italic>:text }`.
-- `<a>: <b>: <c>:d` is equivalent to `<a>:{ <b>:{ <c>:d } }`.
+- `<bold> <:> <italic> <:> word` is equivalent to `<bold>:{ <italic>:{ word } }`.
+- `<a> <:> <b>:{c} <:> <d>:e:[f]` is equivalent to `<a>:{ <b>:{c}:{ <d>:e:[f] } }`.
 
 </details>
 
