@@ -269,7 +269,7 @@ followed by the value. For example: `<>:a:b:c` is a tuple with 3 values.
 #### Tuple expressions
 
 For expressions [expression](#expression) evaluating to tuples or tagged values, one
-can use a *tuple expression*: `a : b : c` is an expression representing a tuple with
+can use a *tuple expression*: `a ~ b ~ c` is an expression representing a tuple with
 3 elements.
 
 Tuple expressions allow expressing tuples at the top level.
@@ -277,10 +277,9 @@ Tuple expressions allow expressing tuples at the top level.
 - Tuples can be expressed without square brackets.
 - Text expressions can easily be delimited.
 
-In tuple expressions, [expressions](#expression) are delimited by colons `:` surrounded
-by whitespace. If the first expression yields a tag with no elements, the following
-expressions represent the arguments of that tag. Otherwise, the expressions form a
-tuple.
+In tuple expressions, [expressions](#expression) are delimited by a tilde `~`. If
+the first expression yields a tag with no elements, the following expressions represent
+the arguments of that tag. Otherwise, the expressions form a tuple.
 
 <details>
 
@@ -288,14 +287,14 @@ tuple.
 
 - `<>:a:b:c:d` is a tuple with 4 parameters.
 - `<>:{<>:{a}}`, `<>:{a}` and `a` are equivalent by automatic unwrapping.
-- `a : b : c` is a tuple expression evaluating to a tuple with 3 elements.
+- `a ~ b ~ c` is a tuple expression evaluating to a tuple with 3 elements.
 
 </details>
 
 #### Argument
 
 An *argument* is a textual representation of a [value](#value) that can be
-used in a [tagged value](#tagged-value).
+appended to a tuple or [tagged value](#tagged-value).
 
 A *nil argument*, *text argument*, *dictionary argument*, *table argument*, *compound
 argument* or *tag argument* is an argument evaluating to [nil](#nil), [text](#text),
@@ -306,12 +305,13 @@ The following textual representations can be used as components:
 
 | Argument                                      | Represents                                       |
 |-----------------------------------------------|--------------------------------------------------|
+| `&`                                           | [Nil](#nil)                                      |
 | [Word](#word)                                 | [Text](#text)                                    |
 | [Transcription](#transcription)               | [Text](#text)                                    |
 | [Text block](#text-block)                     | [Text](#text)                                    |
 | [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                        |
 | [Bracketed table](#bracketed-table)           | [Table](#table)                                  |
-| Empty tuple                                   | Empty tuple                                      |
+| `<>`                                          | Empty tuple                                      |
 | Tag                                           | Tag                                              |
 | [Bracketed expression](#bracketed-expression) | [Value](#value) of the [expression](#expression) |
 
@@ -321,45 +321,45 @@ The following textual representations can be used as components:
 
 - **List of stock changes & tuple constructor:**
   ```
-  > 2023-Nov-10 : -200
-  > 2023-Nov-11 : +500
-  > 2023-Nov-12 : +500
-  > 2023-Nov-13 : [+500; -250]
-  > 2023-Nov-14 : -650
+  > 2023-Nov-10 ~ -200
+  > 2023-Nov-11 ~ +500
+  > 2023-Nov-12 ~ +500
+  > 2023-Nov-13 ~ [+500; -250]
+  > 2023-Nov-14 ~ -650
   > 2023-Nov-15
-  > 2023-Nov-16 : -250
-  > 2023-Nov-17 : -350
+  > 2023-Nov-16 ~ -250
+  > 2023-Nov-17 ~ -350
   ```
 - **List of words & tuple constructor:**
   ```
-  > <Verb> : clear : {
+  > <Verb> ~ clear ~ {
     > regularity: <Regular>
     > transitivity: <Transitive>
-    > conjugation: <to> clear : cleared : cleared : clearing
+    > conjugation: <to> clear ~ cleared ~ cleared ~ clearing
     > definitions: [
       > To empty the contents of.
       > To remove obstructions from.
       > To make transparent.
     ]
   }
-  > <Verb> : burn <down> : {
+  > <Verb> ~ burn <down> ~ {
     > regularity: <Irregular>
     > transitivity: <Transitive>
     > conjugation:
-      : <to> burn <down>
-      : burnt <down>
-      : burnt <down>
-      : burning <down>
+      ~ <to> burn <down>
+      ~ burnt <down>
+      ~ burnt <down>
+      ~ burning <down>
     > definition: To burn completely.
   }
-  > <Noun> : firewood : {
+  > <Noun> ~ firewood ~ {
     > countability: <Uncountable>
-    > declension: firewood : firewood
+    > declension: firewood ~ firewood
     > definition: Wood burned to fuel a fire.
   }
   ```
 - **Tagged values within tuple constructor:**\
-  `<Tag> : arg arg arg : <T>:arg:arg : <T> : arg` represents a tag with 4 arguments.
+  `<Tag> ~ arg arg arg ~ <T>:arg:arg ~ <T> ~ arg` represents a tag with 4 arguments.
 
 </details>
 
@@ -440,12 +440,12 @@ The right-hand side can be any of the following:
 ## Expression
 
 An *expression* is a textual representation of a [value](#value). It is a
-nonblank sequence of terms and tilde operators `~` which may have whitespace in between
+nonblank sequence of terms and ampersand operators `&` which may have whitespace in between
 them. Every [value](#value) can be represented by an expression.
 
-Tilde `~` is an operator which discards adjacent whitespace. *Discarded whitespace*
-is ignored in compound expressions and text terms. A tilde can be placed before or
-after all the terms, but will have no effect. A tilde can stand in for an empty expression,
+Ampersand `&` is an operator which discards adjacent whitespace. *Discarded whitespace*
+is ignored in compound expressions and text terms. An `&` can be placed before or
+after all the terms, but will have no effect. An `&` can stand in for an empty expression,
 since an expression cannot be blank.
 
 An *empty expression* is an expression with no terms. It represents [nil](#nil).
@@ -467,7 +467,7 @@ A *term* is a textual representation of a [value](#value) that can be used
 in an [expression](#expression).
 
 A *text term* represents [text](#text). It is a sequence of [words](#word), [transcriptions](#transcription),
-[text blocks](#text-block) and tilde `~` operators which may have [whitespace](#whitespace)
+[text blocks](#text-block) and ampersand `&` operators which may have [whitespace](#whitespace)
 in between them. When parsed, the strings represented by the [words](#word), [transcriptions](#transcription)
 and [text blocks](#text-block) are concatenated. If there is non-discarded whitespace
 in between two strings, then there is a space character between them in the result.
@@ -478,7 +478,7 @@ A *nil term*, *text term*, *dictionary term*, *table term*, *compound term* or
 a [table](#table), a [compound](#compound) or a [tagged value](#tagged-value) respectively.
 
 Some terms cannot be adjacent to each other, because they will merge. This is overcome
-by using a [bracketed expression](#bracketed-expression) or sometimes a tilde `~` operator.
+by using a [bracketed expression](#bracketed-expression) or sometimes an ampersand `&` operator.
 
 The following textual representations can be used as terms:
 
@@ -494,20 +494,20 @@ The following textual representations can be used as terms:
 
 <summary>Examples</summary>
 
-- `~` is an empty expression. It contains no terms and represents [nil](#nil).
+- `&` is an empty expression. It contains no terms and represents [nil](#nil).
 - `Hello world!` is a text expression containing a text term.
 - `Text constructed from 5 words.`
-- `R ~ e ~ d` is equivalent to `Red`.
+- `R & e & d` is equivalent to `Red`.
 - `{k1: v1; k2: v2}` is a dictionary expression containing a dictionary term.
 - `{k1: v1} Text [1; 2; 3]` is a compound expression containing a dictionary term,
   text term and table term. It represents a [compound](#compound).
-- `{c1} ~ {c2}` is equivalent to `{c1}{c2}`, but not `{c1} {c2}`.
-- `{c1}`, `~ {c1}`, `{c1} ~`, `~ {c1} ~` are equivalent.
+- `{c1} & {c2}` is equivalent to `{c1}{c2}`, but not `{c1} {c2}`.
+- `{c1}`, `& {c1}`, `{c1} &`, `& {c1} &` are equivalent.
 - **Whitespace equivalence:**
   ```
   a
   b {c}d
-  [e]~
+  [e]&
   f
   ```
   is equivalent to `a b {c}d [e]f`, and
@@ -576,8 +576,8 @@ the line.
 - `\This is a transcription\ `
 - `\This transcription spans a line...`
 - **Quotation with reserved characters & character escape sequences:**\
-  ```\Reserved: {, }, [, ], <, >, :, ;, |, ~, ``, `\\ ``` yields the text string\
-  `` Reserved: {, }, [, ], <, >, :, ;, |, ~, `, \ ``.
+  ```\Reserved: {, }, [, ], <, >, :, ;, |, &, ``, `\\ ``` yields the text string\
+  `` Reserved: {, }, [, ], <, >, :, ;, |, &, `, \ ``.
 
 </details>
 
@@ -711,6 +711,7 @@ followed by one of a preset of characters. It represents a [glyph](#glyph).
 | `` `: ``   | `:`     |
 | `` `; ``   | `;`     |
 | `` `\| ``  | `\|`    |
+| `` `& ``   | `&`     |
 | `` `~ ``   | `~`     |
 | ``` `` ``` | `` ` `` |
 | `` `\ ``   | `\ `    |
@@ -742,6 +743,7 @@ the [reserved characters](#reserved-character) and represents a [glyph](#glyph).
 | `::`     | `:`   |
 | `;;`     | `;`   |
 | `\|\|`   | `\|`  |
+| `&&`     | `&`   |
 | `~~`     | `~`   |
 | `<<`     | `<`   |
 | `>>`     | `>`   |
@@ -778,7 +780,8 @@ Thus, they cannot be used freely as [glyphs](#glyph).
 | `:`       | Colon         | Key-value separator, argument application, tuple delimiter |
 | `;`       | Semicolon     | Row separator, entry delimiter                             |
 | `\|`      | Bar           | Column separator                                           |
-| `~`       | Tilde         | Whitespace contraction                                     |
+| `&`       | Ampersand     | Whitespace contraction                                     |
+| `~`       | Tilde         | Tuple expression                                           |
 | `` ` ``   | Backtick      | Escape sequence                                            |
 | `\ `      | Backslash     | Begin transcription, end transcription                     |
 | `{`       | Left bracket  | Begin expression, begin dictionary                         |
@@ -802,7 +805,7 @@ of characters.
 
 If the hash `#` is followed by another glyph, then the hash is considered to be a
 regular text glyph. A hash `#` cannot be followed by
-`:`, `;`, `|`, `~`, `\ `, `{`, `}`, `[`, `]`, `<` or `>`, unless the character is
+`:`, `;`, `|`, `&`, `~`, `\ `, `{`, `}`, `[`, `]`, `<` or `>`, unless the character is
 part of a [repeated escape sequence](#repeated-escape-sequence).
 
 <details>

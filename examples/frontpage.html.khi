@@ -4,7 +4,7 @@
 <html>:{
   <head>:{
     <title>:{Hello world!}
-    <script src:script.js>:{~} # {~} denotes a present but empty element.
+    <script src:script.js>:& # & denotes an empty element.
   }
   <body>:{
     <h1 id:main-heading>:{Hello world!}

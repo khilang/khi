@@ -14,9 +14,10 @@
 ## Expression
 
 <expression> = <expression'>
-             | ":"_<expression'>
+             | "~"
+             | "~" <expression'>
 <expression'> = <expression''>
-              | <expression''>_":"_<expression'>
+              | <expression''> "~" <expression'>
 <expression''> = <word>
                | <word> <expression''>
                | <transcription>
@@ -33,8 +34,8 @@
                | <tuple> <expression''>
                | <tagged-value>
                | <tagged-value> <expression''>
-               | "~"
-               | "~" <expression''>
+               | "&"
+               | "&" <expression''>
 
 ## Dictionary
 
@@ -104,7 +105,9 @@
 
 ## Arguments
 
-<arguments> = ":"<word>
+<arguments> = ":""&"
+            | ":""&"<arguments>
+            | ":"<word>
             | ":"<word><arguments>
             | ":"<transcription>
             | ":"<transcription><arguments>
@@ -155,7 +158,3 @@
 ### Any number (including zero) of whitespace tokens.
 ### Also represented by a space character.
 *
-
-### Some whitespace
-### At least one whitespace token.
-_
