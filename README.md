@@ -57,8 +57,8 @@ An expression is a textual representation of a value.
 
 ### Nil
 
-*Nil* represents an empty value. It corresponds to null in other formats. It is denoted
-by a tilde `~`.
+*Nil* represents an empty value. It corresponds to empty or null in other formats.
+It is denoted by a tilde `~`.
 
 ### Text
 
@@ -178,7 +178,7 @@ tuple. Thus, if `a` is not a tuple, `<>:a` is equivalent to `a`
 itself.
 
 In place of an expression, one can use a *tuple expression* to represent tuples and
-tagged values. For example: `a ~ b ~ c` is an expression representing a tuple with
+tagged values. For example: `a & b & c` is an expression representing a tuple with
 3 parameters.
 
 ### Tagged value
@@ -200,7 +200,7 @@ For example:
   `<div class:m1>:{Content}`. Tags can have attributes which configure them.
 
 A tuple expression starting with a tag represents a tagged value. For example:
-`<Tag> ~ a ~ b ~ c`.
+`<Tag>: a & b & c`.
 
 ### Comment
 
@@ -273,9 +273,9 @@ Notes:
   <@>:atomnum:{atomic number} <atomnum>.
 
   <p> In <@>:purity:pure form, it is a highly <@>:react:reactive
-  <@>:metal:metal&, but normally a thin coat of
+  <@>:metal:metal~, but normally a thin coat of
   <@>:aloxide:{aluminium oxide} forms on its surface, keeping it
-  highly <@>:stab:stable&.
+  highly <@>:stab:stable~.
 
   <p> In nature, it occurs as the <@>:ion:ion <$>:{<Al>^{3+}}.
   It constitutes <$>:8.2% of the earth's crust, making it the
@@ -307,17 +307,17 @@ Notes:
 <html>:{
   <head>:{
     <title>:{Hello world!}
-    <script src:script.js>:& # & denotes an empty element.
+    <script src:script.js>:<> # <> denotes a default (in this case empty) element.
   }
   <body>:{
     <h1 id:main-heading>:{Hello world!}
     <p>:{Hello world!}
     <img src:frontpage.jpg>
-    <div class:dark-background> <:> <p>:{
+    <div class:dark-background>:&:<p>:{
       This is a paragraph <br> with a line break.
       <em class:italic>:{This text is italic.}
     }
-    <pre> <:> <code> <:> <raw!>:<#>
+    <pre>:&:<code>:&:<raw!>:<#>
       def fib(n):
           if n == 0:
               return 0

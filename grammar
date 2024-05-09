@@ -3,7 +3,7 @@
 ## Document
 
 <expression-document> = *
-                      | *<expression>*
+                      | *<value>*
 
 <dictionary-document> = *
                       | *<dictionary>*
@@ -11,31 +11,40 @@
 <table-document> = *
                  | *<table>*
 
+## Value
+
+<value> = <nested-expression>
+        | <tuple-expression>
+        | <expression>
+
 ## Expression
 
-<expression> = <expression'>
+<nested-expression> = <tag>":"_<value>
+                    | "<>"":"_<value>
+
+<tuple-expression> = "&" <tuple-expression'>
+                   | <expression> "&" <tuple-expression'>
+<tuple-expression'> = <expression>
+                    | <expression> "&" <tuple-expression'>
+
+<expression> = <word>
+             | <word> <expression>
+             | <transcription>
+             | <transcription> <expression>
+             | <text-block>
+             | <text-block> <expression>
+             | <bracketed-value>
+             | <bracketed-value> <expression>
+             | <bracketed-dictionary>
+             | <bracketed-dictionary> <expression>
+             | <bracketed-table>
+             | <bracketed-table> <expression>
+             | <tuple>
+             | <tuple> <expression>
+             | <tagged-value>
+             | <tagged-value> <expression>
              | "~"
-             | "~" <expression'>
-<expression'> = <expression''>
-              | <expression''> "~" <expression'>
-<expression''> = <word>
-               | <word> <expression''>
-               | <transcription>
-               | <transcription> <expression''>
-               | <text-block>
-               | <text-block> <expression''>
-               | <bracketed-expression>
-               | <bracketed-expression> <expression''>
-               | <bracketed-dictionary>
-               | <bracketed-dictionary> <expression''>
-               | <bracketed-table>
-               | <bracketed-table> <expression''>
-               | <tuple>
-               | <tuple> <expression''>
-               | <tagged-value>
-               | <tagged-value> <expression''>
-               | "&"
-               | "&" <expression''>
+             | "~" <expression>
 
 ## Dictionary
 
@@ -49,9 +58,9 @@
 <bullet-dictionary> = ">" <dictionary-entry>
                     | ">" <dictionary-entry> <bullet-dictionary>
 
-<dictionary-entry> = <word>":" <expression>
-                   | <transcription>":" <expression>
-                   | <text-block>":" <expression>
+<dictionary-entry> = <word> ":" <value>
+                   | <transcription> ":" <value>
+                   | <text-block> ":" <value>
 
 ## Table
 
@@ -60,28 +69,26 @@
         | <grid-table>
         | <bullet-table>
 
-<flow-table> = <expression>
-             | <expression> ";"
-             | <expression> ";" <flow-table>
-             | <expression> "|" <flow-table>
+<flow-table> = <value>
+             | <value> ";"
+             | <value> ";" <flow-table>
+             | <value> "|" <flow-table>
 
 ### Cannot have zero columns.
-<grid-table> = "|" <expression> <grid-table>
+<grid-table> = "|" <value> <grid-table>
              | "|" <grid-table>
              | "|"
 
-<bullet-table> = ">" <expression>
-               | ">" <expression> <bullet-table'>
+<bullet-table> = ">" <value>
+               | ">" <value> <bullet-table'>
 <bullet-table'> = <bullet-table>
-                | "|" <expression>
-                | "|" <expression> <bullet-table'>
+                | "|" <value>
+                | "|" <value> <bullet-table'>
 
 ## Tuple
 
 <tuple> = "<>"
-        | "<>" "<:>" <composable>
         | "<>"<arguments>
-        | "<>"<arguments> "<:>" <composable>
 
 ## Tag & tagged value
 
@@ -99,22 +106,18 @@
              | <word>":" <text-block> <attributes>
 
 <tagged-value> = <tag>
-               | <tag> "<:>" <composable>
                | <tag><arguments>
-               | <tag><arguments> "<:>" <composable>
 
 ## Arguments
 
-<arguments> = ":""&"
-            | ":""&"<arguments>
-            | ":"<word>
+<arguments> = ":"<word>
             | ":"<word><arguments>
             | ":"<transcription>
             | ":"<transcription><arguments>
             | ":"<text-block>
             | ":"<text-block><arguments>
-            | ":"<bracketed-expression>
-            | ":"<bracketed-expression><arguments>
+            | ":"<bracketed-value>
+            | ":"<bracketed-value><arguments>
             | ":"<bracketed-dictionary>
             | ":"<bracketed-dictionary><arguments>
             | ":"<bracketed-table>
@@ -123,19 +126,12 @@
             | ":""<>"<arguments>
             | ":"<tag>
             | ":"<tag><arguments>
-
-<composable> = | <word>
-               | <transcription>
-               | <text-block>
-               | <bracketed-expression>
-               | <bracketed-dictionary>
-               | <bracketed-table>
-               | <tuple>
-               | <tagged-value>
+            | ":""&"":"<tuple>
+            | ":""&"":"<tagged-value>
 
 ## Bracketed structures
 
-<bracketed-expression> = "{" <expression> "}"
+<bracketed-value> = "{" <value> "}"
 
 <bracketed-dictionary> = "{" "}"
                        | "{" <dictionary> "}"

@@ -178,33 +178,35 @@
 
 ### Multiline tuple expression
 {
-  ~ a a a
-  ~ {b b b}
-  ~ c
-  ~ {
+  & a a a
+  & {b b b}
+  & c
+  & {
     d d d d d
     d d d
   }
-  ~ e e e e
+  & e e e e
 }
 
 ### Singleline tuple expression
-{ a a a ~ {b b b} ~ c c }
+{ a a a & {b b b} & c c }
 
 ### Multiline tuple, singleline header expression
 {
-  a a a ~ {b b b} ~ c ~ {
+  a a a & {b b b} & c & {
     d d d d d
     d d d
   }
 }
 
 ### Inner empty tuple
-<> <:> <> <:> <>
+{ <>: <>: <> }
 
 ### Inner tuple
-<> <:> <> <:> {
-  a ~ b ~ c
+{
+  <>: <>: {
+    a & b & c
+  }
 }
 
 ## Tagged value
@@ -219,17 +221,17 @@
 }
 
 ### Tag composition
-<A>:b:c <:> <D>:e <:> <F>:g:h <:> <I>:{
+<A>:b:c:&:<D>:e:&:<F>:g:h:&:<I>:{
   j j j j j
 }
 
 ### Singleline tag expression
-{ <A> ~ a ~ b b ~ c }
+{ <A>: a & b b & c }
 
 ### Multiline tag, singleline header expression
-### ~ are only on one line.
+### & are only on one line.
 {
-  <A> ~ a ~ b b b b ~ [
+  <A>: a & b b b b & [
     c c c c c
   ]
 }
