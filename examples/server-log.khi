@@ -1,15 +1,16 @@
 # Server uptime log
+# Document type: List (aligned notation)
 
-> 2023-Nov-11 18.56.12 & <Start>
-> 2023-Nov-13 03.00.01 & <Restart>
-> 2023-Nov-14 03.00.01 & <Restart>
-> 2023-Nov-15 03.00.01 & <Restart>
-> 2023-Nov-16 03.00.02 & <Restart>
-> 2023-Nov-17 03.00.01 & <Restart>
-> 2023-Nov-17 19.30.59 & <Stop>
-> 2023-Nov-20 18.33.30 & <Start>
-> 2023-Nov-22 03.00.01 & <Restart>
-> 2023-Nov-23 03.00.01 & <Restart>
-> 2023-Nov-24 03.00.01 & <Restart>
-> 2023-Nov-25 03.00.00 & <Restart>
-> 2023-Nov-25 20.12.12 & <Stop>
+> 2023-Nov-11 | 18.56.12 | <Start>
+> 2023-Nov-13 | 03.00.01 | <Restart>
+> 2023-Nov-14 | 03.00.01 | <Restart>
+> 2023-Nov-15 | 03.00.01 | <Restart>
+> 2023-Nov-16 | 03.00.02 | <Restart>
+> 2023-Nov-17 | 03.00.01 | <Restart>
+> 2023-Nov-17 | 19.30.59 | <Stop>
+> 2023-Nov-20 | 18.33.30 | <Start>
+> 2023-Nov-22 | 03.00.01 | <Restart>
+> 2023-Nov-23 | 03.00.01 | <Restart>
+> 2023-Nov-24 | 03.00.01 | <Restart>
+> 2023-Nov-25 | 03.00.00 | <Restart>
+> 2023-Nov-25 | 20.12.12 | <Stop>

@@ -1,28 +1,29 @@
 # Materials
+# Document type: Dictionary (aligned notation)
 
-> oak-planks: {
-  > name: Oak planks
-  > tags: [wood]
-  > price: 200
+oak-planks: {
+  name: Oak planks
+  tags: [wood]
+  price: 200
 }
-> birch-planks: {
-  > name: Birch planks
-  > tags: [wood]
-  > price: 200
+birch-planks: {
+  name: Birch planks
+  tags: [wood]
+  price: 200
 }
-> stone: {
-  > name: Stone
-  > price: 100
-  > tags: [heavy; stone]
+stone: {
+  name: Stone
+  price: 100
+  tags: [heavy; stone]
 }
-> marble: {
-  > name: Marble
-  > price: 800
-  > beauty: 2
-  > tags: [heavy; stone; rich]
+marble: {
+  name: Marble
+  price: 800
+  beauty: 2
+  tags: [heavy; stone; rich]
 }
-> glass: {
-  > name: Glass
-  > price: 1600
-  > tags: [rich]
+glass: {
+  name: Glass
+  price: 1600
+  tags: [rich]
 }

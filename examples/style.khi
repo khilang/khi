@@ -1,4 +1,5 @@
 # Style recommendations
+# Document type: Value
 
 ## Dictionary
 
@@ -10,36 +11,33 @@
 
 ### Multiline dictionary, singleline entries
 {
-  > k1: a a a a
-  > k2: b b b
-  > k3: c
-  > k4: d d
+  k1: a a a a
+  k2: b b b
+  k3: c
+  k4: d d
 }
 
 ### Multiline dictionary, multiline entries
 {
-  > k1: a a a
-    a a a a
-  > k2: b b b
-  > k3: c c c {
+  k1: a a a
+  a a a a
+  k2: b b b
+  k3: c c c {
     c c
     c c c c
     c
   }
-  > k4: d d d d d
+  k4: d d d d d
     d d d d d
     d d d d
-  > k5: e e e e
+  k5: e e e e
     e e e e
-  > k6: f f f [
+  k6: f f f [
     f f
   ]
 }
 
 ## Row
-
-### Empty row
-[]
 
 ### Singleline row, short inline entries
 [a|b|c|d|e]
@@ -72,20 +70,6 @@
   ]
 ]
 
-## List / Column
-
-### Empty list
-[]
-
-### Singleline list, inline entries
-[a a a; b b b; c; d; e e]
-
-### Multiline list, inline entries
-[
-  a a a; b b b; c;
-  d; e e; f;
-  g g g; h;
-]
 
 ### Multiline list, singleline entries
 [
@@ -110,19 +94,32 @@
   ]
 ]
 
-## Table
+## List
 
-### Empty table
+### Empty list
 []
 
-### Singleline table, inline rows
-[a a|b; c c|d d; e|f f]
+### Singleline list, inline entries
+[a a a; b b b; c; d; e e]
 
-### Multiline table, inline rows
+### Singleline table, inline tuples
+[a|b; c|d; e|f]
+
+### Multiline list, inline tuples
 [
   a|b|c; d|e|f;
   g|h|i; j|k|l;
 ]
+
+### Multiline list, inline entries
+[
+  a a a; b b b; c;
+  d; e e; f {
+    f f f f
+  };
+  g g g; h;
+]
+
 
 ### Multiline table, singleline rows, short & mostly same width columns
 [
@@ -168,32 +165,35 @@
 ## Tuple
 
 ### Inline tuple
-<>:a:{b b b}:[c]
+{a|b|c}
+{ a | {b b b} | [c; d] }
 
 ### Multiline tuple, singleline header
-<>:a:{b b b}:[
-  c c c c c
-  c c c c c c
-]
+{
+  a | {b b b} | [
+    c c c c c;
+    c c c;
+  ]
+}
 
 ### Multiline tuple expression
 {
-  & a a a
-  & {b b b}
-  & c
-  & {
+  | a a a
+  | {b b b}
+  | c
+  | {
     d d d d d
     d d d
   }
-  & e e e e
+  | e e e e
 }
 
 ### Singleline tuple expression
-{ a a a & {b b b} & c c }
+{ a a a | {b b b} | c c }
 
 ### Multiline tuple, singleline header expression
 {
-  a a a & {b b b} & c & {
+  a a a | {b b b} | c | {
     d d d d d
     d d d
   }
@@ -205,7 +205,7 @@
 ### Inner tuple
 {
   <>: <>: {
-    a & b & c
+    a | b | c
   }
 }
 
@@ -226,17 +226,20 @@
 }
 
 ### Singleline tag expression
-{ <A>: a & b b & c }
+{ <A>: a | b b | c }
 
 ### Multiline tag, singleline header expression
 ### & are only on one line.
 {
-  <A>: a & b b b b & [
+  <A>: a | b b b b | [
     c c c c c
   ]
 }
 
 ## Expression
+
+### Nil
+{~}
 
 ### Short inline expression
 {a a a}

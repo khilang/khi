@@ -3,6 +3,13 @@
 This document describes the background, goals and design decisions of the Khi data
 format.
 
+## Overview
+
+1. [Background](#background)
+2. [Goals](#goals)
+3. [Candidates](#candidates)
+4. [Design](#design)
+
 ## Background
 
 Several textual data formats exist that are used for configuration, markup, storage
@@ -61,12 +68,11 @@ The goal is to design a data format that fulfills the criteria:
    3. is resistant to errors.
    4. has style recommendations.
    5. has comments.
+   6. is not verbose.
+   7. has a balanced level of syntax noise.
 3. *Simple*: The format
    1. is not complex or complicated.
    2. is easy to parse.
-4. *Concise*: The format
-   1. is not verbose.
-   2. has low syntax noise.
 
 ## Candidates
 

@@ -1,27 +1,28 @@
-# Sample from grammatical word list
+# Sample from grammatical list of words & phrases
+# Document type: List (aligned notation)
 
-<Verb>: clear & {
-  > regularity: <Regular>
-  > transitivity: <Transitive>
-  > conjugation: <to> clear & cleared & cleared & clearing
-  > definitions: [
+<Verb>: clear {
+  regularity: <Regular>
+  transitivity: <Transitive>
+  conjugation: <to> clear | cleared | cleared | clearing
+  definitions: [
     > To empty the contents of.
     > To remove obstructions from.
     > To make transparent.
   ]
-};
-<Verb>: burn <down> & {
-  > regularity: <Irregular>
-  > transitivity: <Transitive>
-  > conjugation:
-    & <to> burn <down>
-    & burnt <down>
-    & burnt <down>
-    & burning <down>
-  > definition: To burn completely.
-};
-<Noun>: firewood & {
-  > countability: <Uncountable>
-  > declension: firewood & firewood
-  > definition: Wood burned to fuel a fire.
-};
+}
+<Verb>: burn <down> {
+  regularity: <Irregular>
+  transitivity: <Transitive>
+  conjugation:
+  | <to> burn <down>
+  | burnt <down>
+  | burnt <down>
+  | burning <down>
+  definition: To burn completely.
+}
+<Noun>: firewood {
+  countability: <Uncountable>
+  declension: firewood | firewood
+  definition: Wood burned to fuel a fire.
+}

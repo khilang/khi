@@ -1,4 +1,5 @@
 # A frontpage
+# Document type: Value
 
 <doctype!>:html # Macro that inserts <!doctype html>.
 <html>:{
@@ -7,14 +8,16 @@
     <script src:script.js>:<> # <> denotes a default (in this case empty) element.
   }
   <body>:{
-    <h1 id:main-heading>:{Hello world!}
+    <h1 id:main-heading>:{ Hello world! }
     <p>:{Hello world!}
     <img src:frontpage.jpg>
-    <div class:dark-background>:&:<p>:{
-      This is a paragraph <br> with a line break.
-      <em class:italic>:{This text is italic.}
+    <div class:dark-background>:<p>:{
+      This is a paragraph <br> with
+      a line break. <em class:italic>:{
+        This text is italic.
+      }
     }
-    <pre>:&:<code>:&:<raw!>:<#>
+    <pre>:<code>:<raw!>:<#>
       def fib(n):
           if n == 0:
               return 0
