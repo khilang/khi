@@ -2,155 +2,136 @@
 
 ## Document
 
-<expression-document> = *
-                      | *<value>*
+<value-document> → *
+                 | *<value>*
 
-<dictionary-document> = *
+<dictionary-document> → *
                       | *<dictionary>*
 
-<table-document> = *
-                 | *<table>*
+<list-document> → *
+                | *<list>*
 
 ## Value
 
-<value> = <nested-expression>
-        | <tuple-expression>
-        | <expression>
+<value> → <inner-value>
+        | "|" <inner-value>
+        | <tagged-value>
 
-## Expression
+<inner-value> → <block>
+              | <tuple>
 
-<nested-expression> = <tag>":"_<value>
-                    | "<>"":"_<value>
+<tuple> → <block> "|" <block>
+        | <block> "|" <tuple>
 
-<tuple-expression> = "&" <tuple-expression'>
-                   | <expression> "&" <tuple-expression'>
-<tuple-expression'> = <expression>
-                    | <expression> "&" <tuple-expression'>
+<tagged-value> → <tag>":"_<value>
 
-<expression> = <word>
-             | <word> <expression>
-             | <transcription>
-             | <transcription> <expression>
-             | <text-block>
-             | <text-block> <expression>
-             | <bracketed-value>
-             | <bracketed-value> <expression>
-             | <bracketed-dictionary>
-             | <bracketed-dictionary> <expression>
-             | <bracketed-table>
-             | <bracketed-table> <expression>
-             | <tuple>
-             | <tuple> <expression>
-             | <tagged-value>
-             | <tagged-value> <expression>
-             | "~"
-             | "~" <expression>
+<block> → <term>
+        | <term> <block>
+        | "~"
+        | "~" <block>
+
+<term> → <text>
+       | <bracketed-value>
+       | <bracketed-dictionary>
+       | <bracketed-list>
+       | <tagged-arguments>
+
+<text> → <string>
+       | <string> <text>
+<text'> → <string>
+        | <string> <text'>
+        | "~" <text'>
+
+<bracketed-value> → "{" <value> "}"
 
 ## Dictionary
 
-<dictionary> = <flow-dictionary>
-             | <bullet-dictionary>
+<dictionary> → <delimited-dictionary>
+             | <aligned-dictionary>
+             | <absolute-dictionary>
 
-<flow-dictionary> = <dictionary-entry>
-                  | <dictionary-entry> ";"
-                  | <dictionary-entry> ";" <flow-dictionary>
+<delimited-dictionary> → <entry>
+                       | <entry> ";"
+                       | <entry> ";" <delimited-dictionary>
 
-<bullet-dictionary> = ">" <dictionary-entry>
-                    | ">" <dictionary-entry> <bullet-dictionary>
+<aligned-dictionary> → <entry>
+                     | <entry>_<aligned-dictionary>
 
-<dictionary-entry> = <word> ":" <value>
-                   | <transcription> ":" <value>
-                   | <text-block> ":" <value>
+<absolute-dictionary> → <section>
+                      | <section>_<absolute-dictionary>
 
-## Table
+<section> → <square-header>
+          | <square-header>_<list>
+          | <curly-header>
+          | <curly-header>_<inner-dictionary>
+          | <curly-header>_<value>
 
-### All rows must have the same number of columns.
-<table> = <flow-table>
-        | <grid-table>
-        | <bullet-table>
+<curly-header> → "{"<key>"}"":"
 
-<flow-table> = <value>
-             | <value> ";"
-             | <value> ";" <flow-table>
-             | <value> "|" <flow-table>
+<square-header> → "["<key>"]"":"
 
-### Cannot have zero columns.
-<grid-table> = "|" <value> <grid-table>
-             | "|" <grid-table>
-             | "|"
+<inner-dictionary> → <delimited-dictionary>
+                   | <aligned-dictionary>
 
-<bullet-table> = ">" <value>
-               | ">" <value> <bullet-table'>
-<bullet-table'> = <bullet-table>
-                | "|" <value>
-                | "|" <value> <bullet-table'>
+<entry> → <key>":" <value>
 
-## Tuple
+<key> → <string>
+      | <string>":"<key>
 
-<tuple> = "<>"
-        | "<>"<arguments>
-
-## Tag & tagged value
-
-### Name cannot start with a hash sign.
-<tag> = "<"<word>">"
-      | "<"<word> <attributes> ">"
-
-<attributes> = <word>
-             | <word> <attributes>
-             | <word>":" <word>
-             | <word>":" <word> <attributes>
-             | <word>":" <transcription>
-             | <word>":" <transcription> <attributes>
-             | <word>":" <text-block>
-             | <word>":" <text-block> <attributes>
-
-<tagged-value> = <tag>
-               | <tag><arguments>
-
-## Arguments
-
-<arguments> = ":"<word>
-            | ":"<word><arguments>
-            | ":"<transcription>
-            | ":"<transcription><arguments>
-            | ":"<text-block>
-            | ":"<text-block><arguments>
-            | ":"<bracketed-value>
-            | ":"<bracketed-value><arguments>
-            | ":"<bracketed-dictionary>
-            | ":"<bracketed-dictionary><arguments>
-            | ":"<bracketed-table>
-            | ":"<bracketed-table><arguments>
-            | ":""<>"
-            | ":""<>"<arguments>
-            | ":"<tag>
-            | ":"<tag><arguments>
-            | ":""&"":"<tuple>
-            | ":""&"":"<tagged-value>
-
-## Bracketed structures
-
-<bracketed-value> = "{" <value> "}"
-
-<bracketed-dictionary> = "{" "}"
+<bracketed-dictionary> → "{" "}"
                        | "{" <dictionary> "}"
 
-<bracketed-table> = "[" "]"
-                  | "[" <table> "]"
+## List
 
-## Text & whitespace
+<list> → <delimited-list>
+       | <aligned-list>
+       | <tabular-list>
+       | <tagged-list>
 
-### Matches a Word token.
-<word>
+<delimited-list> → <value>
+                 | <value> ";"
+                 | <value> ";" <delimited-list>
 
-### Matches a Transcription token.
-<transcription>
+<aligned-list> → ">"_<value>
+               | ">"_<value>_<aligned-list>
 
-### Matches a Text block token.
-<text-block>
+<tabular-list> → "|" <inner-value> "|"
+               | "|" <inner-value> "|"_<tabular-list>
 
-### Any whitespace
-### Any number (including zero) of whitespace tokens.
-### Also represented by a space character.
-*
+<tagged-list> → <tagged-value>
+              | <tagged-value>_<tagged-list>
+
+<bracketed-list> → "[" "]"
+                 | "[" <list> "]"
+
+## Tagged arguments
+
+<tagged-arguments> → <tag>
+                   | <tag><arguments>
+
+<arguments> → ":"<argument>
+            | ":"<argument><arguments>
+
+<argument> → <string>
+           | <bracketed-value>
+           | <bracketed-dictionary>
+           | <bracketed-list>
+           | <tagged-arguments>
+
+## Tag
+
+<tag> → "<"<word>">"
+      | "<"<word>_<attributes> ">"
+      | "<"">"
+
+<attributes> → <attribute>
+             | <attribute>_<attributes>
+
+<attribute> → <word>
+            | <word>":"<string>
+
+## String
+
+<string> → <word>
+         | <transcription>
+         | <text-block>

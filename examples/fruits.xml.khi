@@ -12,10 +12,9 @@
     <amount>:10
     <colour>:#aff10e
   }
-  # A dictionary compiles to a sequence of tags.
   <fruit>:{
-    name: Mango
-    amount: 20
-    colour: #f0b902
+    <name>:Mango
+    <amount>:20
+    <colour>:#f0b902
   }
 }

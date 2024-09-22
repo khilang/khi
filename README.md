@@ -1,18 +1,23 @@
 # Khi
 
-- is a textual data format.
-- has native support for the universal data structures found in modern programming
-  languages and data formats like JSON, YAML, XML, CSV and LaTeX:
-  - text and markup.
-  - dictionaries.
-  - tables, lists, tuples, matrices.
-  - named hierarchies (like XML tags/elements).
-  - functions, commands (like LaTeX commands).
-- can be used for configuration, markup, storage and serialization.
+a data language: a source code for data.
+
+- defines a textual data format.
+- has native support (both syntactic and semantic) for the universal data
+  structures found in modern programming languages and formats:
+  - text, markup
+  - dictionaries, structs
+  - lists
+  - tuples
+  - tables, matrices
+  - enums (like structure varieties), commands (like LaTeX commands)
+  - named trees and hierarchies (like XML tags/elements)
+- focuses on data representation, markup and configuration, but could be used
+  for storage and serialization.
 - is intuitive to read, write and edit.
 - is aesthetic and convenient for handcoding.
 - is simple; There are no complex rules.
-- is concise and has a balanced amount of syntax noise.
+- has a balanced amount of verbosity and syntax noise.
 
 ## Links
 
@@ -25,14 +30,22 @@
 
 ## Status
 
-The language is complete, but we will wait some time before finalizing it, in case
-some unknown future use cases needs support. However, only small changes and additions
-will be made at this point, such as:
+The language seems complete, but we will wait some time before finalizing it, in
+case some currently unconsidered use cases needs support. However, only small
+changes and additions will be made at this point.
 
-- Minor syntax changes.
-- Small additions, such as more flags for text blocks.
-- Elaboration on or changes to semantics.
-- Clarifications, such as detailed specification of allowed and disallowed Unicode characters.
+### TODO:
+
+Stuff to do and think about, fix or add before **Khi 1.0.0**.
+
+- [X] **Add absolute notation:** Much better than indentation and brackets for
+  longer documents.
+- [ ] **Evaluate text block flags:** There could be some important use cases
+  that should have support. For example, maybe a flag to replace newlines by
+  spaces.
+- [ ] **Specify characters and lexer details:** Specification and description of
+  ASCII/Unicode characters and lexer.
+- [ ] Tidy up and finish documentation and reference.
 
 ## Examples & showcase
 
@@ -56,58 +69,60 @@ Notes:
   the line. A transcription parses reserved characters as text.
 
 ```
+{article}:
 uuid: 0c5aacfe-d828-43c7-a530-12a802af1df4
 type: chemical-element
 key: aluminium
 title: Aluminium
-description: The <@>:element:{chemical element} aluminium.
+description: The <@element>:{chemical element} aluminium.
 tags: [metal; common]
 
-chemical-symbol: Al
-atomic-number: 13
+{chemical-element}:
+symbol: Al
+number: 13
 stp-phase: <Solid>
 melting-point: 933.47
 boiling-point: 2743
 density: 2.7
 electron-shells: [2; 8; 3]
 
-# External references
-ext-refs: {
-  wikipedia: \https://en.wikipedia.org/wiki/Aluminium
-  snl: \https://snl.no/aluminium
-}
+{references}:
+wikipedia: \https://en.wikipedia.org/wiki/Aluminium
+snl: \https://snl.no/aluminium
 
-# Internal references
-refs: {
-  element: 740097ea-10fa-4203-b086-58632f099167
-  chemsym: 6e2f634c-f180-407a-b9ce-2138b412b248
-  atomnum: 1a5e1974-a78c-4820-afeb-79bef6974814
-  react: ab7d8a1f-c028-4466-9bb2-41a39d153241
-  aloxide: c1ff08e7-a88f-42d5-83c3-6adc4835a07b
-  stab: b3b13474-4fe3-4556-9568-925c066916a5
-  purity: 40786551-85c4-461c-ba6e-4d54d5863820
-  ion: effd5c7a-da31-4357-a94c-91343e9a05eb
-  metal: 84333088-cfcc-4e78-8d3f-7307dcab144b
-}
+{links}:
+element: 740097ea-10fa-4203-b086-58632f099167
+chemsym: 6e2f634c-f180-407a-b9ce-2138b412b248
+atomnum: 1a5e1974-a78c-4820-afeb-79bef6974814
+react: ab7d8a1f-c028-4466-9bb2-41a39d153241
+aloxide: c1ff08e7-a88f-42d5-83c3-6adc4835a07b
+stab: b3b13474-4fe3-4556-9568-925c066916a5
+purity: 40786551-85c4-461c-ba6e-4d54d5863820
+ion: effd5c7a-da31-4357-a94c-91343e9a05eb
+metal: 84333088-cfcc-4e78-8d3f-7307dcab144b
 
-content: [
+[content]:
 
-> <@>:self:Aluminium is a <@>:element:{chemical element}
-  with <@>:chemsym:{chemical symbol} <chemsym> and
-  <@>:atomnum:{atomic number} <atomnum>.
+<h1>: Aluminium
 
-> In <@>:purity:pure form, it is a highly <@>:react:reactive
-  {<@>:metal:metal}, but normally a thin coat of
-  <@>:aloxide:{aluminium oxide} forms on its surface, keeping it
-  highly {<@>:stab:stable}.
+<p>: <@self>:Aluminium is a <@element>:{chemical element} with
+<@chemsym>:{chemical symbol} <chemsym> and <@atomnum>:{atomic number} <atomnum>.
 
-> In nature, it occurs as the <@>:ion:ion <$>:{<sym>:{Al}^{3+}}.
-  It constitutes <$>:{8.2%} of the earth's crust, making it the
-  most common <@>:metal:metal found there.
+<h2>: Substance
 
-> ...
+<p>: In <@purity>:pure form, it is a highly <@react>:reactive {<@metal>:metal},
+but normally a thin coat of <@aloxide>:{aluminium oxide} forms on its surface,
+keeping it highly {<@stab>:stable}.
 
-]
+<p>: ...
+
+<h2>: Occurrence
+
+<p>: In nature, it occurs as the <@ion>:ion <$>:{<sym>:{Al}^{3+}}. It
+constitutes <$>:8.2% of the earth's crust, making it the most common
+<@metal>:metal found there.
+
+<p>: ...
 ```
 
 ### Khi-encoded HTML example
@@ -276,7 +291,7 @@ This is a data storage example. It demonstrates that **Khi**, like **CSV**, nati
 supports tables of values.
 
 Notes:
- - This is a table document.
+ - This is a list document. By *table* is meant a list of tuples.
 
 ```
 # 1) Atomic number
@@ -310,4 +325,34 @@ Notes:
 | 22 | Ti |   Titanium |  4 | <Solid> | [2; 8; 10; 2] |
 | 23 |  V |   Vanadium |  5 | <Solid> | [2; 8; 11; 2] |
 | 24 | Cr |   Chromium |  6 | <Solid> | [2; 8; 13; 1] |
+```
+
+### Words & phrases example
+
+```
+<Verb>: clear {
+  regularity: <Regular>
+  transitivity: <Transitive>
+  conjugation: <to> clear | cleared | cleared | clearing
+  definitions: [
+    > To empty the contents of.
+    > To remove obstructions from.
+    > To make transparent.
+  ]
+}
+<Verb>: burn <down> {
+  regularity: <Irregular>
+  transitivity: <Transitive>
+  conjugation:
+  | <to> burn <down>
+  | burnt <down>
+  | burnt <down>
+  | burning <down>
+  definition: To burn completely.
+}
+<Noun>: firewood {
+  countability: <Uncountable>
+  declension: firewood | firewood
+  definition: Wood burned to fuel a fire.
+}
 ```

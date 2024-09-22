@@ -22,12 +22,14 @@ This document specifies the **Khi** data format.
    2. [Dictionary](#dictionary-1)
       1. [Delimited dictionary notation](#delimited-dictionary-notation)
       2. [Aligned dictionary notation](#aligned-dictionary-notation)
-      3. [Bracketed dictionary](#bracketed-dictionary)
+      3. [Absolute dictionary notation](#absolute-dictionary-notation)
+      4. [Bracketed dictionary](#bracketed-dictionary)
    3. [List](#list-1)
       1. [Delimited list notation](#delimited-list-notation)
       2. [Aligned list notation](#aligned-list-notation)
       3. [Tabular list notation](#tabular-list-notation)
-      4. [Bracketed list](#bracketed-list)
+      4. [Tagged list notation](#tagged-list-notation)
+      5. [Bracketed list](#bracketed-list)
    4. [Tagged arguments](#tagged-arguments)
       1. [Argument](#argument)
       2. [Composition](#composition)
@@ -134,10 +136,8 @@ For exmaple: Markup and customized syntax.
 ### Value
 
 ```
-<value> = <block>
-        | "|" <block>
-        | <tuple>
-        | "|" <tuple>
+<value> → <inner-value>
+        | "|" <inner-value>
         | <tagged-value>
 ```
 
@@ -149,10 +149,17 @@ All values consist of [blocks](#block) which may be wrapped in
 Blocks and tuples are optionally prefixed by a bar `|`. This is recommended 
 style for multiline tuples.
 
+#### Inner value
+
+```
+<inner-value> → <block>
+              | <tuple>
+```
+
 #### Block
 
 ```
-<block> = <term>
+<block> → <term>
         | <term> <block>
         | "~"
         | "~" <block>
@@ -183,7 +190,7 @@ the corresponding structures in the result.
 #### Term
 
 ```
-<term> = <text>
+<term> → <text>
        | <bracketed-value>
        | <bracketed-dictionary>
        | <bracketed-list>
@@ -232,9 +239,9 @@ The following textual representations can be used as terms:
 ##### Text
 
 ```
-<text> = <string>
+<text> → <string>
        | <string> <text>
-<text'> = <string>
+<text'> → <string>
         | <string> <text'>
         | "~" <text'>
 ```
@@ -251,14 +258,13 @@ The concatenated string is the content of the represented text.
 #### Tuple
 
 ```
-<tuple> = <block> "|" <block>
+<tuple> → <block> "|" <block>
         | <block> "|" <tuple>
 ```
 
 Represents a [tuple](#tuple) with multiple elements.
 
-In tuple expressions, [expressions](#expression) are delimited by an ampersand `&`. If
-the first term is a tag followed by a colon, then that is a tag expression.
+In tuple expressions, [blocks](#block) are delimited by a bar `|`.
 
 <details>
 
@@ -266,14 +272,14 @@ the first term is a tag followed by a colon, then that is a tag expression.
 
 - `<>:a:b:c:d` is a tuple with 4 parameters.
 - `<>:{<>:{a}}`, `<>:{a}` and `a` are equivalent by automatic unwrapping.
-- `a & b & c` is a tuple expression evaluating to a tuple with 3 elements.
+- `a | b | c` is a tuple expression evaluating to a tuple with 3 elements.
 
 </details>
 
 #### Tagged value
 
 ```
-<tagged-value> = <tag>":"_<value>
+<tagged-value> → <tag>":"_<value>
 ```
 
 Represents a [tagged value](#tagged-value) or a [tuple](#tuple) if the tag is
@@ -285,7 +291,7 @@ Consists of a
 #### Bracketed value
 
 ```
-<bracketed-value> = "{" <value> "}"
+<bracketed-value> → "{" <value> "}"
 ```
 
 Represents a [value](#value), namely the same value that it encloses.
@@ -323,18 +329,22 @@ contexts.
 ### Dictionary
 
 ```
-<dictionary> = <delimited-dictionary>
+<dictionary> → <delimited-dictionary>
              | <aligned-dictionary>
+             | <absolute-dictionary>
 ```
 
 Represents a [dictionary](#dictionary).
 
-There are two dictionary notations: *delimited* and *aligned*.
+There are three dictionary notations: *delimited*, *aligned* and *absolute*.
 
 #### Entry
 
 ```
-<entry> = <string>":" <value>
+<entry> → <key>":" <value>
+
+<key> → <string>
+      | <string>":"<key>
 ```
 
 Represents an entry in a [dictionary](#dictionary).
@@ -359,7 +369,7 @@ It is recommended to use kebab-case for keys.
 #### Delimited dictionary notation
 
 ```
-<delimited-dictionary> = <entry>
+<delimited-dictionary> → <entry>
                        | <entry> ";"
                        | <entry> ";" <delimited-dictionary>
 ```
@@ -383,8 +393,8 @@ a semicolon following the last entry, is allowed.
 #### Aligned dictionary notation
 
 ```
-<aligned-dictionary> = <entry>
-                     | <entry> <aligned-dictionary>
+<aligned-dictionary> → <entry>
+                     | <entry>_<aligned-dictionary>
 ```
 
 In *bullet notation*, each entry starts with a right angle `>`.
@@ -406,10 +416,30 @@ In *bullet notation*, each entry starts with a right angle `>`.
 
 </details>
 
+#### Absolute dictionary notation
+
+```
+<absolute-dictionary> → <section>
+                      | <section>_<absolute-dictionary>
+
+<section> → <square-header>
+          | <square-header>_<list>
+          | <curly-header>
+          | <curly-header>_<inner-dictionary>
+          | <curly-header>_<value>
+
+<curly-header> → "{"<key>"}"":"
+
+<square-header> → "["<key>"]"":"
+
+<inner-dictionary> → <delimited-dictionary>
+                   | <aligned-dictionary>
+```
+
 #### Bracketed dictionary
 
 ```
-<bracketed-dictionary> = "{" "}"
+<bracketed-dictionary> → "{" "}"
                        | "{" <dictionary> "}"
 ```
 
@@ -420,23 +450,24 @@ brackets `{`, `}`. Can be used as an [argument](#argument) or
 ### List
 
 ```
-<list> = <delimited-list>
-       | <tabular-list>
+<list> → <delimited-list>
        | <aligned-list>
+       | <tabular-list>
+       | <tagged-list>
 ```
 
 Represents a [list](#list) value.
 
-An entry is represented by an [expression](#expression). A nonempty table is represented
-by either of three notations: [flow notation](#flow-table-notation), [grid notation](#grid-table-notation)
-or [bullet notation](#bullet-table-notation). Flow notation is intended for inline
-rows and compact representations, grid notation is intended for singleline rows and
-bullet notation is intended for multiline rows.
+An entry is represented by a [value](#value-1). A nonempty list is represented
+by either of four notations: [delimited notation](#delimited-list-notation), [tabular notation](#tabular-list-notation), 
+[aligned notation](#aligned-list-notation) or [tagged notation](#tagged-list-notation). Delimited notation is intended for inline
+rows and compact representations, tabular notation is intended for singleline rows and
+aligned notation is intended for multiline rows.
 
 #### Delimited list notation
 
 ```
-<delimited-list> = <value>
+<delimited-list> → <value>
                  | <value> ";"
                  | <value> ";" <delimited-list>
 ```
@@ -465,13 +496,11 @@ is permitted.
 #### Aligned list notation
 
 ```
-<aligned-list> = ">" <value>
-               | ">" <value> <aligned-list>
-               | <tagged-value>
-               | <tagged-value> <aligned-list>
+<aligned-list> → ">"_<value>
+               | ">"_<value>_<aligned-list>
 ```
 
-In *aligned notation*, each value is preceded by a right angle `>`.
+Each element is preceded by a ~~right angle~~ `>`.
 
 <details>
 
@@ -502,15 +531,11 @@ In *aligned notation*, each value is preceded by a right angle `>`.
 #### Tabular list notation
 
 ```
-<tabular-list> = "|" <block> "|"
-               | "|" <block> "|" <tabular-list>
-               | "|" <tuple> "|"
-               | "|" <tuple> "|" <tabular-list>
+<tabular-list> → "|" <inner-value> "|"
+               | "|" <inner-value> "|"_<tabular-list>
 ```
 
-In *tabular notation*, each value is surrounded by bars `|`.
-
-
+In *tabular notation*, each value is enclosed in bars `|`.
 
 <details>
 
@@ -531,10 +556,19 @@ In *tabular notation*, each value is surrounded by bars `|`.
 
 </details>
 
+#### Tagged list notation
+
+```
+<tagged-list> → <tagged-value>
+              | <tagged-value>_<tagged-list>
+```
+
+A sequence of [tagged values](#tagged-value-1).
+
 #### Bracketed list
 
 ```
-<bracketed-list> = "[" "]"
+<bracketed-list> → "[" "]"
                  | "[" <list> "]"
 ```
 
@@ -548,21 +582,21 @@ empty dictionary.
 ### Tagged arguments
 
 ```
-<tagged-arguments> = <tag>
+<tagged-arguments> → <tag>
                    | <tag><arguments>
 
-<arguments> = ":"<argument>
+<arguments> → ":"<argument>
             | ":"<argument><arguments>
-            | ":"<tagged-arguments>
 ```
 
 #### Argument
 
 ```
-<argument> = <string>
+<argument> → <string>
            | <bracketed-value>
            | <bracketed-dictionary>
            | <bracketed-list>
+           | <tagged-arguments>
 ```
 
 Represents an arbitrary [value](#value).
@@ -665,43 +699,27 @@ a tuple.
 
 #### Composition
 
-*Composition* is indicated by the *composition operator* `&`. In a composition,
-the right-hand side is applied as the last argument of the tuple or tagged value on
-the left-hand side.
-
-The right-hand side can be any of the following:
-
-| Composition argument                          | Represents                                       |
-|-----------------------------------------------|--------------------------------------------------|
-| [Word](#word)                                 | [Text](#text)                                    |
-| [Transcription](#transcription)               | [Text](#text)                                    |
-| [Text block](#text-block)                     | [Text](#text)                                    |
-| [Bracketed dictionary](#bracketed-dictionary) | [Dictionary](#dictionary)                        |
-| [Bracketed table](#bracketed-list)            | [Table](#list)                                   |
-| [Tuple](#tuple)                               | [Tuple](#tuple)                                  |
-| [Tagged value](#tagged-value)                 | [Tagged value](#tagged-value)                    |
-| [Bracketed expression](#bracketed-expression) | [Value](#value) of the [expression](#expression) |
-
 <details>
 
 <summary>Examples</summary>
 
-- `<bold>:&:<italic>:word` is equivalent to `<bold>:{ <italic>:word }`.
-- `<a>:&:<b>:{c}:&:<d>:e:[f]` is equivalent to `<a>:{ <b>:{c}:{ <d>:e:[f] } }`.
+- `<bold>:<italic>:word` is equivalent to `<bold>:{ <italic>:word }`.
+- `<a>:<b>:{c}:<d>:e:[f]` is equivalent to `<a>:{ <b>:{c}:{ <d>:e:[f] } }`.
 
 </details>
 
 ### Tag
 
 ```
-<tag> = "<"<word>">"
-      | "<"<word> <attributes> ">"
-      | "<>"
+<tag> → "<"<word>">"
+      | "<"<word>_<attributes> ">"
+      | "<"">"
 
-<attributes> = <word>
-             | <word> <attributes>
-             | <word>":"<string>
-             | <word>":"<string> <attributes>
+<attributes> → <attribute>
+             | <attribute>_<attributes>
+
+<attribute> → <word>
+            | <word>":"<string>
 ```
 
 A tagged value is represented by a tag, which contains the name and attributes, followed
@@ -719,7 +737,7 @@ It is recommended to use kebab-case for tag and attribute names.
 ### String
 
 ```
-<string> = <word>
+<string> → <word>
          | <transcription>
          | <text-block>
 ```
@@ -727,12 +745,6 @@ It is recommended to use kebab-case for tag and attribute names.
 A *string* represents a sequence of characters.
 
 #### Word
-
-```
-<string> = word
-         | transcription
-         | text-block
-```
 
 A *word* is a sequence of [glyphs](#glyph), including [character escape sequences](#character-escape-sequence)
 and [repeated escape sequences](#repeated-escape-sequence). It represents a string.
@@ -890,7 +902,6 @@ followed by one of a preset of characters. It represents a [glyph](#glyph).
 | `` `: ``   | `:`     |
 | `` `; ``   | `;`     |
 | `` `\| ``  | `\|`    |
-| `` `& ``   | `&`     |
 | `` `~ ``   | `~`     |
 | ``` `` ``` | `` ` `` |
 | `` `\ ``   | `\ `    |
@@ -922,7 +933,6 @@ the [reserved characters](#reserved-character) and represents a [glyph](#glyph).
 | `::`     | `:`   |
 | `;;`     | `;`   |
 | `\|\|`   | `\|`  |
-| `&&`     | `&`   |
 | `~~`     | `~`   |
 | `<<`     | `<`   |
 | `>>`     | `>`   |
@@ -958,8 +968,7 @@ Thus, they cannot be used freely as [glyphs](#glyph).
 |-----------|---------------|------------------------------------------------------------|
 | `:`       | Colon         | Key-value separator, argument application, tuple delimiter |
 | `;`       | Semicolon     | Row separator, entry delimiter                             |
-| `\|`      | Bar           | Column separator                                           |
-| `&`       | Ampersand     | Tuple expression                                           |
+| `\|`      | Bar           | Tuple separator                                            |
 | `~`       | Tilde         | Whitespace contraction                                     |
 | `` ` ``   | Backtick      | Escape sequence                                            |
 | `\ `      | Backslash     | Begin transcription, end transcription                     |
@@ -984,7 +993,7 @@ of characters.
 
 If the hash `#` is followed by another glyph, then the hash is considered to be a
 regular text glyph. A hash `#` cannot be followed by
-`:`, `;`, `|`, `&`, `~`, `\ `, `{`, `}`, `[`, `]`, `<` or `>`, unless the character is
+`:`, `;`, `|`, `~`, `\ `, `{`, `}`, `[`, `]`, `<` or `>`, unless the character is
 part of a [repeated escape sequence](#repeated-escape-sequence).
 
 <details>
@@ -1002,13 +1011,13 @@ part of a [repeated escape sequence](#repeated-escape-sequence).
 ## Document
 
 ```
-<value-document> = *
+<value-document> → *
                  | *<value>*
 
-<dictionary-document> = *
+<dictionary-document> → *
                       | *<dictionary>*
 
-<list-document> = *
+<list-document> → *
                 | *<list>*
 ```
 

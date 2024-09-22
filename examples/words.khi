@@ -1,5 +1,5 @@
 # Sample from grammatical list of words & phrases
-# Document type: List (aligned notation)
+# Document type: List (tagged notation)
 
 <Verb>: clear {
   regularity: <Regular>
