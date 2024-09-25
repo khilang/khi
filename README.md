@@ -31,7 +31,7 @@ a data language: a source code for data.
 ## Status
 
 The language seems complete, but we will wait some time before finalizing it, in
-case some currently unconsidered use cases needs support. However, only small
+case some currently unconsidered use cases need support. However, only small
 changes and additions will be made at this point.
 
 ### TODO:

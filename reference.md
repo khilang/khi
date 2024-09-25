@@ -105,7 +105,7 @@ Example: Tuple, arguments, parameters, components, substructures
 A *dictionary* corresponds to a collection of data structures organized by 
 string keys. It consists of a sequence of key-value pairs known as
 entries. An *entry* assigns a [*value*](#value) to a string *key*. Entries
-with identical keys are allowed, and the order of the entries are preserved.
+with identical keys are not allowed.
 
 Example: Dictionary, object, struct, configuration
 
@@ -239,8 +239,8 @@ The following textual representations can be used as terms:
 ##### Text
 
 ```
-<text> → <string>
-       | <string> <text>
+<text>  → <string>
+        | <string> <text'>
 <text'> → <string>
         | <string> <text'>
         | "~" <text'>
@@ -419,18 +419,20 @@ In *bullet notation*, each entry starts with a right angle `>`.
 #### Absolute dictionary notation
 
 ```
-<absolute-dictionary> → <section>
-                      | <section>_<absolute-dictionary>
+<absolute-dictionary>  → <absolute-dictionary'>
+                       | <inner-dictionary>_<absolute-dictionary'>
+<absolute-dictionary'> → <section>
+                       | <section>_<absolute-dictionary>
 
-<section> → <square-header>
-          | <square-header>_<list>
-          | <curly-header>
-          | <curly-header>_<inner-dictionary>
-          | <curly-header>_<value>
+<section> → <square-header>":"
+          | <square-header>":"_<list>
+          | <curly-header>":"
+          | <curly-header>":"_<inner-dictionary>
+          | <curly-header>":"_<value>
 
-<curly-header> → "{"<key>"}"":"
+<curly-header> → "{"<key>"}"
 
-<square-header> → "["<key>"]"":"
+<square-header> → "["<key>"]"
 
 <inner-dictionary> → <delimited-dictionary>
                    | <aligned-dictionary>

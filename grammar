@@ -36,8 +36,8 @@
        | <bracketed-list>
        | <tagged-arguments>
 
-<text> → <string>
-       | <string> <text>
+<text>  → <string>
+        | <string> <text'>
 <text'> → <string>
         | <string> <text'>
         | "~" <text'>
@@ -57,18 +57,20 @@
 <aligned-dictionary> → <entry>
                      | <entry>_<aligned-dictionary>
 
-<absolute-dictionary> → <section>
-                      | <section>_<absolute-dictionary>
+<absolute-dictionary>  → <absolute-dictionary'>
+                       | <inner-dictionary>_<absolute-dictionary'>
+<absolute-dictionary'> → <section>
+                       | <section>_<absolute-dictionary>
 
-<section> → <square-header>
-          | <square-header>_<list>
-          | <curly-header>
-          | <curly-header>_<inner-dictionary>
-          | <curly-header>_<value>
+<section> → <square-header>":"
+          | <square-header>":"_<list>
+          | <curly-header>":"
+          | <curly-header>":"_<inner-dictionary>
+          | <curly-header>":"_<value>
 
-<curly-header> → "{"<key>"}"":"
+<curly-header> → "{"<key>"}"
 
-<square-header> → "["<key>"]"":"
+<square-header> → "["<key>"]"
 
 <inner-dictionary> → <delimited-dictionary>
                    | <aligned-dictionary>
