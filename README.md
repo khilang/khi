@@ -1,6 +1,6 @@
 # Khi
 
-a data language: a source code for data.
+the **Khi** data language: a source format for data.
 
 - defines a textual data format.
 - has native support (both syntactic and semantic) for the universal data
@@ -21,12 +21,14 @@ a data language: a source code for data.
 
 ## Links
 
-- [**Khi**](https://github.com/khilang/khilang)**:**
-  - [reference](https://github.com/khilang/khilang/blob/master/reference.md)
+- **Khi:**
+  - [repository](https://github.com/khilang/khilang), [quick guide](https://github.com/khilang/khilang/blob/master/quick-guide.md), [reference](https://github.com/khilang/khilang/blob/master/reference.md)
   - [online editor & preprocessor](https://khilang.github.io/khi-editor)
+  - [reference implementation](https://github.com/khilang/khi.rs)
+
 - **Libraries:**
-  - [khi.rs](https://github.com/khilang/khi.rs) (Rust)
-  - [khi.js](https://github.com/khilang/khi.js) (JavaScript)
+  - Rust: [khi.rs](https://github.com/khilang/khi.rs) (Reference implementation)
+  - JavaScript:* [khi.js](https://github.com/khilang/khi.js) (`wasm-pack` derived reference implementation)
 
 ## Status
 
@@ -64,7 +66,8 @@ Notes:
 - The `<@>` macro inserts a link. It takes two arguments: the first argument is the
   article to link to, and the second is the link label that will appear in the article.
 - Compare: The `title` entry has a text value, while the `description` entry has a compound value.
-- This is a dictionary document.
+- This is a dictionary document, written in *absolute dictionary notation*.
+  This notation sections a document with headers, similar to TOML/INI.
 - Backslash `\ ` opens a transcription that lasts until the next `\ ` or the end of
   the line. A transcription parses reserved characters as text.
 
@@ -136,8 +139,8 @@ Notes:
   represented by Khi tags, but a macro ends with `!`, while a regular HTML tag is
   alphabetic.
 - `<doctype!>:html` compiles to `<!doctype html>`.
-- `<#>` opens and closes a text block. We use it to embed code.
-- This is an expression document.
+- `<#>` opens and closes a text block. It is used here to embed code.
+- This is a value document.
 
 ```
 <doctype!>:html # Macro that inserts <!doctype html>.
@@ -176,19 +179,21 @@ compositions of text and commands with arguments. A preprocessor could compile t
 document to **LaTeX**.
 
 Notes:
-- Here, we distinguish between regular LaTeX commands and preprocessor macros. Both
-  are represented by Khi tags, but a macro ends with `!`.
-- **Khi** does not natively support optional arguments. This is instead handled by
-  ending a command name with an apostrophe.
-- Tables are compiled to tabulation syntax. For example, `[1|0; 0|1]` is compiled
-  to **LaTeX** `1&0\\0&1\\`.
-- This is an expression document.
+- Some macros are implemented to make it easier to use certain LaTeX commands.
+  Here the `<def!>` macro is an interface to the LaTeX `\newcommand`.
+- A LaTeX optional argument is indicated by square brackets `[`, `]`. Here, an
+  initial optional argument is indicated with an apostrophe `'` at the end of
+  the command name. Compare `<sqrt>` and `<sqrt'>`.
+- Lists/tables are compiled to LaTeX tabulations (which are delimited by `&` and
+  `\\`). For example, `[1|0; 0|1]` is compiled to **LaTeX** `1&0\\0&1\\`.
+- This is a value document.
 
 ```
 <documentclass>:article
 
 <usepackage>:amsmath
 
+# Use brackets around jot to prevent it from taking "1em" as argument.
 <setlength>:{<jot>}:1em # Controls math line spacing
 
 <begin>:document
@@ -198,11 +203,7 @@ equations and matrices.
 
 <section>:Equations
 
-# Define a sum-range command.
-<def!>:SumRn:4:{ # def! is a macro that defines a LaTeX command.
-  <sum>_{#1}^{`[#2::#3`]} #4
-}
-
+# The def! macro makes it easier to use LaTeX \newcommand.
 <def!>:Log:0:{ <operatorname>:Log }
 
 <begin>:equation* <begin>:split
@@ -217,17 +218,16 @@ equations and matrices.
 <begin>:equation* <Log>(1 + 2 + 3) = <Log>:1 + <Log>:2 + <Log>:3 <end>:equation*
 
 <begin>:align* [
-  | <SumRn>:k:0:100:k | = 0 + 1 + 2 + <dots> + 99 + 100                  |
-  |                 ~ | = (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50 |
-  |                 ~ | = 5050                                           |
+  > 0 + 1 + 2 + <dots> + 99 + 100
+  > (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50
+  > 5050
 ] <end>:align*
 
 <begin>:align* [
-  | <SumRn>:k:0:n:k                    |
-  | = 0 + 1 + 2 + <dots> + (n - 1) + n |
-  | = n <cfrac>:n:2 + <cfrac>:n:2      |
-  | = <cfrac>:n^2:2 + <cfrac>:n:2      |
-  | = n <cdot> <cfrac>:{n + 1}:2       |
+  = 0 + 1 + 2 + <dots> + (n - 1) + n;
+  = n <cfrac>:n:2 + <cfrac>:n:2;
+  = <cfrac>:n^2:2 + <cfrac>:n:2;
+  = n <cdot> <cfrac>:{n + 1}:2;
 ] <end>:align*
 
 <section>:Matrices
@@ -239,6 +239,7 @@ equations and matrices.
     |0|0|1|
   ] <end>:bmatrix
   =
+  # ~ denotes an empty (nil) value.
   <begin>:bmatrix [1|~|~; ~|1|~; ~|~|1] <end>:bmatrix
 <end>:math
 
@@ -254,7 +255,7 @@ Notes:
 - **Khi** is not *syntax typed*, unlike **JSON** and **YAML**. JSON and YAML determine
   the types of data during parsing. For example, quotes indicate that a value is a
   string. Using Khi, programs determine the types of values themselves.
-- This is a dictionary document.
+- This is a dictionary document, written in *aligned dictionary notation*.
 
 ```
 oak-planks: {
@@ -291,7 +292,8 @@ This is a data storage example. It demonstrates that **Khi**, like **CSV**, nati
 supports tables of values.
 
 Notes:
- - This is a list document. By *table* is meant a list of tuples.
+- This is a list document, written in *tabular list notation*. It contains
+  tuples of equal size.
 
 ```
 # 1) Atomic number
@@ -328,6 +330,8 @@ Notes:
 ```
 
 ### Words & phrases example
+
+- This is a list document, written in *tagged list notation*.
 
 ```
 <Verb>: clear {

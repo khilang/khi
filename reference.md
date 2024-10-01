@@ -1,6 +1,6 @@
 # Reference
 
-This document specifies the **Khi** data format.
+This document specifies the **Khi** data language.
 
 ## Overview
 
@@ -543,12 +543,12 @@ In *tabular notation*, each value is enclosed in bars `|`.
 
 <summary>Examples</summary>
 
-- **Grid table with 2 rows and 3 columns:**
+- **Table with 2 rows and 3 columns:**
   ```
   | a a a | b | c c c |
   |   d d | e |     f |
   ```
-- **Grid table:**
+- **Matrix:**
   ```
   |1|0|1|1|
   |0|1|0|0|

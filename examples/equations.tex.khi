@@ -5,6 +5,7 @@
 
 <usepackage>:amsmath
 
+# Use brackets around jot to prevent it from taking "1em" as argument.
 <setlength>:{<jot>}:1em # Controls math line spacing
 
 <begin>:document
@@ -14,11 +15,7 @@ equations and matrices.
 
 <section>:Equations
 
-# Define a sum-range command.
-<def!>:SumRn:4:{ # def! is a macro that defines a LaTeX command.
-  <sum>_{#1}^{`[#2::#3`]} #4
-}
-
+# The def! macro makes it easier to use LaTeX \newcommand.
 <def!>:Log:0:{ <operatorname>:Log }
 
 <begin>:equation* <begin>:split
@@ -33,17 +30,16 @@ equations and matrices.
 <begin>:equation* <Log>(1 + 2 + 3) = <Log>:1 + <Log>:2 + <Log>:3 <end>:equation*
 
 <begin>:align* [
-  | <SumRn>:k:0:100:k | = 0 + 1 + 2 + <dots> + 99 + 100                  |
-  |                 ~ | = (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50 |
-  |                 ~ | = 5050                                           |
+  > 0 + 1 + 2 + <dots> + 99 + 100
+  > (0 + 100) + (1 + 99) + <dots> + (49 + 51) + 50
+  > 5050
 ] <end>:align*
 
 <begin>:align* [
-  | <SumRn>:k:0:n:k                    |
-  | = 0 + 1 + 2 + <dots> + (n - 1) + n |
-  | = n <cfrac>:n:2 + <cfrac>:n:2      |
-  | = <cfrac>:n^2:2 + <cfrac>:n:2      |
-  | = n <cdot> <cfrac>:{n + 1}:2       |
+  = 0 + 1 + 2 + <dots> + (n - 1) + n;
+  = n <cfrac>:n:2 + <cfrac>:n:2;
+  = <cfrac>:n^2:2 + <cfrac>:n:2;
+  = n <cdot> <cfrac>:{n + 1}:2;
 ] <end>:align*
 
 <section>:Matrices
@@ -55,6 +51,7 @@ equations and matrices.
     |0|0|1|
   ] <end>:bmatrix
   =
+  # ~ denotes an empty (nil) value.
   <begin>:bmatrix [1|~|~; ~|1|~; ~|~|1] <end>:bmatrix
 <end>:math
 
