@@ -17,18 +17,23 @@
         | "|" <inner-value>
         | <tagged-value>
 
-<inner-value> → <block>
+<inner-value> → <tuple-element>
               | <tuple>
 
-<tuple> → <block> "|" <block>
-        | <block> "|" <tuple>
+<tuple> → <tuple-element> "|" <tuple-element>
+        | <tuple-element> "|" <tuple>
 
 <tagged-value> → <tag>":"_<value>
+
+<tuple-element> → <block>
+                | <mapped-key>
 
 <block> → <term>
         | <term> <block>
         | "~"
         | "~" <block>
+
+<mapped-key> → <key> "=>" <block>
 
 <term> → <text>
        | <bracketed-value>

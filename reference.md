@@ -1,5 +1,7 @@
 # Reference
 
+<span style="font-size:0.5rem">Revision 0.16</span>
+
 This document specifies the **Khi** data language.
 
 ## Overview
@@ -156,6 +158,8 @@ style for multiline tuples.
               | <tuple>
 ```
 
+#### Tuple element
+TODO
 #### Block
 
 ```
@@ -187,6 +191,8 @@ The compound contains the structures represented by the terms, ordered according
 If there is non-discarded whitespace between two terms, then there is a space between
 the corresponding structures in the result.
 
+#### Mapped key
+TODO
 #### Term
 
 ```

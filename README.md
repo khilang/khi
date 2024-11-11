@@ -21,14 +21,14 @@ the **Khi** data language: a source format for data.
 
 ## Links
 
-- **Khi:**
-  - [repository](https://github.com/khilang/khilang), [quick guide](https://github.com/khilang/khilang/blob/master/quick-guide.md), [reference](https://github.com/khilang/khilang/blob/master/reference.md)
-  - [online editor & preprocessor](https://khilang.github.io/khi-editor)
-  - [reference implementation](https://github.com/khilang/khi.rs)
+- [repository](https://github.com/khilang/khilang), [quick guide](https://github.com/khilang/khilang/blob/master/quick-guide.md), [reference](https://github.com/khilang/khilang/blob/master/reference.md)
+- [online editor & preprocessor](https://khilang.github.io/khi-editor)
+- [reference implementation](https://github.com/khilang/khi.rs)
 
-- **Libraries:**
-  - Rust: [khi.rs](https://github.com/khilang/khi.rs) (Reference implementation)
-  - JavaScript:* [khi.js](https://github.com/khilang/khi.js) (`wasm-pack` derived reference implementation)
+## Libraries
+
+- Rust: [khi.rs](https://github.com/khilang/khi.rs) (Reference implementation)
+- JavaScript: [khi.js](https://github.com/khilang/khi.js) (`wasm-pack` derived reference implementation)
 
 ## Status
 
@@ -42,6 +42,8 @@ Stuff to do and think about, fix or add before **Khi 1.0.0**.
 
 - [X] **Add absolute notation:** Much better than indentation and brackets for
   longer documents.
+- [X] **Add mapped key tuple elements:** Could be used for optional arguments
+  in tuples, or to write a dictionary without brackets and nesting.
 - [ ] **Evaluate text block flags:** There could be some important use cases
   that should have support. For example, maybe a flag to replace newlines by
   spaces.
