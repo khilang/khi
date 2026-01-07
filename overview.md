@@ -1,4 +1,4 @@
-# Quick start
+# Overview
 
 Here is a brief but complete overview of the Khi data format. Details may be found
 in the reference.

@@ -1,7 +1,7 @@
 # Sample from grammatical list of words & phrases
 # Document type: List (tagged notation)
 
-<Verb>: clear {
+<Verb>: clear | {
   regularity: <Regular>
   transitivity: <Transitive>
   conjugation: <to> clear | cleared | cleared | clearing
@@ -11,7 +11,7 @@
     > To make transparent.
   ]
 }
-<Verb>: burn <down> {
+<Verb>: burn <down> | {
   regularity: <Irregular>
   transitivity: <Transitive>
   conjugation:
@@ -21,7 +21,7 @@
   | burning <down>
   definition: To burn completely.
 }
-<Noun>: firewood {
+<Noun>: firewood | {
   countability: <Uncountable>
   declension: firewood | firewood
   definition: Wood burned to fuel a fire.

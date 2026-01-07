@@ -120,7 +120,6 @@
   g g g; h;
 ]
 
-
 ### Multiline table, singleline rows, short & mostly same width columns
 [
   |a|b|c|
