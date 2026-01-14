@@ -1,8 +1,8 @@
 # Khi grammar
 
 Space ` ` or asterisk `*` is optional whitespace. Underscore `_` is required
-whitespace. Character within quotes or `<word>`, `<transcription>` or
-`<text-block>` is a token.
+whitespace. Character within quotes or `<word>`, `<closed-transcription>`,
+`<unclosed-transcription>`  or `<text-block>` is a token.
 
 ## Document
 
@@ -25,9 +25,7 @@ whitespace. Character within quotes or `<word>`, `<transcription>` or
 
 ```
 <value> → <catenation>
-        | <delimited-tuple>
-        | <prefixed-tuple>
-        | <prefixed-tagged-value>
+        | <open-tuple>
 ```
 
 ```
@@ -51,63 +49,63 @@ whitespace. Character within quotes or `<word>`, `<transcription>` or
          | <text-block>
 ```
 
-## Tuple
+## Tagged tuple
 
 ```
-<delimited-tuple>  → <catenation> <delimited-tuple'>
-                   | <delimited-tuple'>
-<delimited-tuple'> → "|" <tuple-element>
-                   | "|" <tuple-element> <delimited-tuple'>
-```
-
-```
-<prefixed-tuple> → <unit>":"_<value>
+<open-tuple> → <open-elements>
+             | <tagged-tuple>
 ```
 
 ```
-<tuple-element> → <catenation>
-                | ":"<key> <catenation>
+<open-elements>  → <open-element> <open-elements'>
+                 | <open-elements'>
+<open-elements'> → "|" <open-element>
+                 | "|" <open-element> <open-elements'>
 ```
 
 ```
-<unit> → "<"">"
-```
-
-## Tagged value
-
-```
-<prefixed-tagged-value> → <tag>":"_<value>
+<open-element> → <catenation>
+               | ":"<key> <catenation>
 ```
 
 ```
-<compact-tagged-value> → <tag>
-                       | <tag><arguments>
+<tagged-tuple> → <tag>":"_<tagged-value>
 ```
 
 ```
-<arguments> → ":"<argument>
-            | ":"<argument><arguments>
-            | ":"<named-argument>
-            | ":"<named-argument><arguments>
-```
-`<argument>` takes precedence over `<arguments>` on ambiguity with
-`<tagged-arguments>`.
-
-```
-<named-argument> → <key>"="<argument>
+<tagged-value> → <catenation>
+               | <open-elements>
+               | <tagged-tuple>
 ```
 
 ```
-<argument> → <string>
-           | <value-bracket>
-           | <dictionary-bracket>
-           | <list-bracket>
-           | <compact-tagged-value>
+<compact-tuple> → <tag>
+                | <tag><compact-elements>
+```
+
+```
+<compact-elements> → ":"<compact-element>
+                   | ":"<compact-element><compact-elements>
+```
+`<compact-element>` takes precedence over `<compact-elements>` on ambiguity.
+
+```
+<compact-element> → <compact-value>
+                  | <key>"="<compact-value>
+```
+
+```
+<compact-value> → <string>
+                | <value-bracket>
+                | <dictionary-bracket>
+                | <list-bracket>
+                | <compact-tuple>
 ```
 
 ```
 <tag> → "<"<key>">"
       | "<"<key>_<attributes> ">"
+      | "<"">"
 ```
 
 ```
@@ -149,23 +147,24 @@ is inconsequential.
 ```
 
 ```
-<section> → <value-header>_<value>
-          | <dictionary-header>
-          | <dictionary-header>_<regular-dictionary>
-          | <list-header>
-          | <list-header>_<list>
+<section> → <curly-header>":"_<value>
+          | <curly-header>":"
+          | <curly-header>":"_<regular-dictionary>
+          | <square-header>":"
+          | <square-header>":"_<list>
+          | "{"<square-header>"}"":"_<value>
+          | "{"<square-header>"}"":"
+          | "{"<square-header>"}"":"_<regular-dictionary>
+          | "["<square-header>"]"":"
+          | "["<square-header>"]"":"_<list>
 ```
 
 ```
-<value-header> → "{"<header-key>"}"":"
+<curly-header> → "{"<header-key>"}"
 ```
 
 ```
-<dictionary-header> → "{"<header-key>"}"":"
-```
-
-```
-<list-header> → "["<header-key>"]"":"
+<square-header> → "["<header-key>"]"
 ```
 
 ```
@@ -193,7 +192,7 @@ is inconsequential.
 <list> → <delimited-list>
        | <bulleted-list>
        | <tabulated-list>
-       | <tag-list>
+       | <tagged-list>
 ```
 
 ```
@@ -208,13 +207,13 @@ is inconsequential.
 ```
 
 ```
-<tabulated-list> → <delimited-tuple'> "|"
-                 | <delimited-tuple'> "|"_<tabulated-list>
+<tabulated-list> → <open-elements'> "|"
+                 | <open-elements'> "|"_<tabulated-list>
 ```
 
 ```
-<tag-list> → <tagged-value>
-           | <tagged-value>_<tag-list>
+<tagged-list> → <tagged-tuple>
+              | <tagged-tuple>_<tagged-list>
 ```
 
 ```
@@ -238,8 +237,7 @@ with `~` when `<term>` matches `<text>`.
        | <value-bracket>
        | <dictionary-bracket>
        | <list-bracket>
-       | <compact-tagged-value>
-       | <unit>
+       | <compact-tuple>
 ```
 
 ## Key
