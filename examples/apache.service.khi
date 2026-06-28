@@ -1,0 +1,16 @@
+# Example of XDG Desktop Entry specification-like file (such as systemd service)
+
+{Unit}:
+Description: Apache web server
+After: network.target
+
+{Service}:
+Type: forking
+ExecStart: /usr/local/apache2/bin/apachectl -k start
+ExecReload: /usr/local/apache2/bin/apachectl -k graceful
+ExecStop: /usr/local/apache2/bin/apachectl -k graceful-stop
+PIDFile: /usr/local/apache2/logs/httpd.pid
+PrivateTmp: true
+
+{Install}:
+WantedBy: multi-user.target

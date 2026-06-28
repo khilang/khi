@@ -1,8 +1,8 @@
 # Khi grammar
 
 Space ` ` or asterisk `*` is optional whitespace. Underscore `_` is required
-whitespace. Character within quotes or `<word>`, `<closed-transcription>`,
-`<unclosed-transcription>`  or `<text-block>` is a token.
+whitespace. Characters within quotes and `[word]`, `[closed-transcription]`,
+`[open-transcription]` and `[text-block]` are tokens.
 
 ## Document
 
@@ -25,7 +25,8 @@ whitespace. Character within quotes or `<word>`, `<closed-transcription>`,
 
 ```
 <value> → <catenation>
-        | <open-tuple>
+        | <barred-value>
+        | <tagged-value>
 ```
 
 ```
@@ -35,71 +36,58 @@ whitespace. Character within quotes or `<word>`, `<closed-transcription>`,
 ## Text
 
 ```
-<text>  → <string>
-        | <string> <text'>
-<text'> → <string>
-        | <string> <text'>
-        | "~" <text'>
+<text> → <words>
+       | [closed-transcription]
+       | [open-transcription]
+       | [text-block]
 ```
 
 ```
-<string> → <word>
-         | <closed-transcription>
-         | <unclosed-transcription>
-         | <text-block>
-```
-
-## Tagged tuple
-
-```
-<open-tuple> → <open-elements>
-             | <tagged-tuple>
+<words>  → [word]
+         | [word] <words>
 ```
 
 ```
-<open-elements>  → <open-element> <open-elements'>
-                 | <open-elements'>
-<open-elements'> → "|" <open-element>
-                 | "|" <open-element> <open-elements'>
+<confined-text> → [word]
+                | [closed-transcription]
+                | [text-block]
+```
+
+## Tuple
+
+```
+<barred-value>   → <catenation> <barred-value'>
+                 | <barred-value'>
+<barred-value'>  → "|" <catenation>
+                 | "|" <catenation> <barred-value'>
 ```
 
 ```
-<open-element> → <catenation>
-               | ":"<key> <catenation>
+<tagged-value> → <tag>":"_<value>
 ```
 
 ```
-<tagged-tuple> → <tag>":"_<tagged-value>
+<confined-tuple> → <tag>
+                 | <tag><confined-values>
 ```
 
 ```
-<tagged-value> → <catenation>
-               | <open-elements>
-               | <tagged-tuple>
+<confined-values> → ":"<confined-catenation>
+                  | ":"<confined-catenation><confined-values>
+```
+`<confined-value>` takes precedence over `<confined-values>` on ambiguity.
+
+```
+<confined-catenation> → <confined-value>
+                      | <confined-text><confined-value>
 ```
 
 ```
-<compact-tuple> → <tag>
-                | <tag><compact-elements>
-```
-
-```
-<compact-elements> → ":"<compact-element>
-                   | ":"<compact-element><compact-elements>
-```
-`<compact-element>` takes precedence over `<compact-elements>` on ambiguity.
-
-```
-<compact-element> → <compact-value>
-                  | <key>"="<compact-value>
-```
-
-```
-<compact-value> → <string>
-                | <value-bracket>
-                | <dictionary-bracket>
-                | <list-bracket>
-                | <compact-tuple>
+<confined-value> → <confined-text>
+                 | <value-bracket>
+                 | <dictionary-bracket>
+                 | <list-bracket>
+                 | <confined-tuple>
 ```
 
 ```
@@ -115,7 +103,7 @@ whitespace. Character within quotes or `<word>`, `<closed-transcription>`,
 
 ```
 <attribute> → <key>
-            | <key>"="<string>
+            | <key>"="<confined-text>
 ```
 
 ## Dictionary
@@ -143,38 +131,38 @@ is inconsequential.
 <sectioned-dictionary>  → <sectioned-dictionary'>
                         | <regular-dictionary>_<sectioned-dictionary'>
 <sectioned-dictionary'> → <section>
-                        | <section>_<sectioned-dictionary>
+                        | <section>_<sectioned-dictionary'>
 ```
 
 ```
-<section> → <curly-header>":"_<value>
-          | <curly-header>":"
-          | <curly-header>":"_<regular-dictionary>
-          | <square-header>":"
-          | <square-header>":"_<list>
-          | "{"<square-header>"}"":"_<value>
-          | "{"<square-header>"}"":"
-          | "{"<square-header>"}"":"_<regular-dictionary>
-          | "["<square-header>"]"":"
-          | "["<square-header>"]"":"_<list>
+<section> → <value-header>_<value>
+          | <dictionary-header>
+          | <dictionary-header>_<nonsectioned-dictionary>
+          | <list-header>
+          | <list-header>_<list>
 ```
 
 ```
-<curly-header> → "{"<header-key>"}"
+<value-header> → "{"<header-key>"}"":"
 ```
 
 ```
-<square-header> → "["<header-key>"]"
+<dictionary-header> → "{"<header-key>"}"":"
+```
+
+```
+<list-header> → "["<header-key>"]"":"
 ```
 
 ```
 <header-key> → <key>
-             | <key> ">" <header-key>
+             | <key>"[""]"
+             | <key>_">"_<header-key>
 ```
 
 ```
-<regular-dictionary> → <delimited-dictionary>
-                     | <aligned-dictionary>
+<nonsectioned-dictionary> → <delimited-dictionary>
+                          | <aligned-dictionary>
 ```
 
 ```
@@ -191,8 +179,8 @@ is inconsequential.
 ```
 <list> → <delimited-list>
        | <bulleted-list>
-       | <tabulated-list>
        | <tagged-list>
+       | <tabular-list>
 ```
 
 ```
@@ -207,13 +195,13 @@ is inconsequential.
 ```
 
 ```
-<tabulated-list> → <open-elements'> "|"
-                 | <open-elements'> "|"_<tabulated-list>
+<tagged-list> → <tagged-tuple>
+              | <tagged-tuple>_<tagged-list>
 ```
 
 ```
-<tagged-list> → <tagged-tuple>
-              | <tagged-tuple>_<tagged-list>
+<tabular-list> → <barred-value'> "|"
+               | <barred-value'> "|"_<tabular-list>
 ```
 
 ```
@@ -237,12 +225,12 @@ with `~` when `<term>` matches `<text>`.
        | <value-bracket>
        | <dictionary-bracket>
        | <list-bracket>
-       | <compact-tuple>
+       | <confined-tuple>
 ```
 
 ## Key
 
 ```
-<key> → <word>
-      | <closed-transcription>
+<key> → [word]
+      | [closed-transcription]
 ```

@@ -17,7 +17,7 @@
 <#>
 
 # Quote
-<#quote n>⏎
+<#quote:n>⏎
 ⇥Everyone is a genius. But if⏎
 ⇥·you judge a fish by its ability⏎
 ⇥·to climb a tree, it will live⏎
@@ -26,7 +26,7 @@
 <#quote>
 
 # Korean paragraph with ideographic whitespace and punctuation.
-<# n>⏎
+<#:n>⏎
 ··결정은　원자의　배열이　공간적으로　반복된　패턴을　가지는　물질이다。⏎
 ··　액체를　냉각시키면　분자들의　운동이　느려지다가　마침내　어떤　온도⏎
 ··　이하에서는　분자들이　일정한　배열을　이루게　되고　자유로이　돌아다닐⏎
@@ -35,7 +35,7 @@
 <#>
 
 # Chinese paragraph
-<#zh n>⏎
+<#zh:n>⏎
 ··莎草纸是古埃及人广泛采用的书写材料，它用当时盛产于尼罗河三角洲的⏎
 ··纸莎草的茎制成。大约在公元前3000年，古埃及人就开始使用莎草纸，并将⏎
 ··这种特产出口到古希腊等古代地中海文明地区，甚至遥远的欧洲内陆和⏎
@@ -43,7 +43,7 @@
 <#zh>
 
 # Whitespace
-<# rfh>⏎
+<#:rfh>⏎
 ⇥··⏎
 ⇥··⇥··⏎
 ⇥··⇥··⏎
