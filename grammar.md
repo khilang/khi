@@ -50,6 +50,7 @@ whitespace. Characters within quotes and `[word]`, `[closed-transcription]`,
 ```
 <confined-text> → [word]
                 | [closed-transcription]
+                | [open-transcription]
                 | [text-block]
 ```
 
@@ -75,11 +76,11 @@ whitespace. Characters within quotes and `[word]`, `[closed-transcription]`,
 <confined-values> → ":"<confined-catenation>
                   | ":"<confined-catenation><confined-values>
 ```
-`<confined-value>` takes precedence over `<confined-values>` on ambiguity.
+`<confined-catenation>` takes precedence over `<confined-values>` and `<term>` on ambiguity.
 
 ```
 <confined-catenation> → <confined-value>
-                      | <confined-text><confined-value>
+                      | [word]<confined-value>
 ```
 
 ```
@@ -215,7 +216,6 @@ is inconsequential.
 <catenation> → <term>
              | <term> <catenation>
              | "~"
-             | "~" <catenation>
 ```
 `<term>` takes precedence over `<catenation>` on ambiguity, which can occur
 with `~` when `<term>` matches `<text>`.
