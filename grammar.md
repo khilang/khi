@@ -216,6 +216,7 @@ is inconsequential.
 <catenation> → <term>
              | <term> <catenation>
              | "~"
+             | "~" <catenation>
 ```
 `<term>` takes precedence over `<catenation>` on ambiguity, which can occur
 with `~` when `<term>` matches `<text>`.
